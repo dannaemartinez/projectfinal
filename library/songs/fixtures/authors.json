@@ -1,0 +1,18 @@
+[
+    {
+      "model": "books.Author",
+      "pk": 1,
+      "fields": {
+        "name": "Arthur",
+        "last_name": "Conan Doyle"
+      }
+    },
+    {
+      "model": "books.Author",
+      "pk": 2,
+      "fields": {
+        "name": "John",
+        "last_name": "Tenniel"
+      }
+    }   
+]

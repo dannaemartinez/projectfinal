@@ -1,0 +1,18 @@
+[
+    {
+      "model": "books.BooksAuthors",
+      "pk": 1,
+      "fields": {
+        "book_id": 1,
+        "author_id":1
+      }
+    },
+    {
+        "model": "books.BooksAuthors",
+        "pk": 2,
+        "fields": {
+          "book_id": 2,
+          "author_id":2
+        }
+      }  
+  ]

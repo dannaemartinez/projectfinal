@@ -1,0 +1,26 @@
+[
+    {
+      "model": "books.Book",
+      "pk": 1,
+      "fields": {
+        "name": "El sabueso de los Baskerville",
+        "publish_year": 1902,
+        "pages": 243,
+        "price": 500.00,
+        "created_at":"2022-04-03T17:48:02.063683Z",
+        "updated_at":"2022-04-03T17:48:02.063683Z"
+      }
+    },
+    {
+        "model": "books.Book",
+        "pk": 2,
+        "fields": {
+          "name": "Las aventuras de Alicia en el país de las maravillas",
+          "publish_year": 1865,
+          "pages": 500,
+          "price": 280.36,
+          "created_at":"2022-04-03T17:48:02.063683Z",
+          "updated_at":"2022-04-03T17:48:02.063703Z"
+        }
+      }    
+  ]

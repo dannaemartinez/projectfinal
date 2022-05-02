@@ -1,0 +1,51 @@
+version: '3'
+services:
+  postgres_db06:
+    image: postgres:14-alpine
+    container_name: "postgres${PORT}"
+    environment:
+      - "POSTGRES_PASSWORD=${PSQL_PASS}"
+      - "POSTGRES_DB=${PSQL_DB}"
+      - "POSTGRES_USER=${PSQL_USER}"
+      #- "POSTGRES_USERNAME:${PSQL_USER}"
+      # - "POSTGRES_USER:${PSQL_USER}"
+    ports:
+      - "100${PORT}:55${PORT}"
+    volumes:
+      #- "${POSTGRES_VOLUME_PATH}:/usr/src/postgres"
+      - "${POSTGRES_VOLUME_PATH}:/usr/src/postgres"
+    networks:
+      - our-library-net
+    command: "-p 55${PORT}"
+
+  web06:
+    build: .
+    image: my-django-image06:2.0.0
+    #command: bash -c "python manage.py makemigrations && python manage.py migrate && pytest && python manage.py runserver 0.0.0.0:80${PORT}"
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:80${PORT}"
+    #command: bash -c "python manage.py runserver 0.0.0.0:80${PORT}"
+    container_name: "django${PORT}"
+    depends_on: 
+      - postgres_db06
+    environment:
+      - "PSQL_DBNAME=${PSQL_DB}"
+      - "PSQL_USERNAME=${PSQL_USER}"
+      - "PSQL_PASS=${PSQL_PASS}"
+      - "PSQL_HOST=postgres_db${PORT}" # You must use the previous command in order to get this HOST
+      - "PSQL_PORT=55${PORT}"
+      - "JWT_TOKEN_TIME=${JWT_TOKEN_TIME}"
+    volumes:
+    # "RUTA/DEL/SERVIDOR:RUTA/DENTRO/DEL/CONTENEDOR"
+      #- "/home/dannae_martinez/django/Django-REST-Exercise:/usr/src/django/library"
+       - "${DJANGO_VOLUME_PATH}:/usr/src/django/library"
+    ports:
+      - "90${PORT}:80${PORT}"
+      #- "30${PORT}:30${PORT}"
+    networks:
+      - our-library-net
+
+networks:
+  our-library-net:
+    external: true
+    driver: bridge
+

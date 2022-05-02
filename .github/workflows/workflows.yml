@@ -1,0 +1,36 @@
+name: Django Test with PostgreSQL Example
+
+on:
+    workflow_call:
+    workflow_dispatch:
+    push:
+       branches: [main]
+    pull_request:
+        branches: [main]
+jobs:
+  simple_build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: main
+      - name: Create docker network
+        run: |
+          docker network create -d bridge our-library-net
+      - name: Build django image
+        run: |
+          docker build -t my-django-image06:2.0.0 .
+      - name: Run docker container postgres
+        run: |
+          docker-compose --env-file .env.stg up -d postgres_db06
+      - name: Verifying net
+        run: |
+          docker inspect -f "{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}" postgres06
+      # - name: Restoring Databases
+      #   run: |
+      #     docker exec postgres06 psql -h localhost -p 5506 -d dannae_martinezdb -U dannae_martinez < db_dump.sql
+      - name: Run docker container web
+        run: |
+          docker-compose --env-file .env.stg up -d web06
