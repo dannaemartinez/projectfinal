@@ -11,7 +11,7 @@ class Singer(models.Model):
 	name = models.CharField(max_length=128)
 	lastName = models.CharField(max_length=128, null=True)
 	nationality = models.CharField(max_length=128)
-	image = models.TextField(null=False)
+	image = models.TextField()
 
 	def __str__(self):
 	 	return f'{self.stageName}'

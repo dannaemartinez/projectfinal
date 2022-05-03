@@ -6,6 +6,8 @@ from library.songs.serializers import *
 import base64
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, FileUploadParser, MultiPartParser, JSONParser
+from rest_framework import pagination
+from django.utils.decorators import method_decorator
 
 class GenreViewSet(viewsets.ModelViewSet):
     """

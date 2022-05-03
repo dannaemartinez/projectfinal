@@ -23,11 +23,19 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from graphene_django.views import GraphQLView
+from django.views.decorators.csrf import csrf_exempt
 
+#GRAPH URLS
+urlpatterns = [
+    # ...
+    path('graphql', csrf_exempt(GraphQLView.as_view(graphiql=True))),
+
+]
 #from library.views import CustomTokenObtainPairView
 
 # JWT URLs
-urlpatterns = [
+urlpatterns += [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ] 
