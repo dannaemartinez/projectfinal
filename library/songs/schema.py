@@ -26,46 +26,9 @@ class SongType(DjangoObjectType):
         fields = '__all__'
 
 class GenreQuery(graphene.ObjectType):
-    genres_by_name = graphene.Field(GenreType, name=graphene.String(required=True))
-    
-    def resolve_all_genres(root, info, **kwargs):
-        # Querying a list
-        return Genre.objects.all()
-
-class SingerQuery(graphene.ObjectType):
-    singer_by_name = graphene.Field(SingerType, name=graphene.String(required=True))
-
-    def resolve_all_singers(root, info, **kwargs):
-        # Querying a list
-        return Singer.objects.all()
-
-
-class AlbumQuery(graphene.ObjectType):
-    album_by_name = graphene.Field(AlbumType, name=graphene.String(required=True))
-    all_singers = graphene.List(SingerType, first=graphene.Int(), skip=graphene.Int())
     all_genres = graphene.List(GenreType, first=graphene.Int(), skip=graphene.Int())
-
-    def resolve_all_singers(root, info, first = None, skip = None):
-        from django.contrib.auth.middleware import get_user
-        from graphql_jwt.utils import get_payload, get_user_by_payload
-
-        # context = info.context
-
-        # print('info',dir(context))
-        # user = info.context.user
-        # print('IS AUTHENTICATED? ', user.is_authenticated)
-
-        # if not user.is_authenticated:
-        #     raise Exception("Authentication credentials were not provided")
-
-        singers = Singer.objects.all()
-        if skip is not None:
-            singers = singers[:skip]
-        if first is not None:
-            singers = singers[first:]
-
-        return singers
-            
+    genres_by_name = graphene.List(GenreType, name=graphene.String(required=True)) ############################################
+    
     def resolve_all_genres(root, info, first = None, skip = None):
         from django.contrib.auth.middleware import get_user
         from graphql_jwt.utils import get_payload, get_user_by_payload
@@ -87,17 +50,15 @@ class AlbumQuery(graphene.ObjectType):
 
         return genres
 
-    def resolve_album_by_name(root, info, name):
+    def resolve_genre_by_name(root, info, name):
         try:
-            return Album.objects.get(name=name)
-        except Album.DoesNotExist:
+            return Genre.objects.filter(name=name) ###############################
+        except Genre.DoesNotExist:
             return None
 
-
-class SongQuery(graphene.ObjectType):
-    song_by_name = graphene.Field(SongType, name=graphene.String(required=True))
-    all_albums = graphene.List(AlbumType, first=graphene.Int(), skip=graphene.Int())
+class SingerQuery(graphene.ObjectType):
     all_singers = graphene.List(SingerType, first=graphene.Int(), skip=graphene.Int())
+    singer_by_name = graphene.List(SingerType, name=graphene.String(required=True))
 
     def resolve_all_singers(root, info, first = None, skip = None):
         from django.contrib.auth.middleware import get_user
@@ -119,6 +80,28 @@ class SongQuery(graphene.ObjectType):
             singers = singers[first:]
 
         return singers
+
+    def resolve_singer_by_name(root, info, name):
+        try:
+            return Singer.objects.filter(name=name)
+        except Singer.DoesNotExist:
+            return None
+    # def resolve_singer_by_name(root, info, name, lastName, nationality, image):
+    #     try:
+    #         return Singer.objects.get(name=name, lastName=lastName, nationality=nationality, image=image)
+    #     except Singer.DoesNotExist:
+    #         return None
+
+
+class AlbumQuery(graphene.ObjectType):
+    album_by_name = graphene.Field(AlbumType, name=graphene.String(required=True))
+    all_albums = graphene.List(AlbumType, first=graphene.Int(), skip=graphene.Int())
+
+    def resolve_album_by_name(root, info, name):
+        try:
+            return Album.objects.filter(name=name)
+        except Album.DoesNotExist:
+            return None
 
     def resolve_all_albums(root, info, first = None, skip = None):
         from django.contrib.auth.middleware import get_user
@@ -141,9 +124,35 @@ class SongQuery(graphene.ObjectType):
 
         return albums
 
+
+class SongQuery(graphene.ObjectType):
+    song_by_name = graphene.Field(SongType, name=graphene.String(required=True))
+    all_songs = graphene.List(SingerType, first=graphene.Int(), skip=graphene.Int())
+
+    def resolve_all_songs(root, info, first = None, skip = None):
+        from django.contrib.auth.middleware import get_user
+        from graphql_jwt.utils import get_payload, get_user_by_payload
+
+        # context = info.context
+
+        # print('info',dir(context))
+        # user = info.context.user
+        # print('IS AUTHENTICATED? ', user.is_authenticated)
+
+        # if not user.is_authenticated:
+        #     raise Exception("Authentication credentials were not provided")
+
+        songs = Song.objects.all()
+        if skip is not None:
+            songs = songs[:skip]
+        if first is not None:
+            songs = songs[first:]
+
+        return songs
+
     def resolve_song_by_name(root, info, name):
         try:
-            return Song.objects.get(name=name)
+            return Song.objects.filter(name=name)
         except Song.DoesNotExist:
             return None
 
@@ -178,7 +187,7 @@ class SongsInput(graphene.InputObjectType):
     previewFile = graphene.String()
     digitalPrice = graphene.Int()
     #si se pone
-    singer = graphene.List(SingersInput)
+    singer = graphene.Field(SingersInput)
 
 class UpsertGenreMutation(graphene.Mutation):
     class Arguments:
