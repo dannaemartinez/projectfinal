@@ -99,7 +99,7 @@ class AlbumQuery(graphene.ObjectType):
 
     def resolve_album_by_name(root, info, name):
         try:
-            return Album.objects.filter(name=name)
+            return Album.objects.get(name=name)
         except Album.DoesNotExist:
             return None
 
@@ -152,7 +152,7 @@ class SongQuery(graphene.ObjectType):
 
     def resolve_song_by_name(root, info, name):
         try:
-            return Song.objects.filter(name=name)
+            return Song.objects.get(name=name)
         except Song.DoesNotExist:
             return None
 
