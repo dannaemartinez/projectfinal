@@ -11,14 +11,3 @@ class User(AbstractUser):
 		ADMIN = 2
 
 	mode = models.IntegerField(choices = Mode.choices, default = 1)
-
-class Direction(models.Model):
-	user = models.ForeignKey(User, related_name='DirectionWithUser', on_delete=models.DO_NOTHING)
-	street = models.CharField(max_length=255, unique=True)
-	zipcode = models.IntegerField()
-	state_province = models.CharField(max_length=255, unique=True)
-	city = models.CharField(max_length=255, unique=True)
-	phone = models.IntegerField()
-
-	class Meta:
-		unique_together = (("user"),)

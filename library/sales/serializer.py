@@ -12,4 +12,6 @@ class Item_SaleSerializer(serializers.ModelSerializer):
 		model = Item_Sale
 		fields = ['id', 'songs', 'sale', 'album', 'type_sale', 'finalPrice']
 
+
+
         

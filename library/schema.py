@@ -4,11 +4,12 @@ import graphene
 from graphene.types.field import Field
 import graphql_jwt
 from library.users.models import *
+from library.sales.schema import *
 
-class Query(GenreQuery, AlbumQuery, SingerQuery, SongQuery, UserQuery, graphene.ObjectType):
+class Query(GenreQuery, AlbumQuery, SingerQuery, SongQuery, UserQuery, SaleQuery, graphene.ObjectType):
     pass
 
-class Mutation(SongMutation, UserMutation, graphene.ObjectType):
+class Mutation(SongMutation, UserMutation, SaleMutation, graphene.ObjectType):
 
 	# JWT MUTATIONS
 	token_auth = graphql_jwt.ObtainJSONWebToken.Field()

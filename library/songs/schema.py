@@ -1,4 +1,5 @@
 from cmath import sin
+from email.mime import image
 import graphene
 from graphene_django import DjangoObjectType
 from graphene.types.field import Field
@@ -188,6 +189,7 @@ class SongsInput(graphene.InputObjectType):
     digitalPrice = graphene.Int()
     #si se pone
     singer = graphene.Field(SingersInput)
+    albums = graphene.Field(AlbumsInput)
 
 class UpsertGenreMutation(graphene.Mutation):
     class Arguments:
@@ -257,10 +259,10 @@ class UpsertAlbumMutation(graphene.Mutation):
         name = graphene.String(required=True)
         releaseDate = graphene.String()
         physicalPrice = graphene.Int(required=True, description='Duration of the Song')
-        stock = graphene.String()
+        stock = graphene.Int()
         image = graphene.String()
-        singer = graphene.List(SingersInput)
-        genre = graphene.List(GenresInput)
+        singers = graphene.List(SingersInput)
+        genres = graphene.List(GenresInput)
 
     # The class attributes define the response of the mutation
     album = graphene.Field(AlbumType)
@@ -281,14 +283,14 @@ class UpsertAlbumMutation(graphene.Mutation):
                     try:
                         aux = Singer.objects.get(pk=singer['id'])
                         aux.name = singer['name']
-                        aux.last_name = singer['lastName']
-                        aux.last_name = singer['nationality']
-                        aux.last_name = singer['image']
+                        aux.lastName = singer['lastName']
+                        aux.nationality = singer['nationality']
+                        aux.image = singer['image']
                         aux.save()
                     except Singer.DoesNotExist:
-                        return cls( status = 'Singer not found', album = None)
+                        return cls( status = 'Singer not found', singer = None)
                 else:
-                    aux = Singer.objects.create(name=singer['name'], lastName=singer['lastName'], nationality=singer['nationality'], image=singer['image'])
+                    aux = Singer.objects.create(**kwargs)
                     aux.save()
                 l_singers.append(aux)
 
@@ -317,7 +319,7 @@ class UpsertAlbumMutation(graphene.Mutation):
                 album = Album.objects.get(pk=kwargs['id'])
                 album.name = kwargs['name']
                 album.physicalPrice = kwargs['physicalPrice']
-                album.stock = kwargs['physicalPrice']
+                album.stock = kwargs['stock']
                 if 'releaseDate' in kwargs:
                     album.releaseDate = kwargs['releaseDate']
                 album.save()
@@ -333,7 +335,7 @@ class UpsertAlbumMutation(graphene.Mutation):
                 albums_genres = Song.objects.create(album=album, genre=genre) #hace ruido
                 albums_genres.save()
         # Notice we return an instance of this mutation
-        return UpsertSongMutation(album = album, status = 'ok')
+        return UpsertAlbumMutation(album = album, status = 'ok')
 
 # class UpsertAlbumMutation(graphene.Mutation):
 #     class Arguments:
@@ -381,6 +383,7 @@ class UpsertSongMutation(graphene.Mutation):
         previewFile = graphene.String()
         digitalPrice = graphene.Decimal(required=True, description='Average price')
         singers = graphene.List(SingersInput)
+        albums = graphene.List(AlbumsInput)
 
     # The class attributes define the response of the mutation
     song = graphene.Field(SongType)
@@ -401,9 +404,12 @@ class UpsertSongMutation(graphene.Mutation):
                     try:
                         aux = Singer.objects.get(pk=singer['id'])
                         aux.name = singer['name']
-                        aux.last_name = singer['lastName']
-                        aux.last_name = singer['nationality']
-                        aux.last_name = singer['image']
+                        aux.lastName = singer['lastName']
+                        aux.nationality = singer['nationality']
+                        if 'image' in kwargs:
+                            album.image = kwargs['image']
+                        if 'stageName' in kwargs:
+                            album.stageName = kwargs['stageName']
                         aux.save()
                     except Singer.DoesNotExist:
                         return cls( status = 'Singer not found', song = None)
@@ -411,6 +417,33 @@ class UpsertSongMutation(graphene.Mutation):
                     aux = Singer.objects.create(name=singer['name'], lastName=singer['lastName'], nationality=singer['nationality'], image=singer['image'])
                     aux.save()
                 l_singers.append(aux)
+
+        l_albums = []
+        if 'albums' in kwargs:
+            albums =  kwargs.pop('albums')
+            for album in albums:
+                aux = None
+                if 'id' in album:
+                    try:
+                        aux = Album.objects.get(pk=album['id'])
+                        aux.name = album['name']
+                        # aux.image = album['image']
+                        if 'releaseDate' in kwargs:
+                            album.releaseDate = kwargs['releaseDate']
+                        if 'physicalPrice' in kwargs:
+                            album.physicalPrice = kwargs['physicalPrice']
+                        if 'stock' in kwargs:
+                            album.stock = kwargs['stock']
+                        if 'image' in kwargs:
+                            album.image = kwargs['image']
+                        
+                        aux.save()
+                    except Album.DoesNotExist:
+                        return cls( status = 'Album not found', album = None)
+                else:
+                    aux = Album.objects.create(name=album['name'], releaseDate=album['releaseDate'], physicalPrice=album['physicalPrice'], stock=album['stock'], image=album['image'])
+                    aux.save()
+                l_albums.append(aux)
 
         if 'id' in kwargs:
             song = None
@@ -436,6 +469,9 @@ class UpsertSongMutation(graphene.Mutation):
             for singer in l_singers:
                 songs_singers = Song.objects.create(song=song, singer=singer) #hace ruido
                 songs_singers.save()
+            for album in l_albums:
+                songs_albums = Album.objects.create(song=song, album=album) #hace ruido
+                songs_albums.save()
         # Notice we return an instance of this mutation
         return UpsertSongMutation(song = song, status = 'ok')
 
@@ -474,7 +510,6 @@ class UpsertSongMutation(graphene.Mutation):
     #         song.save()
     #     # Notice we return an instance of this mutation
     #     return UpsertSongMutation(song=song)
-
 
 class DeleteGenreMutation(graphene.Mutation):
     ok = graphene.Boolean()
