@@ -4,6 +4,7 @@ from graphene_django import DjangoObjectType
 from graphene.types.field import Field
 from library.songs.models import *
 
+
 class GenreType(DjangoObjectType):
     class Meta:
         model = Genre
@@ -25,14 +26,14 @@ class SongType(DjangoObjectType):
         fields = '__all__'
 
 class GenreQuery(graphene.ObjectType):
-    all_genres = graphene.List(GenreType, name=graphene.String(required=True))
+    genres_by_name = graphene.Field(GenreType, name=graphene.String(required=True))
     
     def resolve_all_genres(root, info, **kwargs):
         # Querying a list
         return Genre.objects.all()
 
 class SingerQuery(graphene.ObjectType):
-    all_singers = graphene.List(SingerType, name=graphene.String(required=True))
+    singer_by_name = graphene.Field(SingerType, name=graphene.String(required=True))
 
     def resolve_all_singers(root, info, **kwargs):
         # Querying a list
@@ -40,52 +41,144 @@ class SingerQuery(graphene.ObjectType):
 
 
 class AlbumQuery(graphene.ObjectType):
-    all_albums = graphene.List(AlbumType, name=graphene.String(required=True))
-    album_by_singername = graphene.Field(AlbumType, name=graphene.String(required=True))
-    album_by_songname = graphene.Field(AlbumType, name=graphene.String(required=True))
+    album_by_name = graphene.Field(AlbumType, name=graphene.String(required=True))
+    all_singers = graphene.List(SingerType, first=graphene.Int(), skip=graphene.Int())
+    all_genres = graphene.List(GenreType, first=graphene.Int(), skip=graphene.Int())
 
-    def resolve_all_albums(root, info, **kwargs):
-        # Querying a list
-        return Album.objects.all()
+    def resolve_all_singers(root, info, first = None, skip = None):
+        from django.contrib.auth.middleware import get_user
+        from graphql_jwt.utils import get_payload, get_user_by_payload
 
-    def resolve_album_by_singername(root, info, name):
+        # context = info.context
+
+        # print('info',dir(context))
+        # user = info.context.user
+        # print('IS AUTHENTICATED? ', user.is_authenticated)
+
+        # if not user.is_authenticated:
+        #     raise Exception("Authentication credentials were not provided")
+
+        singers = Singer.objects.all()
+        if skip is not None:
+            singers = singers[:skip]
+        if first is not None:
+            singers = singers[first:]
+
+        return singers
+            
+    def resolve_all_genres(root, info, first = None, skip = None):
+        from django.contrib.auth.middleware import get_user
+        from graphql_jwt.utils import get_payload, get_user_by_payload
+
+        # context = info.context
+
+        # print('info',dir(context))
+        # user = info.context.user
+        # print('IS AUTHENTICATED? ', user.is_authenticated)
+
+        # if not user.is_authenticated:
+        #     raise Exception("Authentication credentials were not provided")
+
+        genres = Genre.objects.all()
+        if skip is not None:
+            genres = genres[:skip]
+        if first is not None:
+            genres = genres[first:]
+
+        return genres
+
+    def resolve_album_by_name(root, info, name):
         try:
-            singer = Singer.objects.get(name=name)
-            return singer.AlbumWithSinger.all()
-        except Album.DoesNotExist:
-            return None
-
-    def resolve_album_by_songname(root, info, name):
-        try:
-            song = Song.objects.get(name=name)
-            return song.SongWithAlbum.all()
+            return Album.objects.get(name=name)
         except Album.DoesNotExist:
             return None
 
 
 class SongQuery(graphene.ObjectType):
-    all_songs = graphene.List(SongType, name=graphene.String(required=True))
-    song_by_albumname = graphene.Field(SongType, name=graphene.String(required=True))
-    song_by_singername = graphene.Field(SongType, name=graphene.String(required=True))
+    song_by_name = graphene.Field(SongType, name=graphene.String(required=True))
+    all_albums = graphene.List(AlbumType, first=graphene.Int(), skip=graphene.Int())
+    all_singers = graphene.List(SingerType, first=graphene.Int(), skip=graphene.Int())
 
-    def resolve_all_songs(root, info, **kwargs):
-        # Querying a list
-        return Song.objects.all()
+    def resolve_all_singers(root, info, first = None, skip = None):
+        from django.contrib.auth.middleware import get_user
+        from graphql_jwt.utils import get_payload, get_user_by_payload
 
-    def resolve_song_by_albumname(root, info, name):
+        # context = info.context
+
+        # print('info',dir(context))
+        # user = info.context.user
+        # print('IS AUTHENTICATED? ', user.is_authenticated)
+
+        # if not user.is_authenticated:
+        #     raise Exception("Authentication credentials were not provided")
+
+        singers = Singer.objects.all()
+        if skip is not None:
+            singers = singers[:skip]
+        if first is not None:
+            singers = singers[first:]
+
+        return singers
+
+    def resolve_all_albums(root, info, first = None, skip = None):
+        from django.contrib.auth.middleware import get_user
+        from graphql_jwt.utils import get_payload, get_user_by_payload
+
+        # context = info.context
+
+        # print('info',dir(context))
+        # user = info.context.user
+        # print('IS AUTHENTICATED? ', user.is_authenticated)
+
+        # if not user.is_authenticated:
+        #     raise Exception("Authentication credentials were not provided")
+
+        albums = Album.objects.all()
+        if skip is not None:
+            albums = albums[:skip]
+        if first is not None:
+            albums = albums[first:]
+
+        return albums
+
+    def resolve_song_by_name(root, info, name):
         try:
-            album = Album.objects.get(name=name)
-            return album.SongWithAlbum.all()
+            return Song.objects.get(name=name)
         except Song.DoesNotExist:
             return None
 
-    def resolve_song_by_singername(root, info, name):
-        try:
-            singer = Singer.objects.get(name=name)
-            return singer.SongWithSinger.all()
-        except Song.DoesNotExist:
-            return None
-    
+class GenresInput(graphene.InputObjectType):
+    id = graphene.ID()
+    name = graphene.String(required=True)
+
+class SingersInput(graphene.InputObjectType):
+    id = graphene.ID()
+    name = graphene.String(required=True)
+    lastName = graphene.String()
+    stageName = graphene.String()
+    nationality = graphene.String()
+    image = graphene.String()
+
+class AlbumsInput(graphene.InputObjectType):
+    id = graphene.ID()
+    name = graphene.String(required=True)
+    releaseDate = graphene.String()
+    physicalPrice = graphene.Int()
+    stock = graphene.Int()
+    image = graphene.String()
+    singer = graphene.Field(SingersInput)
+    genre = graphene.Field(GenresInput)
+
+class SongsInput(graphene.InputObjectType):
+    id = graphene.ID()
+    name = graphene.String(required=True)
+    releaseDate = graphene.String()
+    duration = graphene.String()
+    completeFile = graphene.String()
+    previewFile = graphene.String()
+    digitalPrice = graphene.Int()
+    #si se pone
+    singer = graphene.List(SingersInput)
 
 class UpsertGenreMutation(graphene.Mutation):
     class Arguments:
@@ -95,14 +188,18 @@ class UpsertGenreMutation(graphene.Mutation):
 
     # The class attributes define the response of the mutation
     genre = graphene.Field(GenreType)
+    status = graphene.String()
 
     @classmethod
     def mutate(cls, root, info, name, id = None):
         genre = None
         if id is not None:
-            genre = Genre.objects.get(pk=id)
-            genre.name = name
-            genre.save()
+            try:
+                genre = Genre.objects.get(pk=id)
+                genre.name = name
+                genre.save()
+            except Genre.DoesNotExist:
+                    return cls( genre = None, status = 'Genre not found')
         else:
             genre = Genre.objects.create(name=name)
             genre.save()
@@ -122,18 +219,22 @@ class UpsertSingerMutation(graphene.Mutation):
 
     # The class attributes define the response of the mutation
     singer = graphene.Field(SingerType)
+    status = graphene.String()
 
     @classmethod
     def mutate(cls, root, info, stageName, name, lastName, nationality, image, id = None):
         singer = None
         if id is not None:
-            singer = Singer.objects.get(pk=id)
-            singer.name = name
-            singer.stageName = stageName
-            singer.lastName = lastName
-            singer.nationality = nationality
-            singer.image = image
-            singer.save()
+            try:
+                singer = Singer.objects.get(pk=id)
+                singer.name = name
+                singer.stageName = stageName
+                singer.lastName = lastName
+                singer.nationality = nationality
+                singer.image = image
+                singer.save()
+            except Singer.DoesNotExist:
+                    return cls( book = None, status = 'Singer not found')
         else:
             singer = Singer.objects.create(name=name, stageName = stageName, lastName = lastName, nationality = nationality, image = image)
             singer.save()
@@ -145,72 +246,225 @@ class UpsertAlbumMutation(graphene.Mutation):
         # The input arguments for this mutation
         id = graphene.ID()
         name = graphene.String(required=True)
-        singer = graphene.String(required=True)
         releaseDate = graphene.String()
-        physicalPrice= graphene.String(required=True)
-        genre = graphene.String(required=True)
-        stock = graphene.String(required=True)
-        image = graphene.String(required=True)
-        
+        physicalPrice = graphene.Int(required=True, description='Duration of the Song')
+        stock = graphene.String()
+        image = graphene.String()
+        singer = graphene.List(SingersInput)
+        genre = graphene.List(GenresInput)
 
     # The class attributes define the response of the mutation
     album = graphene.Field(AlbumType)
+    status = graphene.String()
 
     @classmethod
-    def mutate(cls, root, info, name, singer, releaseDate, physicalPrice, genre, stock, image, id = None):
-        album = None
-        if id is not None:
-            album = Album.objects.get(pk=id)
-            album.name = name
-            album.singer = singer
-            album.releaseDate = releaseDate
-            album.physicalPrice = physicalPrice
-            album.genre = genre
-            album.stock = stock
-            album.image = image
-            album.save()
+    def mutate(cls, root, info, **kwargs):
+
+        print('info:',dir(info.context))
+        print('headers:',info.context.headers)
+        
+        l_singers = []
+        if 'singers' in kwargs:
+            singers =  kwargs.pop('singers')
+            for singer in singers:
+                aux = None
+                if 'id' in singer:
+                    try:
+                        aux = Singer.objects.get(pk=singer['id'])
+                        aux.name = singer['name']
+                        aux.last_name = singer['lastName']
+                        aux.last_name = singer['nationality']
+                        aux.last_name = singer['image']
+                        aux.save()
+                    except Singer.DoesNotExist:
+                        return cls( status = 'Singer not found', album = None)
+                else:
+                    aux = Singer.objects.create(name=singer['name'], lastName=singer['lastName'], nationality=singer['nationality'], image=singer['image'])
+                    aux.save()
+                l_singers.append(aux)
+
+
+        l_genres = []
+        if 'genres' in kwargs:
+            genres =  kwargs.pop('genres')
+            for genre in genres:
+                aux = None
+                if 'id' in genre:
+                    try:
+                        aux = Genre.objects.get(pk=genre['id'])
+                        aux.name = genre['name']
+                        aux.save()
+                    except Genre.DoesNotExist:
+                        return cls( status = 'Genre not found', genre = None)
+                else:
+                    aux = Genre.objects.create(name=genre['name'])
+                    aux.save()
+                l_genres.append(aux)
+
+
+        if 'id' in kwargs:
+            album = None
+            try:
+                album = Album.objects.get(pk=kwargs['id'])
+                album.name = kwargs['name']
+                album.physicalPrice = kwargs['physicalPrice']
+                album.stock = kwargs['physicalPrice']
+                if 'releaseDate' in kwargs:
+                    album.releaseDate = kwargs['releaseDate']
+                album.save()
+            except Album.DoesNotExist:
+                return cls( album = None, status = 'Album not found')
         else:
-            album = Album.objects.create(name=name, singer = singer, releaseDate = releaseDate, physicalPrice = physicalPrice, genre = genre, stock = stock, image = image)
+            album = Album.objects.create(**kwargs)
             album.save()
+            for singer in l_singers:
+                albums_singers = Song.objects.create(album=album, singer=singer) #hace ruido
+                albums_singers.save()
+            for genre in l_genres:
+                albums_genres = Song.objects.create(album=album, genre=genre) #hace ruido
+                albums_genres.save()
         # Notice we return an instance of this mutation
-        return UpsertAlbumMutation(album=album)
+        return UpsertSongMutation(album = album, status = 'ok')
+
+# class UpsertAlbumMutation(graphene.Mutation):
+#     class Arguments:
+#         # The input arguments for this mutation
+#         id = graphene.ID()
+#         name = graphene.String(required=True)
+#         singer = graphene.String(required=True)
+#         releaseDate = graphene.String()
+#         physicalPrice= graphene.String(required=True)
+#         genre = graphene.String(required=True)
+#         stock = graphene.String(required=True)
+#         image = graphene.String(required=True)
+        
+
+#     # The class attributes define the response of the mutation
+#     album = graphene.Field(AlbumType)
+
+#     @classmethod
+#     def mutate(cls, root, info, name, singer, releaseDate, physicalPrice, genre, stock, image, id = None):
+#         album = None
+#         if id is not None:
+#             album = Album.objects.get(pk=id)
+#             album.name = name
+#             album.singer = singer
+#             album.releaseDate = releaseDate
+#             album.physicalPrice = physicalPrice
+#             album.genre = genre
+#             album.stock = stock
+#             album.image = image
+#             album.save()
+#         else:
+#             album = Album.objects.create(name=name, singer = singer, releaseDate = releaseDate, physicalPrice = physicalPrice, genre = genre, stock = stock, image = image)
+#             album.save()
+#         # Notice we return an instance of this mutation
+#         return UpsertAlbumMutation(album=album)
 
 class UpsertSongMutation(graphene.Mutation):
     class Arguments:
         # The input arguments for this mutation
         id = graphene.ID()
         name = graphene.String(required=True)
-        singer = graphene.String(required=True)
         releaseDate = graphene.String()
-        album = graphene.String(required=True)
-        duration = graphene.String(required=True)
-        completeFile = graphene.String(required=True)
-        previewFile = graphene.String(required=True)
-        digitalPrice= graphene.String(required=True)
+        duration = graphene.Int(required=True, description='Duration of the Song')
+        completeFile = graphene.String()
+        previewFile = graphene.String()
+        digitalPrice = graphene.Decimal(required=True, description='Average price')
+        singers = graphene.List(SingersInput)
 
     # The class attributes define the response of the mutation
     song = graphene.Field(SongType)
+    status = graphene.String()
 
     @classmethod
-    def mutate(cls, root, info, name, singer, releaseDate, album, duration, completeFile, previewFile, digitalPrice, id = None):
-        song = None
-        if id is not None:
-            song = Song.objects.get(pk=id)
-            song.name = name
-            song.singer = singer
-            song.releaseDate = releaseDate
-            song.album = album
-            song.duration = duration
-            song.completeFile = completeFile
-            song.previewFile = previewFile
-            song.digitalPrice = digitalPrice
-            song.save()
-        else:
-            song = Song.objects.create(name=name, singer = singer, releaseDate = releaseDate, album = album, duration = duration, completeFile = completeFile, previewFile = previewFile, digitalPrice = digitalPrice)
-            song.save()
-        # Notice we return an instance of this mutation
-        return UpsertSongMutation(song=song)
+    def mutate(cls, root, info, **kwargs):
 
+        print('info:',dir(info.context))
+        print('headers:',info.context.headers)
+        
+        l_singers = []
+        if 'singers' in kwargs:
+            singers =  kwargs.pop('singers')
+            for singer in singers:
+                aux = None
+                if 'id' in singer:
+                    try:
+                        aux = Singer.objects.get(pk=singer['id'])
+                        aux.name = singer['name']
+                        aux.last_name = singer['lastName']
+                        aux.last_name = singer['nationality']
+                        aux.last_name = singer['image']
+                        aux.save()
+                    except Singer.DoesNotExist:
+                        return cls( status = 'Singer not found', song = None)
+                else:
+                    aux = Singer.objects.create(name=singer['name'], lastName=singer['lastName'], nationality=singer['nationality'], image=singer['image'])
+                    aux.save()
+                l_singers.append(aux)
+
+        if 'id' in kwargs:
+            song = None
+            try:
+                song = Song.objects.get(pk=kwargs['id'])
+                song.name = kwargs['name']
+                song.digitalPrice = kwargs['digitalPrice']
+                if 'releaseDate' in kwargs:
+                    song.releaseDate = kwargs['releaseDate']
+                if 'duration' in kwargs:
+                    song.duration = kwargs['duration']
+                if 'completeFile' in kwargs:
+                    song.completeFile = kwargs['completeFile']
+                if 'previewFile' in kwargs:
+                    song.previewFile = kwargs['previewFile']
+                song.save()
+            except Song.DoesNotExist:
+                    return cls( song = None, status = 'Song not found')
+        
+        else:
+            song = Song.objects.create(**kwargs)
+            song.save()
+            for singer in l_singers:
+                songs_singers = Song.objects.create(song=song, singer=singer) #hace ruido
+                songs_singers.save()
+        # Notice we return an instance of this mutation
+        return UpsertSongMutation(song = song, status = 'ok')
+
+ #class UpsertSongMutation(graphene.Mutation):
+    # class Arguments:
+    #     # The input arguments for this mutation
+    #     id = graphene.ID()
+    #     name = graphene.String(required=True)
+    #     singer = graphene.String(required=True)
+    #     releaseDate = graphene.String()
+    #     album = graphene.String(required=True)
+    #     duration = graphene.String(required=True)
+    #     completeFile = graphene.String(required=True)
+    #     previewFile = graphene.String(required=True)
+    #     digitalPrice= graphene.String(required=True)
+
+    # # The class attributes define the response of the mutation
+    # song = graphene.Field(SongType)
+
+    # @classmethod
+    # def mutate(cls, root, info, name, singer, releaseDate, album, duration, completeFile, previewFile, digitalPrice, id = None):
+    #     song = None
+    #     if id is not None:
+    #         song = Song.objects.get(pk=id)
+    #         song.name = name
+    #         song.singer = singer
+    #         song.releaseDate = releaseDate
+    #         song.album = album
+    #         song.duration = duration
+    #         song.completeFile = completeFile
+    #         song.previewFile = previewFile
+    #         song.digitalPrice = digitalPrice
+    #         song.save()
+    #     else:
+    #         song = Song.objects.create(name=name, singer = singer, releaseDate = releaseDate, album = album, duration = duration, completeFile = completeFile, previewFile = previewFile, digitalPrice = digitalPrice)
+    #         song.save()
+    #     # Notice we return an instance of this mutation
+    #     return UpsertSongMutation(song=song)
 
 
 class DeleteGenreMutation(graphene.Mutation):
@@ -262,15 +516,11 @@ class DeleteSongMutation(graphene.Mutation):
         return cls(ok=True)
 
 
-class Query(AlbumQuery, graphene.ObjectType):
-    # query_genre = GenreQuery.Field()
-    # query_singer = SingerQuery.Field()
-    # query_album = AlbumQuery.Field()
-    # query_song = SongQuery.Field()
-    pass
+# class Query(GenreQuery, AlbumQuery, SingerQuery, SongQuery, graphene.ObjectType):
+#     pass
 
 
-class Mutation(graphene.ObjectType):
+class SongMutation(graphene.ObjectType):
     pass
     upsert_genre = UpsertGenreMutation.Field()
     upsert_singer = UpsertSingerMutation.Field()
@@ -280,6 +530,9 @@ class Mutation(graphene.ObjectType):
     delete_singer = DeleteSingerMutation.Field()
     delete_album = DeleteAlbumMutation.Field()
     delete_song = DeleteSongMutation.Field()
-    #update_genre = GenreMutation.Field()
+    #JWT MUTATIONS
+#     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
+#     verify_token = graphql_jwt.Verify.Field()
+#     refresh_token = graphql_jwt.Refresh.Field()
 
-schema = graphene.Schema(query=Query, mutation=Mutation)
+# schema = graphene.Schema(query=Query, mutation=Mutation)

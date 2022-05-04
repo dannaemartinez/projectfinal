@@ -14,6 +14,28 @@ from pathlib import Path
 import django
 from django.utils.encoding import force_str
 django.utils.encoding.force_text = force_str
+from django.contrib.auth import get_user_model
+
+
+def my_authentication(request, **kwargs):
+    from graphql_jwt.utils import get_payload, get_user_by_payload
+
+    # JWT VALIDATION
+    print("============================================"+"/n/n/n/n/n/n")
+    print(request.COOKIES)
+    token=request.COOKIES['JWT']
+    payload = get_payload(token, request)
+    user = get_user_by_payload(payload)
+
+    if 'username' in kwargs:
+        user = get_user_model().objects.get(username=kwargs['username'])
+
+    if 'password' in kwargs:
+        if user.password == kwargs['password']:
+            return user
+    return user
+
+django.contrib.auth.authenticate = my_authentication
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -56,6 +78,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
     'graphene_django',
     'corsheaders',
     'drf_yasg',
@@ -76,6 +99,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    # 'graphql_jwt.middleware.JSONWebTokenMiddleware',
 ]
 
 ROOT_URLCONF = 'library.urls'
@@ -99,6 +123,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'library.wsgi.application'
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 CACHES = {
     "default": {
@@ -126,6 +153,7 @@ DATABASES = {
     }
 }
 
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -134,8 +162,8 @@ REST_FRAMEWORK = {
        #'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
        #'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 5,
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'PAGE_SIZE': 5,
 }
 
 from datetime import timedelta
@@ -191,5 +219,27 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 GRAPHENE = {
-    'SCHEMA': "library.songs.schema.schema"
+    'SCHEMA': 'library.schema.schema',
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
 }
+AUTHENTICATION_BACKENDS = [
+    "graphql_jwt.backends.JSONWebTokenBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+GRAPHQL_JWT = {
+    "JWT_VERIFY_EXPIRATION": True,
+    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
+    "JWT_EXPIRATION_DELTA": timedelta(minutes=int(env.get('JWT_TOKEN_TIME'))),
+    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=1),
+    # "JWT_ALLOW_ANY_CLASSES":[
+    #     "graphql_auth.mutations.ObtainJSONWebToken"
+    # ]
+
+}
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.ScryptPasswordHasher'
+] 
