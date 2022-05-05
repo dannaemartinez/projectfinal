@@ -2,11 +2,19 @@ import graphene
 from graphene_django import DjangoObjectType
 from graphene.types.field import Field
 from library.users.models import *
+from typing_extensions import Required
 
 class UserType(DjangoObjectType):
      class Meta:
          model = User
          fields = '__all__'
+
+class UsersInput(graphene.InputObjectType):
+    id = graphene.ID()
+    username = graphene.String()
+    email = graphene.String(required=True)
+    password = graphene.String(required=True)
+    mode = graphene.Int()
 
 class UserQuery(graphene.ObjectType):
     all_users = graphene.List(UserType, first=graphene.Int(), skip=graphene.Int())

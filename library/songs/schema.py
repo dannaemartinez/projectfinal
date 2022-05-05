@@ -4,6 +4,7 @@ import graphene
 from graphene_django import DjangoObjectType
 from graphene.types.field import Field
 from library.songs.models import *
+from typing_extensions import Required
 
 
 class GenreType(DjangoObjectType):
@@ -329,10 +330,10 @@ class UpsertAlbumMutation(graphene.Mutation):
             album = Album.objects.create(**kwargs)
             album.save()
             for singer in l_singers:
-                albums_singers = Song.objects.create(album=album, singer=singer) #hace ruido
+                albums_singers = Album.objects.create(album=album, singer=singer) #hace ruido
                 albums_singers.save()
             for genre in l_genres:
-                albums_genres = Song.objects.create(album=album, genre=genre) #hace ruido
+                albums_genres = Album.objects.create(album=album, genre=genre) #hace ruido
                 albums_genres.save()
         # Notice we return an instance of this mutation
         return UpsertAlbumMutation(album = album, status = 'ok')

@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'graphene_django',
     'corsheaders',
     'drf_yasg',
+    #'typing_extensions',
     'rest_framework',
     'library.editorial',
     'library.users',

@@ -1,11 +1,12 @@
-from datetime import date
-import email
+from cmath import sin
+from email.mime import image
+from typing_extensions import Required
 import graphene
 from graphene_django import DjangoObjectType
 from graphene.types.field import Field
-from library.users.models import *
-from library.songs.models import *
+from library.songs.schema import *
 from library.sales.models import *
+from library.users.schema import UsersInput
 
 class SaleType(DjangoObjectType):
      class Meta:
@@ -18,34 +19,37 @@ class DirectionType(DjangoObjectType):
          fields = '__all__'
 
 class SaleQuery(graphene.ObjectType):
-    sale_by_email = graphene.List(SaleType, email=graphene.String(required=True))
+    sale_by_email = graphene.List(SaleType, clientUser=graphene.String(required=True))
     
-    def resolve_genre_by_email(root, info, email):
+    def resolve_sale_by_email(root, info, clientUser):
         try:
-            return User.objects.filter(email=email)
+            return User.objects.filter(clientUser=clientUser)
         except User.DoesNotExist:
             return None
 
 class SalesInput(graphene.InputObjectType):
     id = graphene.ID()
-    email = graphene.String(required=True) 
-    date = graphene.String()
+    clientUser = graphene.Field(UsersInput)
+    buyDate = graphene.String()
     total = graphene.Int()
 
-class DeleteSaleMutation(graphene.Mutation):
-    ok = graphene.Boolean()
+
+class CreateSaleMutation(graphene.Mutation):
+    sale = graphene.List(SaleType)
 
     class Arguments:
-        id = graphene.ID()
+        sale = SalesInput(required = True)
 
-    @classmethod
-    def mutate(cls, root, info, **kwargs):
-        sale = Sale.objects.get(pk=kwargs["id"])
-        sale.delete()
-        return cls(ok=True)
-
+    @staticmethod
+    def mutate (cls, root, info, **kwargs):
+        print('info:',dir(info.context))
+        print('headers:',info.context.headers)
+        
+        sale = Sale.objects.create(**kwargs)
+        sale.save()
+        return CreateSaleMutation(sale = sale)
 
 class SaleMutation(graphene.ObjectType):
     pass
-    #upsert_sale = UpsertSaleMutation.Field()
-    delete_sale = DeleteSaleMutation.Field()
+    upsert_sale = CreateSaleMutation.Field()
+    
