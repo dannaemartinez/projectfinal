@@ -34,8 +34,8 @@ class Song(models.Model):
 	releaseDate = models.DateTimeField(auto_now_add=True, null=True)
 	album = models.ForeignKey(Album, related_name='SongWithAlbum', on_delete=models.DO_NOTHING)
 	duration = models.IntegerField()
-	completeFile = models.TextField(null=False)
-	previewFile = models.TextField(null=False)
+	completeFile = models.TextField()
+	previewFile = models.TextField()
 	digitalPrice = models.DecimalField(max_digits=5, decimal_places=2)
 
 
