@@ -347,16 +347,26 @@ class UpsertSongMutation(graphene.Mutation):
         aux_album = None
         if 'album' in kwargs:
             album = kwargs.pop('album')
-            try:
-                aux_album = Album.objects.get(pk=album['id'])
-                aux_album.name = album['name']
-                aux_album.physicalPrice = album['physicalPrice']
-                aux_album.stock = album['stock']
-                aux_album.releaseDate = album['releaseDate']
-                aux_album.image = album['image']
+            if 'id' in album:
+                try:
+                    aux_album = Album.objects.get(pk=album['id'])
+                    aux_album.name = album['name']
+                    aux_album.physicalPrice = album['physicalPrice']
+                    aux_album.stock = album['stock']
+                    if 'releaseDate' in album:
+                        aux_album.releaseDate = datetime.strptime(album['releaseDate'], "%Y-%m-%d")
+                    if 'image' in album:
+                        aux_album.image = album['image']
+                    aux_album.save()
+                except Album.DoesNotExist:
+                    return cls(status='Album not found', album=None)
+            else:
+                aux_album = Album.objects.create(name=album['name'], physicalPrice = album['physicalPrice'] , stock = album['stock'])
+                if 'releaseDate' in album:
+                    aux_album.releaseDate = datetime.strptime(album['releaseDate'], "%Y-%m-%d")
+                if 'image' in album:
+                    aux_album.image = album['image']
                 aux_album.save()
-            except Album.DoesNotExist:
-                return cls(status='Album not found', album=None)
 
         if 'id' in kwargs:
             song = None
