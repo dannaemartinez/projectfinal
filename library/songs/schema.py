@@ -382,7 +382,8 @@ class UpsertSongMutation(graphene.Mutation):
                 duration = kwargs['duration'], 
                 previewFile = kwargs['previewFile'],
                 album = aux_album,
-                singer = aux_singer)
+                singer = aux_singer
+                )
             if 'releaseDate' in kwargs:
                 song.releaseDate = datetime.strptime(kwargs['releaseDate'], "%Y-%m-%d")
             if 'image' in kwargs:
