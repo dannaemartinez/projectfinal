@@ -3,6 +3,7 @@ from graphene_django import DjangoObjectType
 from graphene.types.field import Field
 from library.users.models import *
 from typing_extensions import Required
+from sqlalchemy import desc
 
 class UserType(DjangoObjectType):
      class Meta:

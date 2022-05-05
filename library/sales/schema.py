@@ -20,6 +20,11 @@ class DirectionType(DjangoObjectType):
          model = Direction
          fields = '__all__'
 
+class ItemSaleType(DjangoObjectType):
+     class Meta:
+         model = Item_Sale
+         fields = '__all__'
+
 class SaleQuery(graphene.ObjectType):
     sale_by_email = graphene.List(SaleType, email=graphene.String(required=True))
     
@@ -29,18 +34,51 @@ class SaleQuery(graphene.ObjectType):
         except Sale.DoesNotExist:
             return None
 
+class DirectionQuery(graphene.ObjectType):
+    direction_by_email = graphene.List(SaleType, email=graphene.String(required=True))
+    
+    def resolve_sale_by_email(root, info, email):
+        try:
+            return User.objects.filter(email=email)
+        except Sale.DoesNotExist:
+            return None
+
+class PlaylistQuery(graphene.ObjectType):
+    playlist_by_email = graphene.List(SaleType, email=graphene.String(required=True))
+    
+    def resolve_sale_by_email(root, info, email):
+        try:
+            return User.objects.filter(email=email)
+        except Sale.DoesNotExist:
+            return None
+
 class SalesInput(graphene.InputObjectType):
     id = graphene.ID()
-    email = graphene.Field(UsersInput)
+    user = graphene.Field(UsersInput)
     buyDate = graphene.String()
     total = graphene.Int()
+    direction = graphene.Field(DirectionInput)
+                              
+class ItemSalesInput(graphene.InputObjectType):
+    id = graphene.ID()
+    songs = graphene.Field(SongsInput)
+    albums = graphene.Field(AlbumsInput)
+    ales = graphene.Field(SalesInput)
+    finalPrice = graphene.Int()
+
+class DirectionInput(graphene.InputObjectType):
+    id = graphene.ID()
+    user = graphene.Field(UsersInput)
+    street = graphene.String()
+    zipcode = graphene.Int()
+    city = graphene.String()
 
 class UpsertSaleMutation(graphene.Mutation):
     class Arguments:
         id = graphene.ID()
-        user = UsersInput(required=True)
+        userId = graphene.Int(required=True)
         buyDate = graphene.String()
-        total = graphene.Int()
+        total = graphene.Decimal()
     
     sale = graphene.Field(SaleType)
     status = graphene.String()
@@ -49,50 +87,32 @@ class UpsertSaleMutation(graphene.Mutation):
     def mutate (cls, root, info, **kwargs):
         print('info:', dir(info.context))
         print('headers:', info.context.headers)
-        aux_user = None
-        if 'user' in kwargs:
-            user = kwargs.pop('user')
-            if id in user:
-                try:
-                    aux_user = User.objects.get(pk=user['id'])
-                    aux_user.email = user['email']
-                    aux_user.username = user['username']
-                    aux_user.password = user['password']
-                    aux_user.mode = user['mode']
-                    aux_user.save()
-                except User.DoesNotExist:
-                    return cls(status='User not found', user=None)
-            else:
-                aux_user = User.objects.create(
-                    email = user['email'], username = user['username'],
-                    password = user['password'], mode = user['mode']
-                )
-                aux_user.save()
         if 'id' in kwargs:
             sale = None
             try:
                 sale = Sale.objects.get(pk=kwargs['id'])
                 sale.total = kwargs['total']
-                sale.user = aux_user
+                sale.user = User.objects.get(pk=kwargs['userId'])
                 if 'buyDate' in kwargs:
-                    sale.releaseDate = datetime.strptime(kwargs['buyDate'], "%Y-%m-%d")
+                    sale.buyDate = datetime.strptime(kwargs['buyDate'], "%Y-%m-%d")
                 sale.save()
             except Sale.DoesNotExist:
                 return cls(sale = None, status='Sale not found')
         else:
+            user = User.objects.get(pk=kwargs['userId'])
             sale = Sale.objects.create(
                 total = kwargs['total'], 
-                sale = aux_user
+                user = user
             )
             if 'buyDate' in kwargs:
                     sale.releaseDate = datetime.strptime(kwargs['buyDate'], "%Y-%m-%d")
             sale.save()
         return UpsertSaleMutation(sale = sale)
 
-class UpsertDierction(graphene.Mutation):
+class UpsertDirectionMutation(graphene.Mutation):
     class Arguments:
         id = graphene.ID()
-        email = graphene.String(required=True)
+        userId = graphene.Int(required=True)
         street = graphene.String(required=True)
         zipcode = graphene.Int(required=True)
         city = graphene.String(required=True)
@@ -103,11 +123,70 @@ class UpsertDierction(graphene.Mutation):
     def mutate(cls, root, info, **kwargs):
         print('info:', dir(info.context))
         print('headers:', info.context.headers)
-
+        if 'id' in kwargs:
+            direction = None
+            try:
+                direction = Direction.objects.get(pk=kwargs['id'])
+                direction.street = kwargs['street']
+                direction.zipcode = kwargs['zipcode']
+                direction.city = kwargs['city']
+                direction.user = User.objects.get(pk=kwargs['userId'])
+                direction.save()
+            except Direction.DoesNotExist:
+                return cls(direction = None, status='direction not found')
+        else:
+            user = User.objects.get(pk=kwargs['userId'])
+            direction = Direction.objects.create(
+                street = kwargs['street'], 
+                zipcode = kwargs['zipcode'],
+                city = kwargs['city'],
+                user = user
+            )
+            direction.save()
+        return UpsertDirectionMutation(direction = direction)
         
+class UpsertItemSaleMutation(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID()
+        albumId = graphene.Int(required=True)
+        songId = graphene.Int(required=True)
+        saleId = graphene.Int(required=True)
+        finalPrice = graphene.Decimal()
+    
+    itemsale = graphene.Field(ItemSaleType)
+    status = graphene.String()
 
+    @classmethod
+    def mutate (cls, root, info, **kwargs):
+        print('info:', dir(info.context))
+        print('headers:', info.context.headers)
+        if 'id' in kwargs:
+            itemsale = None
+            try:
+                itemsale = Item_Sale.objects.get(pk=kwargs['id'])
+                itemsale.finalPrice = kwargs['finalPrice']
+                itemsale.album = Album.objects.get(pk=kwargs['albumId'])
+                itemsale.song = Song.objects.get(pk=kwargs['songId'])
+                itemsale.sale = Sale.objects.get(pk=kwargs['saleId'])
+                itemsale.save()
+            except Item_Sale.DoesNotExist:
+                return cls(itemsale = None, status='ItemSale not found')
+        else:
+            album = Album.objects.get(pk=kwargs['albumId'])
+            song = Song.objects.get(pk=kwargs['songId'])
+            sale = Sale.objects.get(pk=kwargs['saleId'])
+            itemsale = Item_Sale.objects.create(
+                finalPrice = kwargs['finalPrice'], 
+                song = song,
+                album = album,
+                sale = sale
+            )
+            itemsale.save()
+        return UpsertItemSaleMutation(itemsale = itemsale)
 
 class SaleMutation(graphene.ObjectType):
     pass
     upsert_sale = UpsertSaleMutation.Field()
-    
+    upsert_direction = UpsertDirectionMutation.Field()
+    upsert_itemsale = UpsertItemSaleMutation.Field()
+                  

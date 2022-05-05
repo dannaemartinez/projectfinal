@@ -6,12 +6,13 @@ from library.users.models import User
 
 # Create your models here.
 class Sale(models.Model):
-	email = models.ForeignKey(User, related_name='SaleWithUser',on_delete=models.DO_NOTHING)
+	user = models.ForeignKey(User, related_name='SaleWithUser',on_delete=models.DO_NOTHING)
 	buyDate = models.DateTimeField(auto_now_add=True, null=True)
-	total = models.DecimalField(decimal_places=2, max_digits=4, default=0)
+	total = models.DecimalField(decimal_places=2, max_digits=6, default=0)
+	
 
 	def __str__(self):
-	 	return f'{self.clientUser} {self.buyDate}'
+	 	return f'{self.user} {self.buyDate}'
 
 class Item_Sale(models.Model):
 	sale = models.ForeignKey(Sale, related_name='Item_SaleWithSale', on_delete=models.DO_NOTHING)
@@ -24,14 +25,14 @@ class Item_Sale(models.Model):
 		unique_together = (("sale"),)
 
 class Direction(models.Model):
-	email = models.ForeignKey(User, related_name='DirectionWithUser', on_delete=models.DO_NOTHING)
+	user = models.ForeignKey(User, related_name='DirectionWithUser', on_delete=models.DO_NOTHING)
 	street = models.CharField(max_length=255, unique=True)
 	zipcode = models.IntegerField()
 	city = models.CharField(max_length=255, unique=True)
 
 
 	class Meta:
-		unique_together = (("email"),)
+		unique_together = (("user"),)
 
 
 
