@@ -312,8 +312,8 @@ class UpsertSongMutation(graphene.Mutation):
         previewFile = graphene.String()
         digitalPrice = graphene.Decimal(
             required=True, description='Average price')
-        # singer = SingersInput(required=True)
-        # album = AlbumsInput(required=True)
+        singerId = graphene.Int(required=True)
+        albumId = graphene.Int(required=True)
     # The class attributes define the response of the mutation
     song = graphene.Field(SongType)
     status = graphene.String()
@@ -321,53 +321,6 @@ class UpsertSongMutation(graphene.Mutation):
     def mutate(cls, root, info, **kwargs):
         print('info:', dir(info.context))
         print('headers:', info.context.headers)
-        aux_singer = None
-        if 'singer' in kwargs:
-            singer = kwargs.pop('singer')
-            if 'id' in singer:
-                try:
-                    aux_singer = Singer.objects.get(pk=singer['id'])
-                    aux_singer.name = singer['name']
-                    aux_singer.lastName = singer['lastName']
-                    aux_singer.stageName = singer['stageName']
-                    aux_singer.nationality = singer['nationality']
-                    aux_singer.image = singer['image']
-                    aux_singer.save()
-                except Singer.DoesNotExist:
-                    return cls(status='Singer not found', singer=None)
-            else:
-                aux_singer = Singer.objects.create(
-                    name=singer['name'],
-                    lastName=singer['lastName'],
-                    stageName=singer['stageName'],
-                    nationality=singer['nationality'],
-                    image=singer['image']
-                )
-                aux_singer.save()
-        aux_album = None
-        if 'album' in kwargs:
-            album = kwargs.pop('album')
-            if 'id' in album:
-                try:
-                    aux_album = Album.objects.get(pk=album['id'])
-                    aux_album.name = album['name']
-                    aux_album.physicalPrice = album['physicalPrice']
-                    aux_album.stock = album['stock']
-                    if 'releaseDate' in album:
-                        aux_album.releaseDate = datetime.strptime(album['releaseDate'], "%Y-%m-%d")
-                    if 'image' in album:
-                        aux_album.image = album['image']
-                    if 'genre' in album:
-                        aux_album.genre = album['genre']
-                    aux_album.save()
-                except Album.DoesNotExist:
-                    return cls(status='Album not found', album=None)
-            else:
-                aux_album = Album.objects.create(name=album['name'], physicalPrice = album['physicalPrice'] , stock = album['stock'])
-                if 'releaseDate' in album:
-                    aux_album.releaseDate = datetime.strptime(album['releaseDate'], "%Y-%m-%d")
-                aux_album.save()
-
         if 'id' in kwargs:
             song = None
             try:
@@ -377,8 +330,8 @@ class UpsertSongMutation(graphene.Mutation):
                 song.completeFile = kwargs['completeFile']
                 song.duration = kwargs['duration']
                 song.previewFile = kwargs['previewFile']
-                song.album = aux_album
-                song.singer = aux_singer
+                song.album = Album.objects.get(pk=kwargs['albumId'])
+                song.singer = Singer.objects.get(pk=kwargs['singerId'])
                 if 'releaseDate' in kwargs:
                     song.releaseDate = datetime.strptime(kwargs['releaseDate'], "%Y-%m-%d")
                 song.save()
@@ -386,16 +339,16 @@ class UpsertSongMutation(graphene.Mutation):
                 return cls(song=None, status='Song not found')
         else:
             song = Song.objects.create(
-                name = kwargs['name'], 
-                digitalPrice = kwargs['digitalPrice'], 
-                completeFile = kwargs['completeFile'], 
-                duration = kwargs['duration'], 
+                name = kwargs['name'],
+                digitalPrice = kwargs['digitalPrice'],
+                completeFile = kwargs['completeFile'],
+                duration = kwargs['duration'],
                 previewFile = kwargs['previewFile'],
-                album = aux_album,
-                singer = aux_singer
+                album = Album.objects.get(pk=kwargs['albumId']),
+                singer = Singer.objects.get(pk=kwargs['singerId'])
                 )
             if 'releaseDate' in kwargs:
-                song.releaseDate = datetime.strptime(kwargs['releaseDate'], "%Y-%m-%d") 
+                song.releaseDate = datetime.strptime(kwargs['releaseDate'], "%Y-%m-%d")
             song.save()
         # Notice we return an instance of this mutation
         return UpsertSongMutation(song=song, status='ok')
