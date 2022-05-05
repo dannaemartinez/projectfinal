@@ -32,7 +32,8 @@ services:
       - our-library-net
 
   web06:
-    build: .
+    build: 
+      context: ./backend
     image: my-django-image06:2.0.0
     #command: bash -c "python manage.py makemigrations && python manage.py migrate && pytest && python manage.py runserver 0.0.0.0:80${PORT}"
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:80${PORT}"
@@ -56,6 +57,27 @@ services:
        - "${DJANGO_VOLUME_PATH}:/usr/src/django/library"
     ports:
       - "90${PORT}:80${PORT}"
+      - 3001:3001
+    networks:
+      - our-library-net
+
+  front06:
+    build: 
+      context: ./frontend
+      args:
+        - BASE_API_URI=${BASE_API_URI}
+    image: node06:18-alpine3.14
+    command: "sh -c 'npm install && npm dedupe && npm cache clear --force && npm start'"
+    container_name: "react${PORT}"
+    depends_on: 
+      - web06
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - "${REACT_DEV_VOLUME_PATH}:/usr/src/frontend"
+      - "${REACT_DEV_VOLUME_PATH}/node_modules:/usr/src/frontend/node_modules"
+    ports:
+      - "110${PORT}:3000"
     networks:
       - our-library-net
 

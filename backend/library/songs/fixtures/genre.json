@@ -1,0 +1,72 @@
+[
+    {
+      "model": "songs.Genre",
+      "pk": 1,
+      "fields": {
+      "name": "kpop"
+      }
+    },
+    {
+      "model": "songs.Genre",
+      "pk": 2,
+      "fields": {
+      "name": "pop"
+      }
+    },
+    {
+      "model": "songs.Genre",
+      "pk": 3,
+      "fields": {
+      "name": "rop"
+      }
+    },
+    {
+      "model": "songs.Genre",
+      "pk": 4,
+      "fields": {
+      "name": "bachata"
+      }
+    },
+    {
+      "model": "songs.Genre",
+      "pk": 5,
+      "fields": {
+      "name": "reggaeton"
+      }
+    },
+    {
+      "model": "songs.Genre",
+      "pk": 6,
+      "fields": {
+      "name": "rap"
+      }
+    },
+    {
+      "model": "songs.Genre",
+      "pk": 7,
+      "fields": {
+      "name": "clasica"
+      }
+    },
+    {
+      "model": "songs.Genre",
+      "pk": 8,
+      "fields": {
+      "name": "country"
+      }
+    },
+    {
+      "model": "songs.Genre",
+      "pk": 9,
+      "fields": {
+      "name": "metal"
+      }
+    },
+    {
+      "model": "songs.Genre",
+      "pk": 10,
+      "fields": {
+      "name": "folk"
+      }
+    } 
+]

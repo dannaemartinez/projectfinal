@@ -1,0 +1,52 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Docker: Django",
+      "type": "python",
+      "request": "attach",
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/backend",
+          "remoteRoot": "/usr/src/django/library"
+        }
+      ],
+      "port": 3001,
+      "host": "127.0.0.1",
+    },
+    {
+      //   "type": "pwa-msedge",
+      //   "request": "attach",
+      //   "name": "Attach to browser localhost",
+      //   "pathMappings": [
+      //     {
+      //       "localRoot": "${workspaceFolder}/frontend",
+      //       "remoteRoot": "/usr/src/frontend"
+      //     }
+      //   ],
+      //   // "url": "http://localhost:3000",
+      //   // "webRoot": "${workspaceFolder}"
+      //   "port": 9229,
+      //   "host": "127.0.0.1",
+      "name": "Debug CRA",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:11006",
+      "webRoot": "${workspaceFolder}/frontend/src",
+      "sourceMapPathOverrides": {
+        "/app/src/frontend/*": "${webRoot}/*"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Django/React",
+      "configurations": ["Docker: Django", "Debug CRA"],
+      // "preLaunchTask": "${defaultBuildTask}",
+      "stopAll": true
+    }
+  ]
+}

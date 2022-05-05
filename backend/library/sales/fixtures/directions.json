@@ -1,0 +1,12 @@
+[
+    {
+      "model": "sales.Direction",
+      "pk": 1,
+      "fields": {
+        "user": 3,
+        "zipcode": 76806,
+        "street": "Av Central 145, San Cayetano",
+        "city": "Queretaro"
+      }
+    }
+]

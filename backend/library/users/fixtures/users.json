@@ -1,0 +1,18 @@
+[
+    {
+      "model": "users.User",
+      "pk": 3,
+      "fields": {
+        "username": "Dannae",
+        "first_name": "Dannae",
+        "password": "123",
+        "last_name": "Martinez",
+        "email": "dannaeruthmartinez@gmail.com",
+        "is_staff": true,
+        "is_active": true,  
+        "date_joined": "2022-05-06",
+        "mode": 2,
+        "last_login":"2022-05-06"
+      }
+    }
+]

@@ -1,0 +1,11 @@
+[
+    {
+      "model": "sales.Sale",
+      "pk": 1,
+      "fields": {
+        "user": 3,
+        "total": 0,
+        "buyDate": "2022-05-06"
+      }
+    }
+]

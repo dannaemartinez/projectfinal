@@ -1,0 +1,158 @@
+[
+    {
+      "model": "songs.Album",
+      "pk": 1,
+      "fields": {
+        "name": "Pies descalzos",
+        "image": "aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvNzFXSnFKRW1PU0wuX1NMMTUwMF8uanBn",
+        "physicalPrice": 300.2,
+        "releaseDate": "1995-07-01",
+        "stock": 13,
+        "genre": 3,
+        "singer": 1
+      }
+    },
+    {
+      "model": "songs.Album",
+      "pk": 2,
+      "fields": {
+        "name": "Loba",
+        "image": "aHR0cHM6Ly9jZG5zLWltYWdlcy5kemNkbi5uZXQvaW1hZ2VzL2NvdmVyLzM2ODZmZTQ2YjI0OWE2YzBmNTE4MDljZDU2ODVhMDI0LzM1MHgzNTAuanBn",
+        "physicalPrice": 100.5,
+        "releaseDate": "2009-10-09",
+        "stock": 3,
+        "genre": 6,
+        "singer":1
+      }
+    },
+    {
+      "model": "songs.Album",
+      "pk": 3,
+      "fields": {
+        "name": "El Dorado",
+        "image": "aHR0cHM6Ly9ibG9nbWlzdGVybXVzaWMuZmlsZXMud29yZHByZXNzLmNvbS8yMDE3LzA3L2ltZ181MTQxLmpwZw==",
+        "physicalPrice": 150.5,
+        "releaseDate": "2017-05-03",
+        "stock": 35,
+        "genre": 2,
+        "singer":1
+      }
+    },
+    {
+      "model": "songs.Album",
+      "pk": 4,
+      "fields": {
+        "name": "Dangerous Woman",
+        "image": "aHR0cHM6Ly9pLnBpbmltZy5jb20vb3JpZ2luYWxzLzgzLzk5LzNhLzgzOTkzYTZmNjg5YTk1YzdiM2YwNGNjNjU4Zjg3NzE4LmpwZw==",
+        "physicalPrice": 300.99,
+        "releaseDate": "2016-05-20",
+        "stock": 10,
+        "genre": 2,
+        "singer":2
+      }
+    },
+    {
+      "model": "songs.Album",
+      "pk": 5,
+      "fields": {
+        "name": "A Girl Like Me",
+        "image": "aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvNzFwUFBQQkFCOUwuX1NMMTIwMF8uanBn",
+        "physicalPrice": 100.99,
+        "releaseDate": "2006-04-19",
+        "stock": 6,
+        "genre": 2,
+        "singer":3
+      }
+    },
+    {
+      "model": "songs.Album",
+      "pk": 6,
+      "fields": {
+        "name": "Up Next Session",
+        "image": "aHR0cHM6Ly9pMS5zbmRjZG4uY29tL2FydHdvcmtzLTAwMDU5Nzc5MjE1NS1pbXc4M3QtdDUwMHg1MDAuanBn",
+        "physicalPrice": 69.99,
+        "releaseDate": "2017-09-20",
+        "stock": 26,
+        "genre": 3,
+        "singer":4
+      }
+    },
+    {
+      "model": "songs.Album",
+      "pk": 7,
+      "fields": {
+        "name": "My Love Is Your Love",
+        "image": "aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvNTF2UEhLbjZMa0wuX1NYMzU1Xy5qcGc=",
+        "physicalPrice": 69.99,
+        "releaseDate": "1998-11-17",
+        "stock": 5,
+        "genre": 2,
+        "singer":5
+      }
+    },
+    {
+      "model": "songs.Album",
+      "pk": 8,
+      "fields": {
+        "name": "Teenage Dream",
+        "image": "aHR0cHM6Ly9jZG4uZ3J1cG9lbGNvcnRlaW5nbGVzLmVzL1NHRk0vZGN0bS9JTUFHRU5FUzAyLzIwMTIwNS8xOC8wMDEwNTExMTI4Nzc1MF9fX1AxXzYwMHg2MDAuanBn",
+        "physicalPrice": 50.99,
+        "releaseDate": "2012-03-26",
+        "stock": 5,
+        "genre": 4,
+        "singer":6
+      }
+    },
+    {
+      "model": "songs.Album",
+      "pk": 9,
+      "fields": {
+        "name": "1000 Forms of Fear",
+        "image": "aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvODExNWdQamlULUwuX0FDX1NMMTUwMF8uanBn",
+        "physicalPrice": 150.99,
+        "releaseDate": "2014-07-04",
+        "stock": 15,
+        "genre": 6,
+        "singer":7
+      }
+    },
+    {
+      "model": "songs.Album",
+      "pk": 10,
+      "fields": {
+        "name": "Camila",
+        "image": "aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvODF2dXBRT2RjS0wuX1NZNDUwXy5qcGc=",
+        "physicalPrice": 200.99,
+        "releaseDate": "2018-01-12",
+        "stock": 35,
+        "genre": 2,
+        "singer":8
+      }
+    },
+    {
+      "model": "songs.Album",
+      "pk": 11,
+      "fields": {
+        "name": "Future Nostalgia",
+        "image": "aHR0cHM6Ly93d3cuc2FuYm9ybnMuY29tLm14L2ltYWdlbmVzLXNhbmJvcm5zLWlpLzEyMDAvMTkwMjk1Mjg2MTAxLmpwZw==",
+        "physicalPrice": 200.99,
+        "releaseDate": "2020-03-27",
+        "stock": 35,
+        "genre": 2,
+        "singer":9
+      }
+    },
+    {
+      "model": "songs.Album",
+      "pk": 12,
+      "fields": {
+        "name": "For You",
+        "image": "aHR0cHM6Ly9wYnMudHdpbWcuY29tL21lZGlhL0VtYUhyZ0xYSUFJVF9TdC5qcGc=",
+        "physicalPrice": 362.00,
+        "releaseDate": "2014-11-24",
+        "stock": 2,
+        "genre": 9,
+        "singer":10
+      }
+    }
+]

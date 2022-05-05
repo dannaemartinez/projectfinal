@@ -1,0 +1,12 @@
+[
+    {
+      "model": "sales.Item_Sale",
+      "pk": 1,
+      "fields": {
+        "sale": 1,
+        "songs": 6,
+        "albums": 1,
+        "finalPrice": 253.01
+      }
+    }
+]

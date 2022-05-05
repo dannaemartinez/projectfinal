@@ -1,0 +1,123 @@
+[
+    {
+      "model": "songs.Singer",
+      "pk": 1,
+      "fields": {
+        "name": "Shakira",
+        "lastName": "Mebarak",
+        "image":"aHR0cHM6Ly9sb3M0MGVzMDAuZXBpbWcubmV0L2xvczQwL2ltYWdlbmVzLzIwMTcvMTAvMjQvbXVzaWNhLzE1MDg4MzQ0NDhfMDk4MTE2XzE1MDg4MzU5MzRfbm90aWNpYV9ub3JtYWwuanBn",
+        "nationality": "Colombiana",
+        "stageName": "Shakira"
+      }
+    },
+    {
+      "model": "songs.Singer",
+      "pk": 2,
+      "fields": {
+        "name": "Laura",
+        "lastName": "Pergolizzi",
+        "image": "aHR0cHM6Ly9pbWFnZXMuc3F1YXJlc3BhY2UtY2RuLmNvbS9jb250ZW50L3YxLzU2ZTgzNGViZDUxY2Q0NjZjOTkxNzhlNS8xNTkyNDMwOTMxNzA5LTEzUUY3UE41MUE3RTNRS0ozRUo3L0xQLmpwZw",
+        "nationality": "Estadounidense",
+        "stageName": "LP"
+      }
+    },
+    {
+      "model": "songs.Singer",
+      "pk": 3,
+      "fields": {
+        "name": "Robyn Rihanna",
+        "lastName": "Fenty",
+        "image": "aHR0cHM6Ly9pbWd3b21hbi5lbHBlcmlvZGljby5jb20vYjIvZDIvYWMvcmloYW5uYS1hY3RvLXByZXNlbnRhY2lvbi1mZW50eS0yMDIwLmpwZw",
+        "nationality": "Barbadense",
+        "stageName": "Rihanna"
+      }
+    },
+    {
+      "model": "songs.Singer",
+      "pk": 4,
+      "fields": {
+        "name": "Ariana",
+        "lastName": "Grande",
+        "image": "aHR0cHM6Ly9sYXN0Zm0uZnJlZXRscy5mYXN0bHkubmV0L2kvdS83NzB4MC83ODU0MjA2NGM1Nzc1Y2FmNTMxNjdiZTNiZGJiOTdiMi5qcGc",
+        "nationality": "Estadounidense",
+        "stageName": "Ariana Grande"
+      }
+    },
+    {
+      "model": "songs.Singer",
+      "pk": 5,
+      "fields": {
+        "name": "Billie",
+        "lastName": "Pirate Baird O'Connell",
+        "image": "aHR0cHM6Ly9sYXZlcmRhZG5vdGljaWFzLmNvbS9fX2V4cG9ydC8xNjAwODQxMjc5MTI5L3NpdGVzL2xhdmVyZGFkL2ltZy8yMDIwLzA5LzIzL2JpbGxpZV9laWxpc2hfY2VsZWJyaWRhZGVzX3F1ZV9hZG1pcmFuX2FfYWxhX2NhbnRhbnRlLmpwZ18xOTAyODAwOTEzLmpwZw==",
+        "nationality": "Estadounidense",
+        "stageName": "Billie Eilish"
+      }
+    },
+    {
+      "model": "songs.Singer",
+      "pk": 6,
+      "fields": {
+        "name": "Whitney",
+        "lastName": "Houston",
+        "image": "aHR0cHM6Ly93d3cubGVjdHVyYXMuY29tL21lZGlvLzIwMjAvMDkvMzAvd2hpdG5leS1ob3VzdG9uXzc5NDI5MjNhXzgwMHg4MDAuanBn",
+        "nationality": "Estadounidense",
+        "stageName": "Whitney Houston"
+      }
+    },
+    {
+      "model": "songs.Singer",
+      "pk": 7,
+      "fields": {
+        "name": "Katheryn Elizabeth",
+        "lastName": "Hudson",
+        "image": "aHR0cHM6Ly9oaXBzLmhlYXJzdGFwcHMuY29tL2htZy1wcm9kLnMzLmFtYXpvbmF3cy5jb20vaW1hZ2VzL2thdHktcGVycnktdmlzaXRzLXRoZS1zaXJpdXN4bS1zdHVkaW9zLW9uLWF1Z3VzdC0wNy0yMDE5LWluLW5ld3MtcGhvdG8tMTU4NzM3Nzg4NC5qcGc=",
+        "nationality": "Estadounidense",
+        "stageName": "Katy Perry"
+      }
+    },
+    {
+      "model": "songs.Singer",
+      "pk": 8,
+      "fields": {
+        "name": "Sia Kate",
+        "lastName": "Isobelle",
+        "image": "aHR0cHM6Ly9pY2hlZi5iYmNpLmNvLnVrL25ld3MvNjQwL2Nwc3Byb2RwYi8xNTk0MC9wcm9kdWN0aW9uL185ODY0ODM4OF9nZXR0eWltYWdlcy01MjM5MzI2NDguanBn",
+        "nationality": "Australiana",
+        "stageName": "Sia"
+      }
+    },
+    {
+      "model": "songs.Singer",
+      "pk": 9,
+      "fields": {
+        "name": "Karla Camila",
+        "lastName": "Cabello",
+        "image": "aHR0cHM6Ly9sb3M0MGVzMDAuZXBpbWcubmV0L2xvczQwL2ltYWdlbmVzLzIwMTcvMDcvMTgvbG92ZTQwLzE1MDAzNzY5NDVfNTk3NjcwXzE1MDAzNzc4NDBfbm90aWNpYV9ub3JtYWwuanBn",
+        "nationality": "Cubana",
+        "stageName": "Camila Cabello"
+      }
+    },
+    {
+      "model": "songs.Singer",
+      "pk": 10,
+      "fields": {
+        "name": "Dua",
+        "lastName": "Lipa",
+        "image": "aHR0cHM6Ly9tZWdhc3Rhci1jZG5tZWQuYWdpbGVjb250ZW50LmNvbS9yZXNvdXJjZXMvanBnLzkvMi8xNjA2MTI5NzQzODI5LmpwZw",
+        "nationality": "Londonense",
+        "stageName": "Dua Lipa"
+      }
+    },
+    {
+      "model": "songs.Singer",
+      "pk": 11,
+      "fields": {
+        "name": "Selena Marie",
+        "lastName": "Gómez",
+        "image": "aHR0cHM6Ly9pMC53cC5jb20vaG90Ym9vay5teC93cC1jb250ZW50L3VwbG9hZHMvMjAyMS8wNS9wb3J0YWRhdG9kby1sby1xdWUtdGllbmVzLXF1ZS1zYWJlci1zb2JyZS1zZWxlbmEtZ29tZXouanBlZw",
+        "nationality": "Estadounidense",
+        "stageName": "Selena Gómez"
+      }
+    }
+]
