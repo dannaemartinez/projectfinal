@@ -205,7 +205,7 @@ class UpsertSingerMutation(graphene.Mutation):
                 singer.image = image
                 singer.save()
             except Singer.DoesNotExist:
-                return cls(book=None, status='Singer not found')
+                return cls(singer=None, status='Singer not found')
         else:
             singer = Singer.objects.create(
                 name=name, stageName=stageName, lastName=lastName, nationality=nationality, image=image)
@@ -312,8 +312,8 @@ class UpsertSongMutation(graphene.Mutation):
         previewFile = graphene.String()
         digitalPrice = graphene.Decimal(
             required=True, description='Average price')
-        singer = SingersInput(required=True)
-        album = AlbumsInput(required=True)
+        # singer = SingersInput(required=True)
+        # album = AlbumsInput(required=True)
     # The class attributes define the response of the mutation
     song = graphene.Field(SongType)
     status = graphene.String()
@@ -357,6 +357,8 @@ class UpsertSongMutation(graphene.Mutation):
                         aux_album.releaseDate = datetime.strptime(album['releaseDate'], "%Y-%m-%d")
                     if 'image' in album:
                         aux_album.image = album['image']
+                    if 'genre' in album:
+                        aux_album.genre = album['genre']
                     aux_album.save()
                 except Album.DoesNotExist:
                     return cls(status='Album not found', album=None)
@@ -364,8 +366,6 @@ class UpsertSongMutation(graphene.Mutation):
                 aux_album = Album.objects.create(name=album['name'], physicalPrice = album['physicalPrice'] , stock = album['stock'])
                 if 'releaseDate' in album:
                     aux_album.releaseDate = datetime.strptime(album['releaseDate'], "%Y-%m-%d")
-                if 'image' in album:
-                    aux_album.image = album['image']
                 aux_album.save()
 
         if 'id' in kwargs:
@@ -395,9 +395,7 @@ class UpsertSongMutation(graphene.Mutation):
                 singer = aux_singer
                 )
             if 'releaseDate' in kwargs:
-                song.releaseDate = datetime.strptime(kwargs['releaseDate'], "%Y-%m-%d")
-            if 'image' in kwargs:
-                song.image = kwargs['image']    
+                song.releaseDate = datetime.strptime(kwargs['releaseDate'], "%Y-%m-%d") 
             song.save()
         # Notice we return an instance of this mutation
         return UpsertSongMutation(song=song, status='ok')

@@ -6,7 +6,7 @@ from library.users.models import User
 
 # Create your models here.
 class Sale(models.Model):
-	clientUser = models.ForeignKey(User, related_name='SaleWithUser',on_delete=models.DO_NOTHING)
+	email = models.ForeignKey(User, related_name='SaleWithUser',on_delete=models.DO_NOTHING)
 	buyDate = models.DateTimeField(auto_now_add=True, null=True)
 	total = models.DecimalField(decimal_places=2, max_digits=4, default=0)
 
@@ -24,15 +24,14 @@ class Item_Sale(models.Model):
 		unique_together = (("sale"),)
 
 class Direction(models.Model):
-	user = models.ForeignKey(User, related_name='DirectionWithUser', on_delete=models.DO_NOTHING)
+	email = models.ForeignKey(User, related_name='DirectionWithUser', on_delete=models.DO_NOTHING)
 	street = models.CharField(max_length=255, unique=True)
 	zipcode = models.IntegerField()
-	state_province = models.CharField(max_length=255, unique=True)
 	city = models.CharField(max_length=255, unique=True)
-	phone = models.IntegerField()
+
 
 	class Meta:
-		unique_together = (("user"),)
+		unique_together = (("email"),)
 
 
 

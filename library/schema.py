@@ -5,12 +5,12 @@ from graphene.types.field import Field
 from typing_extensions import Required
 import graphql_jwt
 from library.users.models import *
-from library.sales.schema import CreateSaleMutation, SaleQuery, SalesInput
+from library.sales.schema import UpsertSaleMutation, SaleQuery, SalesInput
 
 class Query(GenreQuery, AlbumQuery, SingerQuery, SongQuery, UserQuery, SaleQuery, graphene.ObjectType):
     pass
 
-class Mutation(SongMutation, UserMutation, CreateSaleMutation, graphene.ObjectType):
+class Mutation(SongMutation, UserMutation, UpsertSaleMutation, graphene.ObjectType):
 
 	# JWT MUTATIONS
 	token_auth = graphql_jwt.ObtainJSONWebToken.Field()
