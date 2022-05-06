@@ -5,9 +5,9 @@ from graphene.types.field import Field
 from typing_extensions import Required
 import graphql_jwt
 from library.users.models import *
-from library.sales.schema import SaleMutation, SaleQuery, DirectionQuery, UpsertDirectionMutation, UpsertSaleMutation
+from library.sales.schema import PlaylistQuery, SaleMutation, SaleQuery, DirectionQuery, UpsertDirectionMutation, UpsertSaleMutation, PlaylistSong, UpsertPlaylistSongMutation, PlaylistSongType
 
-class Query(GenreQuery, AlbumQuery, SingerQuery, SongQuery, UserQuery, SaleQuery, DirectionQuery, graphene.ObjectType):
+class Query(GenreQuery, AlbumQuery, SingerQuery, SongQuery, UserQuery, SaleQuery, DirectionQuery, PlaylistQuery, graphene.ObjectType):
     pass
 
 class Mutation(SongMutation, UserMutation, SaleMutation, graphene.ObjectType):

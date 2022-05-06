@@ -25,6 +25,16 @@ class ItemSaleType(DjangoObjectType):
          model = Item_Sale
          fields = '__all__'
 
+class PlaylistType(DjangoObjectType):
+     class Meta:
+         model = Playlist
+         fields = '__all__'
+
+class PlaylistSongType(DjangoObjectType):
+     class Meta:
+         model = PlaylistSong
+         fields = '__all__'
+
 class SaleQuery(graphene.ObjectType):
     sale_by_email = graphene.List(SaleType, email=graphene.String(required=True))
     
@@ -35,7 +45,7 @@ class SaleQuery(graphene.ObjectType):
             return None
 
 class DirectionQuery(graphene.ObjectType):
-    direction_by_email = graphene.List(SaleType, email=graphene.String(required=True))
+    direction_by_email = graphene.List(DirectionType, email=graphene.String(required=True))
     
     def resolve_sale_by_email(root, info, email):
         try:
@@ -44,12 +54,12 @@ class DirectionQuery(graphene.ObjectType):
             return None
 
 class PlaylistQuery(graphene.ObjectType):
-    playlist_by_email = graphene.List(SaleType, email=graphene.String(required=True))
+    playlist_by_user = graphene.List(PlaylistType, user=graphene.String(required=True))
     
-    def resolve_sale_by_email(root, info, email):
+    def resolve_sale_by_user(root, info, user):
         try:
-            return User.objects.filter(email=email)
-        except Sale.DoesNotExist:
+            return User.objects.filter(user=user)
+        except Playlist.DoesNotExist:
             return None
 
 class SalesInput(graphene.InputObjectType):
@@ -71,6 +81,11 @@ class DirectionInput(graphene.InputObjectType):
     street = graphene.String()
     zipcode = graphene.Int()
     city = graphene.String()
+
+class PlaylistInput(graphene.InputObjectType):
+    id = graphene.ID()
+    user = graphene.Field(UsersInput)
+    name = graphene.String()
 
 class UpsertSaleMutation(graphene.Mutation):
     class Arguments:
@@ -176,16 +191,81 @@ class UpsertItemSaleMutation(graphene.Mutation):
             sale = Sale.objects.get(pk=kwargs['saleId'])
             itemsale = Item_Sale.objects.create(
                 finalPrice = kwargs['finalPrice'], 
-                song = song,
-                album = album,
+                songs = song,
+                albums = album,
                 sale = sale
             )
             itemsale.save()
         return UpsertItemSaleMutation(itemsale = itemsale)
+
+class UpsertPlaylistMutation(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID()
+        userId = graphene.Int(required=True)
+        name = graphene.String()
+
+    playlist = graphene.Field(PlaylistType)
+    status = graphene.String()
+
+    @classmethod
+    def mutate (cls, root, info, **kwargs):
+        print('info:', dir(info.context))
+        print('headers:', info.context.headers)
+        if 'id' in kwargs:
+            playlist = None
+            try:
+                playlist = Playlist.objects.get(pk=kwargs['id'])
+                playlist.user = User.objects.get(pk=kwargs['userId'])
+                playlist.name = kwargs['name']
+                playlist.save()
+            except Playlist.DoesNotExist:
+                return cls(playlist = None, status='Playlist not found')
+        else:
+            user = User.objects.get(pk=kwargs['userId'])
+            playlist = Playlist.objects.create(
+                name = kwargs['name'], 
+                user = user
+            )
+            playlist.save()
+        return UpsertPlaylistMutation(playlist = playlist)
+
+class UpsertPlaylistSongMutation(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID()
+        songId = graphene.Int(required=True)
+        playlistId = graphene.Int(required=True)
+
+    playlistSong = graphene.Field(PlaylistSongType)
+    status = graphene.String()
+
+    @classmethod
+    def mutate (cls, root, info, **kwargs):
+        print('info:', dir(info.context))
+        print('headers:', info.context.headers)
+        if 'id' in kwargs:
+            playlistSong = None
+            try:
+                playlistSong = Playlist.objects.get(pk=kwargs['id'])
+                playlistSong.playlist = Playlist.objects.get(pk=kwargs['playlistid'])
+                playlistSong.song = Song.objects.get(pk=kwargs['songId'])
+                playlistSong.save()
+            except PlaylistSong.DoesNotExist:
+                return cls(playlistSong = None, status='PlaylistSong not found')
+        else:
+            playlist = Playlist.objects.get(pk=kwargs['playlistId'])
+            song = Song.objects.get(pk=kwargs['songId'])
+            playlistSong = PlaylistSong.objects.create(
+                playlist = playlist,
+                song = song
+            )
+            playlistSong.save()
+        return UpsertPlaylistSongMutation(playlistSong = playlistSong)
 
 class SaleMutation(graphene.ObjectType):
     pass
     upsert_sale = UpsertSaleMutation.Field()
     upsert_direction = UpsertDirectionMutation.Field()
     upsert_itemsale = UpsertItemSaleMutation.Field()
+    upsert_playlist = UpsertPlaylistMutation.Field()
+    upsert_playlistSong = UpsertPlaylistSongMutation.Field()
                   

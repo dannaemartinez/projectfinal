@@ -1,0 +1,254 @@
+[
+    {
+      "model": "songs.Song",
+      "pk": 1,
+      "fields": {
+        "name": "Estoy aquí",
+        "releaseDate": "1995-07-01",
+        "duration": 250,
+        "completeFile": "123",
+        "previewFile": "123",
+        "digitalPrice": 12.2,  
+        "album": 1,
+        "singer": 1
+      }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 2,
+        "fields": {
+            "name": "Un poco de Amor",
+            "digitalPrice": 20.12,
+            "releaseDate": "1995-07-01",
+            "previewFile": "+++++PC9ib2R5PjwvaHRtbD4=",
+            "completeFile": "123+",
+            "duration": 243,
+            "album": 1,
+            "singer": 1
+        }
+      },
+      {
+        "model": "songs.Song",
+        "pk": 3,
+        "fields": {
+            "name": "Te espero sentada",
+            "digitalPrice": 50.2,
+            "releaseDate": "1995-07-01",
+            "previewFile": "123",
+            "completeFile": "123456",
+            "duration": 205,
+            "album": 1,
+            "singer": 1
+        }
+      },
+    {
+        "model": "songs.Song",
+        "pk": 4,
+        "fields": {
+            "name": "Pienso en ti",
+            "digitalPrice": 30.2,
+            "releaseDate": "1995-07-01",
+            "previewFile": "123",
+            "completeFile": "123456",
+            "duration": 146,
+            "album": 1,
+            "singer": 1
+        }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 5,
+        "fields": {
+            "name": "Se quiere, se mata",
+            "digitalPrice": 16.2,
+            "releaseDate": "1995-07-01",
+            "previewFile": "123",
+            "completeFile": "123456",
+            "duration": 218,
+            "album": 1,
+            "singer": 1
+        }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 6,
+        "fields": {
+            "name": "Antologia",
+            "digitalPrice": 120.2,
+            "releaseDate": "1995-07-01",
+            "previewFile": "123",
+            "completeFile": "123456",
+            "duration": 254,
+            "album": 1,
+            "singer": 1
+          }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 7,
+        "fields": {
+            "name": "She Wolf",
+            "releaseDate": "2009-10-09",
+            "duration": 188,
+            "completeFile": "123+",
+            "previewFile": "123+",
+            "digitalPrice": 12.2,  
+            "album": 2,
+            "singer": 1
+        }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 8,
+        "fields": {
+            "name": "Good Stuff",
+            "digitalPrice": 56.12,
+            "releaseDate": "2009-10-09",
+            "previewFile": "+++++PC9ib2R5PjwvaHRtbD4=",
+            "completeFile": "123+",
+            "duration": 197,
+            "album": 2,
+            "singer": 1
+          }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 9,
+        "fields": {
+            "name": "Nada",
+            "digitalPrice": 30.2,
+            "releaseDate": "2017-05-27",
+            "previewFile": "123",
+            "completeFile": "123456",
+            "duration": 190,
+            "album": 3,
+            "singer": 1
+          }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 10,
+        "fields": {
+            "name": "Dangerous Woman",
+            "digitalPrice": 10.2,
+            "releaseDate": "2016-05-20",
+            "previewFile": "123",
+            "completeFile": "123456",
+            "duration": 234,
+            "album": 4,
+            "singer": 2
+          }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 11,
+        "fields": {
+            "name": "A Girl Like Me",
+            "digitalPrice": 32.2,
+            "releaseDate": "2006-04-1",
+            "previewFile": "123",
+            "completeFile": "123456",
+            "duration": 256,
+            "album": 5,
+            "singer": 3
+          }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 12,
+        "fields": {
+            "name": "Ocean Eyes",
+            "digitalPrice": 32.2,
+            "releaseDate": "2017-09-20",
+            "previewFile": "123",
+            "completeFile": "123456",
+            "duration": 280,
+            "album": 5,
+            "singer": 4
+          }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 13,
+        "fields": {
+            "name": "bellyache",
+            "digitalPrice": 32.2,
+            "releaseDate": "2017-09-20",
+            "previewFile": "123",
+            "completeFile": "123456",
+            "duration": 186,
+            "album": 6,
+            "singer": 4
+          }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 14,
+        "fields": {
+            "name": "Teenage Dream",
+            "digitalPrice": 10.2,
+            "releaseDate": "2011-06-20",
+            "previewFile": "123",
+            "completeFile": "123456",
+            "duration": 208,
+            "album": 8,
+            "singer": 6
+          }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 15,
+        "fields": {
+            "name": "Hostage",
+            "digitalPrice": 10.2,
+            "releaseDate": "2014-07-04",
+            "previewFile": "123",
+            "completeFile": "123456",
+            "duration": 153,
+            "album": 9,
+            "singer": 7
+          }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 16,
+        "fields": {
+            "name": "Havana",
+            "digitalPrice": 20.00,
+            "releaseDate": "2018-01-12",
+            "previewFile": "123",
+            "completeFile": "123456",
+            "duration": 202,
+            "album": 10,
+            "singer": 8
+          }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 17,
+        "fields": {
+            "name": "Cool",
+            "digitalPrice": 36.2,
+            "releaseDate": "2020-03-27",
+            "previewFile": "123",
+            "completeFile": "123456",
+            "duration": 201,
+            "album": 11,
+            "singer": 9
+          }
+    },
+    {
+        "model": "songs.Song",
+        "pk": 17,
+        "fields": {
+            "name": "Who Says",
+            "digitalPrice": 51.2,
+            "releaseDate": "2014-11-24",
+            "previewFile": "123",
+            "completeFile": "123456",
+            "duration": 209,
+            "album": 12,
+            "singer": 10
+          }
+    }
+]

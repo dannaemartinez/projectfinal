@@ -18,7 +18,6 @@ class Item_Sale(models.Model):
 	sale = models.ForeignKey(Sale, related_name='Item_SaleWithSale', on_delete=models.DO_NOTHING)
 	songs = models.ForeignKey(Song, related_name='Item_SaleWithSong', on_delete=models.DO_NOTHING)
 	albums = models.ForeignKey(Album, related_name='Item_SaleWithAlbum', on_delete=models.DO_NOTHING)
-	#type_sale = models.BooleanField(physical | digital)
 	finalPrice = models.DecimalField(max_digits=5, decimal_places=2)
 	
 	class Meta:
@@ -34,7 +33,13 @@ class Direction(models.Model):
 	class Meta:
 		unique_together = (("user"),)
 
+class Playlist(models.Model):
+	user = models.ForeignKey(User, related_name='PlaylistWithUser', on_delete=models.DO_NOTHING)
+	name = models.CharField(max_length = 45)
 
+class PlaylistSong(models.Model):
+	song = models.ForeignKey(Song, related_name='PlaylisSongtWithSong', on_delete=models.DO_NOTHING)
+	playlist = models.ForeignKey(Playlist, related_name='PlaylistSongWithPlaylist', on_delete=models.DO_NOTHING)
 
 
 	

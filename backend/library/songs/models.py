@@ -1,4 +1,6 @@
 from django.db import models
+from library.users.models import User
+#from backend.library.users.models import User
 
 class Genre(models.Model):
 	name = models.CharField(max_length=70)

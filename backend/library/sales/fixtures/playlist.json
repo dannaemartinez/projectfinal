@@ -1,0 +1,10 @@
+[
+    {
+      "model": "sales.Playlist",
+      "pk": 1,
+      "fields": {
+        "name": "Piojos",
+        "user": 3
+      }
+    }
+]
