@@ -52,42 +52,84 @@ class SaleQuery(graphene.ObjectType):
 class DirectionQuery(graphene.ObjectType):
     direction_by_user = graphene.List(DirectionType, user=graphene.String(required=True))
     
-    def resolve_direction_by_user(root, info, user):
-        try:
-            return Direction.objects.filter(user=user)
-        except Direction.DoesNotExist:
-            return None
+    def resolve_direction_by_user(root, info, user, first = None, skip = None):
+        from django.contrib.auth.middleware import get_user
+        from graphql_jwt.utils import get_payload, get_user_by_payload
+        
+        context = info.context
+        print('info',dir(context))
+        user = info.context.user
+        print('IS AUTHENTICATED? ', user.is_authenticated)
+        
+        if not user.is_authenticated:
+            raise Exception("Authentication credentials were not provided")
+        direction = Direction.objects.filter(user=user)
+        if skip is not None:
+            direction = direction[:skip]
+        if first is not None:
+            direction = direction[:first]
+            return direction
 
 class PlaylistQuery(graphene.ObjectType):
     playlist_by_user = graphene.List(PlaylistType, user=graphene.String(required=True))
     
-    def resolve_playlist_by_user(root, info, user):
-        try:
-            return Playlist.objects.filter(user=user)
-        except Playlist.DoesNotExist:
-            return None
-
-    def resolve_playlist_by_user_desc(root, info, user):
-        try:
-            return Playlist.objects.filter(user=user).order_by('-id')
-        except Playlist.DoesNotExist:
-            return None
+    def resolve_playlist_by_user(root, info, user, first = None, skip = None):
+        from django.contrib.auth.middleware import get_user
+        from graphql_jwt.utils import get_payload, get_user_by_payload
+        
+        context = info.context
+        print('info',dir(context))
+        user = info.context.user
+        print('IS AUTHENTICATED? ', user.is_authenticated)
+        
+        if not user.is_authenticated:
+            raise Exception("Authentication credentials were not provided")
+        playlist = Playlist.objects.filter(user=user)
+        if skip is not None:
+            playlist = playlist[:skip]
+        if first is not None:
+            playlist = playlist[:first]
+            return playlist
 
 class PlaylistSongQuery(graphene.ObjectType):
     playlist_by_song_desc = graphene.List(PlaylistSongType, song=graphene.String(required=True))
     playlist_by_song_asc = graphene.List(PlaylistSongType, song=graphene.String(required=True))
 
-    def resolve_playlist_by_song_desc(root, info, song):
-        try:
-            return PlaylistSong.objects.filter(song=song).order_by('-song')
-        except PlaylistSong.DoesNotExist:
-            return None
-
-    def resolve_playlist_by_song_asc(root, info, song):
-        try:
-            return PlaylistSong.objects.filter(song=song).order_by('song')
-        except PlaylistSong.DoesNotExist:
-            return None
+    def resolve_playlist_by_song_desc(root, info, song, first = None, skip = None):
+        from django.contrib.auth.middleware import get_user
+        from graphql_jwt.utils import get_payload, get_user_by_payload
+        
+        context = info.context
+        print('info',dir(context))
+        user = info.context.user
+        print('IS AUTHENTICATED? ', user.is_authenticated)
+        
+        if not user.is_authenticated:
+            raise Exception("Authentication credentials were not provided")
+        playlistSong = PlaylistSong.objects.filter(song=song).order_by('-song')
+        if skip is not None:
+            playlistSong = playlistSong[:skip]
+        if first is not None:
+            playlistSong = playlistSong[:first]
+            return playlistSong
+    
+    def resolve_playlist_by_song_asc(root, info, song, first = None, skip = None):
+        from django.contrib.auth.middleware import get_user
+        from graphql_jwt.utils import get_payload, get_user_by_payload
+        
+        context = info.context
+        print('info',dir(context))
+        user = info.context.user
+        print('IS AUTHENTICATED? ', user.is_authenticated)
+        
+        if not user.is_authenticated:
+            raise Exception("Authentication credentials were not provided")
+        playlistSong = PlaylistSong.objects.filter(song=song).order_by('song')
+        if skip is not None:
+            playlistSong = playlistSong[:skip]
+        if first is not None:
+            playlistSong = playlistSong[:first]
+            return playlistSong
 
 class SalesInput(graphene.InputObjectType):
     id = graphene.ID()

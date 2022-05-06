@@ -7,8 +7,7 @@ import { getAlbums } from "../../services/album";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useAppSelector } from "../../app/hooks";
-import { albumsSelector, singersSelector, songsSelector } from "../../features/musicSlice";
-import "./styles.css"
+import { albumsSelector, singersSelector } from "../../features/musicSlice";
 
 const Explore = () => {
   const dispatch = useDispatch();
@@ -21,16 +20,49 @@ const Explore = () => {
     dispatch(getAlbums());
   }, [dispatch]);
 
-return (
+  const styles: Styles = {
+    title: {
+      fontWeight: "Bold",
+      width: "500px",
+      padding: "20px 0",
+    },
+    subtitle: {
+      fontWeight: "600",
+      padding: "10px 0",
+      color: "gray",
+    },
+    albumsContainer: {
+      width: "100%",
+    },
+    albumsList: {
+      width: "100%",
+      display: "flex",
+      overflowX: "auto",
+      gap: "60px",
+      paddingBottom: "20px",
+    },
+    singerContainer: {
+      width: "100%",
+    },
+    singerList: {
+      width: "100%",
+      display: "flex",
+      overflowX: "auto",
+      gap: "60px",
+      paddingBottom: "20px",
+    },
+  };
+
+  return (
     <>
-      <Typography variant="h2" className="title">
-        La Música de las Mejores
+      <Typography variant="h2" sx={styles.title}>
+        Escucha a tus artistas favoritos en el mejor lugar.
       </Typography>
-      <Box className="albumsContainer">
-        <Typography variant="h6" className="subtitle">
-          Sus Creaciones
+      <Box sx={styles.albumsContainer}>
+        <Typography variant="h6" sx={styles.subtitle}>
+          Últimos álbumes.
         </Typography>
-        <Box className = "albumsList">
+        <Box sx={styles.albumsList}>
           {albums.map((album) => (
             <AlbumCard
               {...album}
@@ -39,11 +71,11 @@ return (
             />
           ))}
         </Box>
-        <Box className = "singersContainer">
-          <Typography variant="h6" className="subtitle">
-            Ellas
+        <Box sx={styles.singersContainer}>
+          <Typography variant="h6" sx={styles.subtitle}>
+            Los artistas más escuchados.
           </Typography>
-          <Box className ="singerList">
+          <Box sx={styles.singerList}>
             {singers.map((singer) => (
               <SingerCard {...singer} key={`singer-${singer._id}`} />
             ))}
