@@ -9,6 +9,10 @@ from graphene.types.field import Field
 from library.songs.schema import *
 from library.sales.models import *
 from library.users.schema import UsersInput
+from typing_extensions import Required
+from sqlalchemy import desc
+from graphene_django import DjangoObjectType
+from django_filters import FilterSet, OrderingFilter
 
 class SaleType(DjangoObjectType):
      class Meta:
@@ -31,35 +35,58 @@ class PlaylistType(DjangoObjectType):
          fields = '__all__'
 
 class PlaylistSongType(DjangoObjectType):
-     class Meta:
-         model = PlaylistSong
-         fields = '__all__'
+    class Meta:
+        model = PlaylistSong
+        fields = '__all__'
+        ordering = ('song',)
 
 class SaleQuery(graphene.ObjectType):
-    sale_by_email = graphene.List(SaleType, email=graphene.String(required=True))
+    sale_by_user = graphene.List(SaleType, user=graphene.String(required=True))
     
-    def resolve_sale_by_email(root, info, email):
+    def resolve_sale_by_user(root, info, user):
         try:
-            return User.objects.filter(email=email)
+            return Sale.objects.filter(user=user)
         except Sale.DoesNotExist:
             return None
 
 class DirectionQuery(graphene.ObjectType):
-    direction_by_email = graphene.List(DirectionType, email=graphene.String(required=True))
+    direction_by_user = graphene.List(DirectionType, user=graphene.String(required=True))
     
-    def resolve_sale_by_email(root, info, email):
+    def resolve_direction_by_user(root, info, user):
         try:
-            return User.objects.filter(email=email)
-        except Sale.DoesNotExist:
+            return Direction.objects.filter(user=user)
+        except Direction.DoesNotExist:
             return None
 
 class PlaylistQuery(graphene.ObjectType):
     playlist_by_user = graphene.List(PlaylistType, user=graphene.String(required=True))
     
-    def resolve_sale_by_user(root, info, user):
+    def resolve_playlist_by_user(root, info, user):
         try:
-            return User.objects.filter(user=user)
+            return Playlist.objects.filter(user=user)
         except Playlist.DoesNotExist:
+            return None
+
+    def resolve_playlist_by_user_desc(root, info, user):
+        try:
+            return Playlist.objects.filter(user=user).order_by('-id')
+        except Playlist.DoesNotExist:
+            return None
+
+class PlaylistSongQuery(graphene.ObjectType):
+    playlist_by_song_desc = graphene.List(PlaylistSongType, song=graphene.String(required=True))
+    playlist_by_song_asc = graphene.List(PlaylistSongType, song=graphene.String(required=True))
+
+    def resolve_playlist_by_song_desc(root, info, song):
+        try:
+            return PlaylistSong.objects.filter(song=song).order_by('-song')
+        except PlaylistSong.DoesNotExist:
+            return None
+
+    def resolve_playlist_by_song_asc(root, info, song):
+        try:
+            return PlaylistSong.objects.filter(song=song).order_by('song')
+        except PlaylistSong.DoesNotExist:
             return None
 
 class SalesInput(graphene.InputObjectType):

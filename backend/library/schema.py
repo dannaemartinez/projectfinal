@@ -5,9 +5,10 @@ from graphene.types.field import Field
 from typing_extensions import Required
 import graphql_jwt
 from library.users.models import *
-from library.sales.schema import PlaylistQuery, SaleMutation, SaleQuery, DirectionQuery, UpsertDirectionMutation, UpsertSaleMutation, PlaylistSong, UpsertPlaylistSongMutation, PlaylistSongType
+from library.sales.schema import PlaylistQuery, PlaylistSongQuery, SaleMutation, SaleQuery, DirectionQuery, UpsertDirectionMutation, UpsertSaleMutation, PlaylistSong, UpsertPlaylistSongMutation, PlaylistSongType
+import graphql_jwt
 
-class Query(GenreQuery, AlbumQuery, SingerQuery, SongQuery, UserQuery, SaleQuery, DirectionQuery, PlaylistQuery, graphene.ObjectType):
+class Query(GenreQuery, AlbumQuery, SingerQuery, SongQuery, UserQuery, SaleQuery, DirectionQuery, PlaylistQuery, PlaylistSongQuery, graphene.ObjectType):
     pass
 
 class Mutation(SongMutation, UserMutation, SaleMutation, graphene.ObjectType):

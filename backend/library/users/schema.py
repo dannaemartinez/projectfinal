@@ -5,6 +5,7 @@ from library.users.models import *
 from typing_extensions import Required
 from sqlalchemy import desc
 
+
 class UserType(DjangoObjectType):
      class Meta:
          model = User

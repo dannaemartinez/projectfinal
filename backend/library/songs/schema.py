@@ -8,131 +8,207 @@ from graphene.types.field import Field
 from library.songs.models import *
 from typing_extensions import Required
 from sqlalchemy import desc
+from graphene_django import DjangoObjectType
+from django_filters import FilterSet, OrderingFilter
 
 class GenreType(DjangoObjectType):
     class Meta:
         model = Genre
         fields = '__all__'
+        ordering = ('id',)
+
 class SingerType(DjangoObjectType):
     class Meta:
         model = Singer
         fields = '__all__'
+        ordering = ('id',)
+
 class AlbumType(DjangoObjectType):
     class Meta:
         model = Album
         fields = '__all__'
+        ordering = ('releaseDate',)
+
 class SongType(DjangoObjectType):
     class Meta:
         model = Song
         fields = '__all__'
+        ordering = ('releaseDate',)
+
 class GenreQuery(graphene.ObjectType):
-    all_genres = graphene.List(
-        GenreType, first=graphene.Int(), skip=graphene.Int())
-    genres_by_name = graphene.List(
-        GenreType, name=graphene.String(required=True))
-    def resolve_all_genres(root, info, first=None, skip=None):
-        from django.contrib.auth.middleware import get_user
-        from graphql_jwt.utils import get_payload, get_user_by_payload
-        # context = info.context
-        # print('info',dir(context))
-        # user = info.context.user
-        # print('IS AUTHENTICATED? ', user.is_authenticated)
-        # if not user.is_authenticated:
-        #     raise Exception("Authentication credentials were not provided")
-        genres = Genre.objects.all()
+    all_genres_asc = graphene.List(GenreType, first=graphene.Int(), skip=graphene.Int())
+    all_genres_desc = graphene.List(GenreType, first=graphene.Int(), skip=graphene.Int())
+    genres_by_name_asc = graphene.List(GenreType, name=graphene.String(required=True))
+    genres_by_name_desc = graphene.List(GenreType, name=graphene.String(required=True))
+    
+    def resolve_all_genres_asc(root, info, first=None, skip=None):
+    #     from django.contrib.auth.middleware import get_user
+    #     from graphql_jwt.utils import get_payload, get_user_by_payload
+    #     context = info.context
+    #     print('info',dir(context))
+    #     user = info.context.user
+    #     print('IS AUTHENTICATED? ', user.is_authenticated)
+
+    #     if not user.is_authenticated:
+    #         raise Exception("Authentication credentials were not provided")
+        genres = Genre.objects.all().order_by('id')
         if skip is not None:
             genres = genres[:skip]
         if first is not None:
             genres = genres[first:]
         return genres
-    def resolve_genre_by_name(root, info, name):
+    
+    def resolve_all_genres_desc(root, info, first=None, skip=None):
+        genres = Genre.objects.all().order_by('-id')
+        if skip is not None:
+            genres = genres[:skip]
+        if first is not None:
+            genres = genres[first:]
+        return genres
+
+    def resolve_genres_by_name_asc(root, info, name):
         try:
-            return Genre.objects.filter(name=name)
+            return Genre.objects.filter(name=name).order_by('id')
         except Genre.DoesNotExist:
             return None
+    def resolve_genres_by_name_desc(root, info, name):
+        try:
+            return Genre.objects.filter(name=name).order_by('-id')
+        except Genre.DoesNotExist:
+            return None
+
 class SingerQuery(graphene.ObjectType):
-    all_singers = graphene.List(
-        SingerType, first=graphene.Int(), skip=graphene.Int())
-    singer_by_name = graphene.List(
-        SingerType, name=graphene.String(required=True))
-    def resolve_all_singers(root, info, first=None, skip=None):
-        from django.contrib.auth.middleware import get_user
-        from graphql_jwt.utils import get_payload, get_user_by_payload
-        # context = info.context
-        # print('info',dir(context))
-        # user = info.context.user
-        # print('IS AUTHENTICATED? ', user.is_authenticated)
-        # if not user.is_authenticated:
-        #     raise Exception("Authentication credentials were not provided")
-        singers = Singer.objects.all()
+    all_singers_asc = graphene.List(SingerType, first=graphene.Int(), skip=graphene.Int())
+    all_singers_desc = graphene.List(SingerType, first=graphene.Int(), skip=graphene.Int())
+    singer_by_name_asc = graphene.List(SingerType, name=graphene.String(required=True))
+    singer_by_name_desc = graphene.List(SingerType, name=graphene.String(required=True))
+    
+    def resolve_all_singers_asc(root, info, first=None, skip=None):
+
+    #     from django.contrib.auth.middleware import get_user
+    #     from graphql_jwt.utils import get_payload, get_user_by_payload
+    #     context = info.context
+    #     print('info',dir(context))
+    #     user = info.context.user
+    #     print('IS AUTHENTICATED? ', user.is_authenticated)
+    #     if not user.is_authenticated:
+    #         raise Exception("Authentication credentials were not provided")
+
+        singers = Singer.objects.all().order_by('id')
         if skip is not None:
             singers = singers[:skip]
         if first is not None:
             singers = singers[first:]
         return singers
-    def resolve_singer_by_name(root, info, name):
+
+    def resolve_all_singers_desc(root, info, first=None, skip=None):
+        singers = Singer.objects.all().order_by('-id')
+        if skip is not None:
+            singers = singers[:skip]
+        if first is not None:
+            singers = singers[first:]
+        return singers
+
+    def resolve_singer_by_name_asc(root, info, name):
         try:
-            return Singer.objects.filter(name=name)
+            return Singer.objects.filter(name=name).order_by('id')
         except Singer.DoesNotExist:
             return None
-    # def resolve_singer_by_name(root, info, name, lastName, nationality, image):
-    #     try:
-    #         return Singer.objects.get(name=name, lastName=lastName, nationality=nationality, image=image)
-    #     except Singer.DoesNotExist:
-    #         return None
-class AlbumQuery(graphene.ObjectType):
-    album_by_name = graphene.Field(
-        AlbumType, name=graphene.String(required=True))
-    all_albums = graphene.List(
-        AlbumType, first=graphene.Int(), skip=graphene.Int())
-    def resolve_album_by_name(root, info, name):
+
+    def resolve_singer_by_name_desc(root, info, name):
         try:
-            return Album.objects.get(name=name)
+            return Singer.objects.filter(name=name).order_by('-id')
+        except Singer.DoesNotExist:
+            return None
+
+class AlbumQuery(graphene.ObjectType):
+    album_by_name_asc = graphene.List(AlbumType, name=graphene.String(required=True))
+    album_by_name_desc = graphene.List(AlbumType, name=graphene.String(required=True))
+    all_albums_asc = graphene.List(AlbumType, first=graphene.Int(), skip=graphene.Int())
+    all_albums_desc = graphene.List(AlbumType, first=graphene.Int(), skip=graphene.Int())
+    
+    def resolve_album_by_name_asc(root, info, name):
+        try:
+            return Album.objects.filter(name=name).order_by('releaseDate')
         except Album.DoesNotExist:
             return None
-    def resolve_all_albums(root, info, first=None, skip=None):
-        from django.contrib.auth.middleware import get_user
-        from graphql_jwt.utils import get_payload, get_user_by_payload
-        # context = info.context
-        # print('info',dir(context))
-        # user = info.context.user
-        # print('IS AUTHENTICATED? ', user.is_authenticated)
-        # if not user.is_authenticated:
-        #     raise Exception("Authentication credentials were not provided")
-        albums = Album.objects.all()
+
+    def resolve_album_by_name_desc(root, info, name):
+        try:
+            return Album.objects.filter(name=name).order_by('-releaseDate')
+        except Album.DoesNotExist:
+            return None
+
+    def resolve_all_albums_asc(root, info, first=None, skip=None):
+    #     from django.contrib.auth.middleware import get_user
+    #     from graphql_jwt.utils import get_payload, get_user_by_payload
+    #     context = info.context
+    #     print('info',dir(context))
+    #     user = info.context.user
+    #     print('IS AUTHENTICATED? ', user.is_authenticated)
+    #     if not user.is_authenticated:
+    #         raise Exception("Authentication credentials were not provided")
+        albums = Album.objects.all().order_by('releaseDate')
         if skip is not None:
             albums = albums[:skip]
         if first is not None:
             albums = albums[first:]
         return albums
+
+    def resolve_all_albums_desc(root, info, first=None, skip=None):
+        albums = Album.objects.all().order_by('-releaseDate')
+        if skip is not None:
+            albums = albums[:skip]
+        if first is not None:
+            albums = albums[first:]
+        return albums
+
 class SongQuery(graphene.ObjectType):
-    song_by_name = graphene.Field(
-        SongType, name=graphene.String(required=True))
-    all_songs = graphene.List(
-        SingerType, first=graphene.Int(), skip=graphene.Int())
-    def resolve_all_songs(root, info, first=None, skip=None):
-        from django.contrib.auth.middleware import get_user
-        from graphql_jwt.utils import get_payload, get_user_by_payload
+    song_by_name_asc = graphene.List(SongType, name=graphene.String(required=True))
+    song_by_name_desc = graphene.List(SongType, name=graphene.String(required=True))
+    all_songs_asc = graphene.List(SongType, first=graphene.Int(), skip=graphene.Int())
+    all_songs_desc = graphene.List(SongType, first=graphene.Int(), skip=graphene.Int())
+    
+    def resolve_all_songs_asc(root, info, first=None, skip=None):
+        songs = Song.objects.all().order_by('releaseDate')
+        if skip is not None:
+            songs = songs[:skip]
+        if first is not None:
+            songs = songs[first:]
+        return songs
+    
+    def resolve_all_songs_desc(root, info, first=None, skip=None):
+        # from django.contrib.auth.middleware import get_user
+        # from graphql_jwt.utils import get_payload, get_user_by_payload
         # context = info.context
         # print('info',dir(context))
         # user = info.context.user
         # print('IS AUTHENTICATED? ', user.is_authenticated)
         # if not user.is_authenticated:
         #     raise Exception("Authentication credentials were not provided")
-        songs = Song.objects.all()
+        songs = Song.objects.all().order_by('-releaseDate')
         if skip is not None:
             songs = songs[:skip]
         if first is not None:
             songs = songs[first:]
         return songs
-    def resolve_song_by_name(root, info, name):
+
+    def resolve_song_by_name_asc(root, info, name):
         try:
-            return Song.objects.get(name=name)
+            return Song.objects.filter(name=name).order_by('releaseDate')
         except Song.DoesNotExist:
             return None
+
+    def resolve_song_by_name_desc(root, info, name):
+        try:
+            return Song.objects.filter(name=name).order_by('-releaseDate')
+        except Song.DoesNotExist:
+            return None
+
 class GenresInput(graphene.InputObjectType):
     id = graphene.ID()
     name = graphene.String(required=True)
+
 class SingersInput(graphene.InputObjectType):
     id = graphene.ID()
     name = graphene.String(required=True)
@@ -140,6 +216,7 @@ class SingersInput(graphene.InputObjectType):
     stageName = graphene.String()
     nationality = graphene.String()
     image = graphene.String()
+
 class AlbumsInput(graphene.InputObjectType):
     id = graphene.ID()
     name = graphene.String(required=True)
@@ -149,6 +226,7 @@ class AlbumsInput(graphene.InputObjectType):
     image = graphene.String()
     singer = graphene.Field(SingersInput)
     genre = graphene.Field(GenresInput)
+
 class SongsInput(graphene.InputObjectType):
     id = graphene.ID()
     name = graphene.String(required=True)
@@ -183,6 +261,7 @@ class UpsertGenreMutation(graphene.Mutation):
             genre.save()
         # Notice we return an instance of this mutation
         return UpsertGenreMutation(genre=genre)
+
 class UpsertSingerMutation(graphene.Mutation):
     class Arguments:
         # The input arguments for this mutation
@@ -365,6 +444,7 @@ class DeleteGenreMutation(graphene.Mutation):
         genre = Genre.objects.get(pk=kwargs["id"])
         genre.delete()
         return cls(ok=True)
+
 class DeleteSingerMutation(graphene.Mutation):
     ok = graphene.Boolean()
     class Arguments:
@@ -374,6 +454,7 @@ class DeleteSingerMutation(graphene.Mutation):
         singer = Singer.objects.get(pk=kwargs["id"])
         singer.delete()
         return cls(ok=True)
+
 class DeleteAlbumMutation(graphene.Mutation):
     ok = graphene.Boolean()
     class Arguments:
@@ -383,6 +464,7 @@ class DeleteAlbumMutation(graphene.Mutation):
         album = Album.objects.get(pk=kwargs["id"])
         album.delete()
         return cls(ok=True)
+
 class DeleteSongMutation(graphene.Mutation):
     ok = graphene.Boolean()
     class Arguments:
@@ -392,6 +474,9 @@ class DeleteSongMutation(graphene.Mutation):
         song = Song.objects.get(pk=kwargs["id"])
         song.delete()
         return cls(ok=True)
+
+
+
 class SongMutation(graphene.ObjectType):
     pass
     upsert_genre = UpsertGenreMutation.Field()

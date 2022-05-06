@@ -20,12 +20,12 @@ from django.contrib.auth import get_user_model
 def my_authentication(request, **kwargs):
     from graphql_jwt.utils import get_payload, get_user_by_payload
 
+    user = None
     # JWT VALIDATION
-    print("============================================"+"/n/n/n/n/n/n")
-    print(request.COOKIES)
-    token=request.COOKIES['JWT']
-    payload = get_payload(token, request)
-    user = get_user_by_payload(payload)
+    if 'JWT' in request.COOKIES:
+        token=request.COOKIES['JWT']
+        payload = get_payload(token, request)
+        user = get_user_by_payload(payload)
 
     if 'username' in kwargs:
         user = get_user_model().objects.get(username=kwargs['username'])
@@ -82,7 +82,8 @@ INSTALLED_APPS = [
     'graphene_django',
     'corsheaders',
     'drf_yasg',
-    #'typing_extensions',
+    'django_filters',
+    'typing_extensions',
     'rest_framework',
     'library.editorial',
     'library.users',
@@ -100,7 +101,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    # 'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    #'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'library.urls'
@@ -232,6 +234,7 @@ AUTHENTICATION_BACKENDS = [
 
 GRAPHQL_JWT = {
     "JWT_VERIFY_EXPIRATION": True,
+    "JWT_ALLOW_ARGUMENT": True,
     "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
     "JWT_EXPIRATION_DELTA": timedelta(minutes=int(env.get('JWT_TOKEN_TIME'))),
     "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=1),
