@@ -57,7 +57,6 @@ class SalesInput(graphene.InputObjectType):
     user = graphene.Field(UsersInput)
     buyDate = graphene.String()
     total = graphene.Int()
-    direction = graphene.Field(DirectionInput)
                               
 class ItemSalesInput(graphene.InputObjectType):
     id = graphene.ID()
