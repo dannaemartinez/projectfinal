@@ -1,7 +1,7 @@
 import { AppDispatch } from "../app/store";
 import { setAuth } from "../features/authSlice";
 import { setLoading } from "../features/loaderSlice";
-import { LoginDTO } from "../views/login/forms";
+import { LoginDTO } from "../views/login/form";
 
 export const fetchLogin = (user: LoginDTO) => async (dispatch: AppDispatch) => {
   try {
