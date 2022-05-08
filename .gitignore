@@ -2,7 +2,5 @@
 **/editorial/__pycache__
 **/library/__pycache__
 **/users/__pycache__
-**/songs/migrations
-**/users/migrations
-**/editorial/migrations
+**/migrations
 **__pycache__/
