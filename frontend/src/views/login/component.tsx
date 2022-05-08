@@ -61,12 +61,12 @@ const Login = () => {
               </Typography>
               <Box sx={styles.inputsContainer}>
                 <TextField
-                  error={Boolean(errors.email)}
+                  error={Boolean(errors.username)}
                   onChange={handleChange}
-                  label="Email"
-                  name="email"
-                  type="email"
-                  helperText={errors.email}
+                  label="Username"
+                  name="username"
+                  type="username"
+                  helperText={errors.username}
                 />
                 <TextField
                   error={Boolean(errors.password)}

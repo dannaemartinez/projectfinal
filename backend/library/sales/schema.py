@@ -68,7 +68,7 @@ class DirectionQuery(graphene.ObjectType):
             direction = direction[:skip]
         if first is not None:
             direction = direction[:first]
-            return direction
+        return direction
 
 class PlaylistQuery(graphene.ObjectType):
     playlist_by_user = graphene.List(PlaylistType, user=graphene.String(required=True))
@@ -89,7 +89,7 @@ class PlaylistQuery(graphene.ObjectType):
             playlist = playlist[:skip]
         if first is not None:
             playlist = playlist[:first]
-            return playlist
+        return playlist
 
 class PlaylistSongQuery(graphene.ObjectType):
     playlist_by_song_desc = graphene.List(PlaylistSongType, song=graphene.String(required=True))
@@ -111,7 +111,7 @@ class PlaylistSongQuery(graphene.ObjectType):
             playlistSong = playlistSong[:skip]
         if first is not None:
             playlistSong = playlistSong[:first]
-            return playlistSong
+        return playlistSong
     
     def resolve_playlist_by_song_asc(root, info, song, first = None, skip = None):
         from django.contrib.auth.middleware import get_user
@@ -129,7 +129,7 @@ class PlaylistSongQuery(graphene.ObjectType):
             playlistSong = playlistSong[:skip]
         if first is not None:
             playlistSong = playlistSong[:first]
-            return playlistSong
+        return playlistSong
 
 class SalesInput(graphene.InputObjectType):
     id = graphene.ID()
