@@ -80,7 +80,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
     'graphene_django',
-    'graphql_auth',
     'corsheaders',
     'drf_yasg',
     'django_filters',
@@ -235,16 +234,10 @@ AUTHENTICATION_BACKENDS = [
 
 GRAPHQL_JWT = {
     "JWT_VERIFY_EXPIRATION": True,
-    "JWT_ALLOW_ARGUMENT": True,
+    # "JWT_ALLOW_ARGUMENT": True,
     "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
     "JWT_EXPIRATION_DELTA": timedelta(minutes=int(env.get('JWT_TOKEN_TIME'))),
     "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=1),
-    "JWT_ALLOW_ANY_CLASSES":[
-         "graphql_auth.mutations.ObtainJSONWebToken",
-         "graphql_auth.mutations.VerifyAccount",
-         "graphql_auth.mutations.Register"
-    ]
-
 }
 
 PASSWORD_HASHERS = [
