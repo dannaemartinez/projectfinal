@@ -81,6 +81,24 @@ services:
     networks:
       - our-library-net
 
+  front06:
+    build: 
+      context: ./frontend
+    image: node06:18-alpine3.14
+    command: "sh -c 'npm install && npm dedupe && npm cache clear --force && npm start'"
+    container_name: "react${PORT}"
+    depends_on: 
+      - web06
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - "${REACT_DEV_VOLUME_PATH}:/usr/src/frontend"
+      - "${REACT_DEV_VOLUME_PATH}/node_modules:/usr/src/frontend/node_modules"
+    ports:
+      - "110${PORT}:3000"
+    networks:
+      - our-library-net
+
 networks:
   our-library-net:
     external: true

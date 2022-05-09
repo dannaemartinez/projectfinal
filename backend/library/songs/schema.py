@@ -11,13 +11,11 @@ from sqlalchemy import desc
 from graphene_django import DjangoObjectType
 from django_filters import FilterSet, OrderingFilter
 
-
 class GenreType(DjangoObjectType):
     class Meta:
         model = Genre
         fields = '__all__'
         ordering = ('id',)
-
 
 class SingerType(DjangoObjectType):
     class Meta:
@@ -25,13 +23,11 @@ class SingerType(DjangoObjectType):
         fields = '__all__'
         ordering = ('id',)
 
-
 class AlbumType(DjangoObjectType):
     class Meta:
         model = Album
         fields = '__all__'
         ordering = ('releaseDate',)
-
 
 class SongType(DjangoObjectType):
     class Meta:
@@ -62,7 +58,6 @@ class GenreQuery(graphene.ObjectType):
             return Genre.objects.filter(name=name).order_by('id')
         except Genre.DoesNotExist:
             return None
-
     def resolve_genres_by_name_desc(root, info, name):
         try:
             return Genre.objects.filter(name=name).order_by('-id')
@@ -128,17 +123,12 @@ class SingerQuery(graphene.ObjectType):
         except Singer.DoesNotExist:
             return None
 
-
 class AlbumQuery(graphene.ObjectType):
-    album_by_name_asc = graphene.List(
-        AlbumType, name=graphene.String(required=True))
-    album_by_name_desc = graphene.List(
-        AlbumType, name=graphene.String(required=True))
-    all_albums_asc = graphene.List(
-        AlbumType, first=graphene.Int(), skip=graphene.Int())
-    all_albums_desc = graphene.List(
-        AlbumType, first=graphene.Int(), skip=graphene.Int())
-
+    album_by_name_asc = graphene.List(AlbumType, name=graphene.String(required=True))
+    album_by_name_desc = graphene.List(AlbumType, name=graphene.String(required=True))
+    all_albums_asc = graphene.List(AlbumType, first=graphene.Int(), skip=graphene.Int())
+    all_albums_desc = graphene.List(AlbumType, first=graphene.Int(), skip=graphene.Int())
+    
     def resolve_album_by_name_asc(root, info, name):
         try:
             return Album.objects.filter(name=name).order_by('releaseDate')
@@ -152,14 +142,14 @@ class AlbumQuery(graphene.ObjectType):
             return None
 
     def resolve_all_albums_asc(root, info, first=None, skip=None):
-        #     from django.contrib.auth.middleware import get_user
-        #     from graphql_jwt.utils import get_payload, get_user_by_payload
-        #     context = info.context
-        #     print('info',dir(context))
-        #     user = info.context.user
-        #     print('IS AUTHENTICATED? ', user.is_authenticated)
-        #     if not user.is_authenticated:
-        #         raise Exception("Authentication credentials were not provided")
+    #     from django.contrib.auth.middleware import get_user
+    #     from graphql_jwt.utils import get_payload, get_user_by_payload
+    #     context = info.context
+    #     print('info',dir(context))
+    #     user = info.context.user
+    #     print('IS AUTHENTICATED? ', user.is_authenticated)
+    #     if not user.is_authenticated:
+    #         raise Exception("Authentication credentials were not provided")
         albums = Album.objects.all().order_by('releaseDate')
         if skip is not None:
             albums = albums[:skip]
@@ -175,17 +165,12 @@ class AlbumQuery(graphene.ObjectType):
             albums = albums[first:]
         return albums
 
-
 class SongQuery(graphene.ObjectType):
-    song_by_name_asc = graphene.List(
-        SongType, name=graphene.String(required=True))
-    song_by_name_desc = graphene.List(
-        SongType, name=graphene.String(required=True))
-    all_songs_asc = graphene.List(
-        SongType, first=graphene.Int(), skip=graphene.Int())
-    all_songs_desc = graphene.List(
-        SongType, first=graphene.Int(), skip=graphene.Int())
-
+    song_by_name_asc = graphene.List(SongType, name=graphene.String(required=True))
+    song_by_name_desc = graphene.List(SongType, name=graphene.String(required=True))
+    all_songs_asc = graphene.List(SongType, first=graphene.Int(), skip=graphene.Int())
+    all_songs_desc = graphene.List(SongType, first=graphene.Int(), skip=graphene.Int())
+    
     def resolve_all_songs_asc(root, info, first=None, skip=None):
         songs = Song.objects.all().order_by('releaseDate')
         if skip is not None:
@@ -193,7 +178,7 @@ class SongQuery(graphene.ObjectType):
         if first is not None:
             songs = songs[first:]
         return songs
-
+        
     def resolve_all_songs_desc(root, info, first=None, skip=None):
         # from django.contrib.auth.middleware import get_user
         # from graphql_jwt.utils import get_payload, get_user_by_payload
@@ -222,11 +207,9 @@ class SongQuery(graphene.ObjectType):
         except Song.DoesNotExist:
             return None
 
-
 class GenresInput(graphene.InputObjectType):
     id = graphene.ID()
     name = graphene.String(required=True)
-
 
 class SingersInput(graphene.InputObjectType):
     id = graphene.ID()
@@ -235,7 +218,6 @@ class SingersInput(graphene.InputObjectType):
     stageName = graphene.String()
     nationality = graphene.String()
     image = graphene.String()
-
 
 class AlbumsInput(graphene.InputObjectType):
     id = graphene.ID()
@@ -246,7 +228,6 @@ class AlbumsInput(graphene.InputObjectType):
     image = graphene.String()
     singer = graphene.Field(SingersInput)
     genre = graphene.Field(GenresInput)
-
 
 class SongsInput(graphene.InputObjectType):
     id = graphene.ID()
@@ -284,7 +265,6 @@ class UpsertGenreMutation(graphene.Mutation):
             genre.save()
         # Notice we return an instance of this mutation
         return UpsertGenreMutation(genre=genre)
-
 
 class UpsertSingerMutation(graphene.Mutation):
     class Arguments:
@@ -453,17 +433,16 @@ class UpsertSongMutation(graphene.Mutation):
                 return cls(song=None, status='Song not found')
         else:
             song = Song.objects.create(
-                name=kwargs['name'],
-                digitalPrice=kwargs['digitalPrice'],
-                completeFile=kwargs['completeFile'],
-                duration=kwargs['duration'],
-                previewFile=kwargs['previewFile'],
-                album=Album.objects.get(pk=kwargs['albumId']),
-                singer=Singer.objects.get(pk=kwargs['singerId'])
-            )
+                name = kwargs['name'],
+                digitalPrice = kwargs['digitalPrice'],
+                completeFile = kwargs['completeFile'],
+                duration = kwargs['duration'],
+                previewFile = kwargs['previewFile'],
+                album = Album.objects.get(pk=kwargs['albumId']),
+                singer = Singer.objects.get(pk=kwargs['singerId'])
+                )
             if 'releaseDate' in kwargs:
-                song.releaseDate = datetime.strptime(
-                    kwargs['releaseDate'], "%Y-%m-%d")
+                song.releaseDate = datetime.strptime(kwargs['releaseDate'], "%Y-%m-%d")
             song.save()
         # Notice we return an instance of this mutation
         return UpsertSongMutation(song=song, status='ok')
@@ -481,7 +460,6 @@ class DeleteGenreMutation(graphene.Mutation):
         genre.delete()
         return cls(ok=True)
 
-
 class DeleteSingerMutation(graphene.Mutation):
     ok = graphene.Boolean()
 
@@ -494,7 +472,6 @@ class DeleteSingerMutation(graphene.Mutation):
         singer.delete()
         return cls(ok=True)
 
-
 class DeleteAlbumMutation(graphene.Mutation):
     ok = graphene.Boolean()
 
@@ -506,7 +483,6 @@ class DeleteAlbumMutation(graphene.Mutation):
         album = Album.objects.get(pk=kwargs["id"])
         album.delete()
         return cls(ok=True)
-
 
 class DeleteSongMutation(graphene.Mutation):
     ok = graphene.Boolean()
