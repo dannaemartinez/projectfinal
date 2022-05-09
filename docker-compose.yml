@@ -57,7 +57,7 @@ services:
        - "${DJANGO_VOLUME_PATH}:/usr/src/django/library"
     ports:
       - "90${PORT}:80${PORT}"
-      - 3001:3001
+      # - 3001:3001 #debug port for debugpy (configured in manage.py)
     networks:
       - our-library-net
 
