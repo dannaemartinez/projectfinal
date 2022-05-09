@@ -5,7 +5,7 @@
       "fields": {
         "name": "Shakira",
         "lastName": "Mebarak",
-        "image": "aHR0cHM6Ly9zdGF0aWMud2lraWEubm9jb29raWUubmV0L2RvYmxhamUvaW1hZ2VzL2QvZDAvU2hha2lyYS5qcGcvcmV2aXNpb24vbGF0ZXN0P2NiPTIwMjAwMzA1MDAwMTAyJnBhdGgtcHJlZml4PWVz",
+        "image":"aHR0cHM6Ly9sb3M0MGVzMDAuZXBpbWcubmV0L2xvczQwL2ltYWdlbmVzLzIwMTcvMTAvMjQvbXVzaWNhLzE1MDg4MzQ0NDhfMDk4MTE2XzE1MDg4MzU5MzRfbm90aWNpYV9ub3JtYWwuanBn",
         "nationality": "Colombiana",
         "stageName": "Shakira"
       }
@@ -14,11 +14,11 @@
       "model": "songs.Singer",
       "pk": 2,
       "fields": {
-        "name": "Robyn Rihanna",
-        "lastName": "Fenty",
-        "image": "aHR0cDovL2JvcmRvLmFsL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIwLzEyL1JpaGFubmEtQmFyYmFkaWFuLXNpbmdlci1Sb2J5bi1GZW50eS5qcGc=",
-        "nationality": "Barbadense",
-        "stageName": "Rihanna"
+        "name": "Laura",
+        "lastName": "Pergolizzi",
+        "image": "aHR0cHM6Ly9pbWFnZXMuc3F1YXJlc3BhY2UtY2RuLmNvbS9jb250ZW50L3YxLzU2ZTgzNGViZDUxY2Q0NjZjOTkxNzhlNS8xNTkyNDMwOTMxNzA5LTEzUUY3UE41MUE3RTNRS0ozRUo3L0xQLmpwZw",
+        "nationality": "Estadounidense",
+        "stageName": "LP"
       }
     },
     {
@@ -27,7 +27,7 @@
       "fields": {
         "name": "Robyn Rihanna",
         "lastName": "Fenty",
-        "image": "aHR0cDovL2JvcmRvLmFsL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIwLzEyL1JpaGFubmEtQmFyYmFkaWFuLXNpbmdlci1Sb2J5bi1GZW50eS5qcGc=",
+        "image": "aHR0cHM6Ly9pbWd3b21hbi5lbHBlcmlvZGljby5jb20vYjIvZDIvYWMvcmloYW5uYS1hY3RvLXByZXNlbnRhY2lvbi1mZW50eS0yMDIwLmpwZw",
         "nationality": "Barbadense",
         "stageName": "Rihanna"
       }
@@ -38,7 +38,7 @@
       "fields": {
         "name": "Ariana",
         "lastName": "Grande",
-        "image": "aHR0cHM6Ly9tZWRpYS52b2d1ZS5lcy9waG90b3MvNjIzOWY2NzhlOTFhYzM1NWUxYTJjNDc5LzI6My93XzI1NjAlMkNjX2xpbWl0L0dldHR5SW1hZ2VzLTEyMDIyMTkwODIuanBn",
+        "image": "aHR0cHM6Ly9sYXN0Zm0uZnJlZXRscy5mYXN0bHkubmV0L2kvdS83NzB4MC83ODU0MjA2NGM1Nzc1Y2FmNTMxNjdiZTNiZGJiOTdiMi5qcGc",
         "nationality": "Estadounidense",
         "stageName": "Ariana Grande"
       }
@@ -82,7 +82,7 @@
       "fields": {
         "name": "Sia Kate",
         "lastName": "Isobelle",
-        "image": "aHR0cHM6Ly9sb3M0MGVzMDAuZXBpbWcubmV0L2xvczQwL2ltYWdlbmVzLzIwMTgvMTIvMTgvbXVzaWNhLzE1NDUxMzUwNTVfMDg1Njg0XzE1NDUxNDE4NDZfbm90aWNpYV9ub3JtYWwuanBn",
+        "image": "aHR0cHM6Ly9pY2hlZi5iYmNpLmNvLnVrL25ld3MvNjQwL2Nwc3Byb2RwYi8xNTk0MC9wcm9kdWN0aW9uL185ODY0ODM4OF9nZXR0eWltYWdlcy01MjM5MzI2NDguanBn",
         "nationality": "Australiana",
         "stageName": "Sia"
       }
@@ -93,7 +93,7 @@
       "fields": {
         "name": "Karla Camila",
         "lastName": "Cabello",
-        "image": "aHR0cHM6Ly9tZWRpYS52b2d1ZS5teC9waG90b3MvNWUyOGQ3OTAxNjIwYWEwMDA4M2VmZWE2LzI6My93XzI1NjAlMkNjX2xpbWl0L2NhbWlsYS1jYWJlbGxvLWNvbi1wZWluYWRvLWRlLW9uZGFzLWxhcmdhcy5qcGc=",
+        "image": "aHR0cHM6Ly9sb3M0MGVzMDAuZXBpbWcubmV0L2xvczQwL2ltYWdlbmVzLzIwMTcvMDcvMTgvbG92ZTQwLzE1MDAzNzY5NDVfNTk3NjcwXzE1MDAzNzc4NDBfbm90aWNpYV9ub3JtYWwuanBn",
         "nationality": "Cubana",
         "stageName": "Camila Cabello"
       }
@@ -104,7 +104,7 @@
       "fields": {
         "name": "Dua",
         "lastName": "Lipa",
-        "image": "aHR0cHM6Ly9rZ28uZ29vZ2xldXNlcmNvbnRlbnQuY29tL3Byb2ZpbGVfdnJ0X3Jhd19ieXRlc18xNTg3NTE0MzQ4XzIxNTQuanBn=",
+        "image": "aHR0cHM6Ly9tZWdhc3Rhci1jZG5tZWQuYWdpbGVjb250ZW50LmNvbS9yZXNvdXJjZXMvanBnLzkvMi8xNjA2MTI5NzQzODI5LmpwZw",
         "nationality": "Londonense",
         "stageName": "Dua Lipa"
       }
@@ -115,7 +115,7 @@
       "fields": {
         "name": "Selena Marie",
         "lastName": "Gómez",
-        "image": "aHR0cHM6Ly9mbG9wLnRvZGF5L19fZXhwb3J0LzE2NTE3OTI3OTIzMDkvc2l0ZXMvZmxvcC9pbWcvMjAyMi8wNS8wNS9zZWxlbmEtZ29tZXotcG9ydHJhaXQtYW1lcmljYW4tc2luZ2VyLXBob3Rvc2hvb3Qtc2VsZW5hLWdvbWV6LXBob3RvLmpwZ18xNTgzMzA5MTc3LmpwZw==",
+        "image": "aHR0cHM6Ly9pMC53cC5jb20vaG90Ym9vay5teC93cC1jb250ZW50L3VwbG9hZHMvMjAyMS8wNS9wb3J0YWRhdG9kby1sby1xdWUtdGllbmVzLXF1ZS1zYWJlci1zb2JyZS1zZWxlbmEtZ29tZXouanBlZw",
         "nationality": "Estadounidense",
         "stageName": "Selena Gómez"
       }
