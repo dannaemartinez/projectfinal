@@ -5,3 +5,5 @@
 **/migrations
 **__pycache__/
 .env
+**/package-lock.json
+**/yarn.lock
