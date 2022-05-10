@@ -21,6 +21,7 @@
     "@types/redux-persist": "^4.3.1",
     "@types/yup": "^0.29.13",
     "formik": "^2.2.9",
+    "formik-material-ui": "^4.0.0-alpha.2",
     "js-sha512": "^0.8.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

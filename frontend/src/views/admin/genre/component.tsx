@@ -6,6 +6,7 @@ import {
   TableRow,
   TextField,
   Typography,
+  Input
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -27,6 +28,8 @@ import {
 
 const AdminGenre = () => {
   const [editIndex, setEditIndex] = useState<number | undefined>(undefined);
+  const [initialEditValues, setInitialEditValues] = useState<UpdateGenreDTO | undefined>(undefined);
+
   const dispatch = useDispatch();
 
   const genres = useAppSelector(genresSelector);
@@ -69,7 +72,10 @@ const AdminGenre = () => {
                 <Button
                   variant="contained"
                   color="warning"
-                  onClick={() => setEditIndex(index)}
+                  onClick={() => {
+                    setInitialEditValues({ id: parseInt(item.id), name: item.name })
+                    setEditIndex(index)
+                  }}
                 >
                   Editar
                 </Button>
@@ -92,11 +98,11 @@ const AdminGenre = () => {
                   <Paper elevation={6} sx={styles.formContainer}>
                     <TextField
                       label="Nombre"
-                      error={Boolean(errors.description)}
-                      name="description"
-                      value={values.description}
+                      error={Boolean(errors.name)}
+                      name="name"
+                      value={values.name}
                       onChange={handleChange}
-                      helperText={errors.description}
+                      helperText={errors.name}
                     />
                     <Button
                       sx={styles.formButton}
@@ -117,26 +123,28 @@ const AdminGenre = () => {
                 {`Editar el genero ${genres[editIndex].name}.`}
               </Typography>{" "}
               <Formik
-                initialValues={initialValuesUpdate}
+                enableReinitialize={true}
+                initialValues={initialEditValues}
                 onSubmit={passToUpdate}
                 validationSchema={validationSchemaUpdate}
               >
-                {({ handleSubmit, handleChange, values, errors }) => (
+                {({ handleSubmit, handleChange, values, errors, isValid, dirty }) => (
                   <form onSubmit={handleSubmit}>
                     <Paper elevation={6} sx={styles.formContainer}>
                       <TextField
                         label="Nombre"
-                        error={Boolean(errors.description)}
-                        name="description"
-                        value={values.description}
+                        error={Boolean(errors.name)}
+                        name="name"
+                        value={values.name}
                         onChange={handleChange}
-                        helperText={errors.description}
+                        helperText={errors.name}
                       />
                       <Button
                         sx={styles.formButton}
                         variant="contained"
                         color="warning"
                         type="submit"
+                        disabled={!(isValid && dirty)}
                       >
                         Editar
                       </Button>

@@ -3,10 +3,18 @@ import { store } from "../../../app/store";
 import { fetchAddSinger, fetchUpdateSinger } from "../../../services/singer";
 
 export interface CreateSingerDTO {
-  description: string;
+  name?: string,
+  stageName?: string,
+  lastName?: string,
+  nationality?: string,
+  image?: string,
 }
 export interface UpdateSingerDTO {
-  description: string;
+  name?: string,
+  stageName?: string,
+  lastName?: string,
+  nationality?: string,
+  image?: string,
 }
 
 export interface SingerPosition {
@@ -16,27 +24,66 @@ export interface SingerPosition {
 
 export const validationSchemaCreate: Yup.SchemaOf<CreateSingerDTO> = Yup.object(
   {
-    description: Yup.string()
+    name: Yup.string()
       .min(3, "Tienes que escribir al menos 3 caracteres")
-      .max(10, "Tienes que escribir menos de 10 caracteres")
-      .required("El nombre del genero es requerido"),
+      .max(70, "Tienes que escribir menos de 70 caracteres")
+      .required("El nombre del cantante es requerido"),
+    stageName: Yup.string()
+      .min(3, "Tienes que escribir al menos 3 caracteres")
+      .max(20, "Tienes que escribir menos de 20 caracteres")
+      .required("El nombre del cantante es requerido"),
+    lastName: Yup.string()
+      .min(3, "Tienes que escribir al menos 3 caracteres")
+      .max(70, "Tienes que escribir menos de 70 caracteres")
+      .required("El nombre del cantante es requerido"),
+    nationality: Yup.string()
+      .min(3, "Tienes que escribir al menos 3 caracteres")
+      .max(20, "Tienes que escribir menos de 20 caracteres")
+      .required("El nombre del cantante es requerido"),
+      image: Yup.string()
+      .min(3, "Tienes que escribir al menos 3 caracteres")
+      // .required("La imagen del cantante es requerida"),
   }
 );
 
 export const validationSchemaUpdate: Yup.SchemaOf<UpdateSingerDTO> = Yup.object(
   {
-    description: Yup.string()
+    id: Yup.number().required(),
+    name: Yup.string()
       .min(3, "Tienes que escribir al menos 3 caracteres")
       .max(10, "Tienes que escribir menos de 10 caracteres")
-      .required("El nombre del genero a actualizar es requerido"),
+      .required("El nombre del cantante es requerido"),
+    stageName: Yup.string()
+      .min(3, "Tienes que escribir al menos 3 caracteres")
+      .max(10, "Tienes que escribir menos de 10 caracteres")
+      .required("El nombre del cantante es requerido"),
+    lastName: Yup.string()
+      .min(3, "Tienes que escribir al menos 3 caracteres")
+      .max(10, "Tienes que escribir menos de 10 caracteres")
+      .required("El nombre del cantante es requerido"),
+    nationality: Yup.string()
+      .min(3, "Tienes que escribir al menos 3 caracteres")
+      .max(10, "Tienes que escribir menos de 10 caracteres")
+      .required("El nombre del cantante es requerido"),
+      image: Yup.string()
+      .min(3, "Tienes que escribir al menos 3 caracteres")
+      // .required("La imagen del cantante es requerida"),
   }
 );
 
 export const initialValuesCreate: CreateSingerDTO = {
-  description: "",
+  name: undefined,
+  stageName: undefined,
+  lastName: undefined,
+  nationality: undefined,
+  image: undefined
 };
 export const initialValuesUpdate: UpdateSingerDTO = {
-  description: "",
+  name: undefined,
+  stageName: undefined,
+  lastName: undefined,
+  nationality: undefined,
+  image: undefined
 };
 
 export const createSinger = (values: CreateSingerDTO) => {

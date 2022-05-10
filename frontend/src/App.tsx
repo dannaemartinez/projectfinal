@@ -44,7 +44,7 @@ const App = () => {
       display: "flex",
       flexDirection: "column",
       padding: "40px",
-      overflow: "hidden",
+      overflowX: "hidden",
     },
   };
 

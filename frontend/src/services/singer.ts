@@ -72,12 +72,38 @@ export const fetchAddSinger =
   (createSingerDTO: CreateSingerDTO) => async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await fetchAuth("http://localhost:8000/singer", {
+      const query = `mutation UpsertSinger( 
+        $id: ID,  
+        $name: String!, 
+        $stageName: String!, 
+        $lastName:String!,
+        $nationality:String!, 
+        $image: String!) {
+        upsertSinger(
+          id: $id, 
+          name: $name, 
+          stageName: $stageName,
+          lastName:$lastName,
+          nationality: $nationality,
+          image: $image
+           ) {
+          singer {
+            id
+            stageName
+            name
+            lastName
+            nationality
+            image
+          }
+        }
+      }`;
+      const variables= createSingerDTO
+      const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(createSingerDTO),
+        body: JSON.stringify({query:query, variables: variables}),
       });
 
       if (response.status !== 200) return "";

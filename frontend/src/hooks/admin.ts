@@ -7,7 +7,7 @@ export interface JWTPayload {
   exp: number;
   iat: number;
   rol: string;
-  _id: string;
+  id: string;
 }
 
 export const useAdmin = () => {

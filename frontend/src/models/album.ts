@@ -3,7 +3,7 @@ import { Singer } from "./singer";
 import { Song } from "./song";
 
 export interface Album {
-  _id: string;
+  id: string;
   name: string;
   singer: Singer;
   releaseDate: Date;

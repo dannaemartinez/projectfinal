@@ -1,19 +1,27 @@
 import {
   Box,
   Button,
+  Input,
   Paper,
   TableCell,
   TableRow,
   TextField,
   Typography,
+  InputAdornment,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { SimpleFileUpload } from 'formik-material-ui'
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/hooks";
 import TableInfo from "../../../components/table/component";
 import { singersSelector } from "../../../features/musicSlice";
 import { fetchDeleteSinger, getSingers } from "../../../services/singer";
-import { Formik } from "formik";
+import { getBase64 } from "../../../helpers/files";
+import { Field, Formik } from "formik";
 import { styles } from "./styles";
 import {
   createSinger,
@@ -22,11 +30,13 @@ import {
   validationSchemaCreate,
   validationSchemaUpdate,
   updateSinger,
+  CreateSingerDTO,
   UpdateSingerDTO,
 } from "./form";
 
 const AdminSinger = () => {
   const [editIndex, setEditIndex] = useState<number | undefined>(undefined);
+  const [initialEditValues, setInitialEditValues] = useState<UpdateSingerDTO | undefined>(undefined); 
   const dispatch = useDispatch();
 
   const singers = useAppSelector(singersSelector);
@@ -34,6 +44,13 @@ const AdminSinger = () => {
   useEffect(() => {
     dispatch(getSingers());
   }, [dispatch]);
+
+  const passToCreate = (values: CreateSingerDTO) => {
+    getBase64(values.image, (result) => {
+      values.image = result;
+      createSinger(values);
+    });
+  }
 
   const passToUpdate = (values: UpdateSingerDTO) => {
     if (editIndex !== undefined)
@@ -48,18 +65,18 @@ const AdminSinger = () => {
       <Typography variant="h2" sx={styles.title}>
         Administrador de cantantes.
       </Typography>{" "}
-      <Box sx={styles.SingerContainer}>
+      <Box sx={styles.singerContainer}>
         <TableInfo
           rowsPerPageOptions={[5, 10, 15]}
           data={singers}
           columnsNames={["Id", "Nombre artistico", "Imagen", "Acciones"]}
-          title="Géneros"
+          title="Cantantes"
           row={(item, index) => (
             <TableRow>
-              <TableCell sx={styles.SingerId}>{item.id}</TableCell>
-              <TableCell sx={styles.SingerField}>{item.stageName}</TableCell>
-              <TableCell sx={styles.SingerField}>{item.stageName}</TableCell>
-              <TableCell sx={styles.SingerActions}>
+              <TableCell sx={styles.singerId}>{item.id}</TableCell>
+              <TableCell sx={styles.singerField}>{item.stageName}</TableCell>
+              <TableCell sx={styles.singerField}>{item.stageName}</TableCell>
+              <TableCell sx={styles.singerActions}>
                 <Button
                   variant="contained"
                   color="error"
@@ -81,7 +98,7 @@ const AdminSinger = () => {
         <Box sx={styles.formGroup}>
           <Box>
             <Typography variant="h5" sx={styles.title}>
-              Crear un nuevo genero.
+              Crear un nuevo Cantante.
             </Typography>{" "}
             <Formik
               initialValues={initialValuesCreate}
@@ -93,11 +110,43 @@ const AdminSinger = () => {
                   <Paper elevation={6} sx={styles.formContainer}>
                     <TextField
                       label="Nombre"
-                      error={Boolean(errors.description)}
-                      name="description"
-                      value={values.description}
+                      error={Boolean(errors.name)}
+                      name="name"
+                      value={values.name}
                       onChange={handleChange}
-                      helperText={errors.description}
+                      helperText={errors.name}
+                    />
+                    <TextField
+                      label="Alias"
+                      error={Boolean(errors.stageName)}
+                      name="stageName"
+                      value={values.stageName}
+                      onChange={handleChange}
+                      helperText={errors.stageName}
+                    />
+                    <TextField
+                      label="Apellido"
+                      error={Boolean(errors.lastName)}
+                      name="lastName"
+                      value={values.lastName}
+                      onChange={handleChange}
+                      helperText={errors.lastName}
+                    />
+                    <TextField
+                      label="Nacionalidad"
+                      error={Boolean(errors.nationality)}
+                      name="nationality"
+                      value={values.nationality}
+                      onChange={handleChange}
+                      helperText={errors.nationality}
+                    />
+                    <TextField
+                      label="Imagen"
+                      error={Boolean(errors.image)}
+                      name="image"
+                      value={values.image}
+                      onChange={handleChange}
+                      helperText={errors.image}
                     />
                     <Button
                       sx={styles.formButton}
@@ -115,7 +164,7 @@ const AdminSinger = () => {
           {editIndex !== undefined && (
             <Box>
               <Typography variant="h5" sx={styles.title}>
-                {`Editar el genero ${singers[editIndex].stageName}.`}
+                {`Editar las canciones ${singers[editIndex].stageName}.`}
               </Typography>{" "}
               <Formik
                 initialValues={initialValuesUpdate}

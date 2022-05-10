@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { FC } from "react";
 import { Styles } from "../../../theme/types";
 import { SingerCardProps } from "./types";
+import { getImageSrc } from "../../../helpers/files";
 
 const SingerCard: FC<SingerCardProps> = ({ image, stageName }) => {
   const styles: Styles = {
@@ -34,14 +35,14 @@ const SingerCard: FC<SingerCardProps> = ({ image, stageName }) => {
     width: "auto",
   };
 
-  const getImageSrc = (imageStr: string): string =>{ 
-    try {
-      const src = window.atob(image);
-      return src.startsWith("http") ? src: `data:image/jpeg;base64,${image}`
-    } catch (error) {
-      return 'no-image'
-    }
-  };
+  // const getImageSrc = (imageStr: string): string => {
+  //   try {
+  //     const src = window.atob(imageStr);
+  //     return src.startsWith("http") ? src : `data:image/jpeg;base64,${image}`
+  //   } catch (error) {
+  //     return imageStr.startsWith("http") ? imageStr : 'no-image'
+  //   }
+  // };
 
   return (
     <Box sx={styles.container}>

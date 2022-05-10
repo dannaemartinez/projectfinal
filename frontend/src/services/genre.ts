@@ -68,12 +68,21 @@ export const fetchAddGenre =
   (createGenreDTO: CreateGenreDTO) => async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await fetchAuth("http://localhost:8000/genre", {
+      const query = `mutation UpsertGenre( $id: ID,  $name: String!) {
+        upsertGenre(id: $id, name: $name) {
+          genre {
+            id
+            name
+          }
+        }
+      }`;
+      const variables= createGenreDTO
+      const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(createGenreDTO),
+        body: JSON.stringify({query:query, variables: variables}),
       });
 
       if (response.status !== 200) return "";
@@ -92,14 +101,21 @@ export const fetchUpdateGenre =
   async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await fetchAuth(
-        `http://localhost:8000/genre/${genrePosition.id}`,
-        {
-          method: "PATCH",
+      const query = `mutation UpsertGenre( $id: ID,  $name: String!) {
+        upsertGenre(id: $id, name: $name) {
+          genre {
+            id
+            name
+          }
+        }
+      }`;
+      const variables= updateGenreDTO
+      const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(updateGenreDTO),
+          body: JSON.stringify({query:query, variables: variables}),
         }
       );
 

@@ -26,8 +26,26 @@ export const MusicSlice = createSlice({
     setSongs: (state, action) => {
       state.songs = action.payload;
     },
+    deleteSong: (state, action) => {
+      state.songs.splice(action.payload, 1);
+    },
+    addSong: (state, action) => {
+      state.songs.push(action.payload);
+    },
+    updateSong: (state, action) => {
+      state.songs[action.payload.index] = action.payload.genre;
+    },
     setAlbums: (state, action) => {
       state.albums = action.payload;
+    },
+    deleteAlbum: (state, action) => {
+      state.albums.splice(action.payload, 1);
+    },
+    addAlbum: (state, action) => {
+      state.albums.push(action.payload);
+    },
+    updateAlbum: (state, action) => {
+      state.albums[action.payload.index] = action.payload.genre;
     },
     setSingers: (state, action) => {
       state.singers = action.payload;
@@ -58,8 +76,7 @@ export const MusicSlice = createSlice({
 
 export const musicSelector = (state: RootState) => state.music;
 
-export const singersSelector = (state: RootState) =>
-  musicSelector(state).singers;
+export const singersSelector = (state: RootState) => musicSelector(state).singers;
 export const albumsSelector = (state: RootState) => musicSelector(state).albums;
 export const songsSelector = (state: RootState) => musicSelector(state).songs;
 export const genresSelector = (state: RootState) => musicSelector(state).genres;
@@ -70,7 +87,13 @@ export const {
   addSinger,
   updateSinger,
   setAlbums,
+  deleteAlbum,
+  addAlbum,
+  updateAlbum,
   setSongs,
+  deleteSong,
+  addSong,
+  updateSong,
   setGenres,
   deleteGenre,
   addGenre,

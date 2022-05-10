@@ -5,21 +5,21 @@ export const styles: Styles = {
     fontWeight: "Bold",
     padding: "20px 0",
   },
-  singerContainer: {
+  albumContainer: {
     display: "flex",
     gap: "60px",
-    padding: "40px 0",
-    flexDirection: "column"
+    padding: "40px 40px",
+    flexDirection: "column",
   },
-  singerId: {
+  albumId: {
     fontSize: "1.1rem",
   },
-  singerField: {
+  albumField: {
     fontSize: "1.1rem",
     fontWeight: "600",
     textTransform: "capitalize",
   },
-  singerActions: {
+  albumActions: {
     display: "flex",
     justifyContent: "space-evenly",
   },
@@ -28,10 +28,14 @@ export const styles: Styles = {
     flexDirection: "column",
   },
   formContainer: {
+    width: '100%',
     padding: "20px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+  },
+  formInput: {
+    margin: "20px 0",
   },
   formButton: {
     margin: "20px 0",

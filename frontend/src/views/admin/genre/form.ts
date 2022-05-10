@@ -3,10 +3,11 @@ import { store } from "../../../app/store";
 import { fetchAddGenre, fetchUpdateGenre } from "../../../services/genre";
 
 export interface CreateGenreDTO {
-  description: string;
+  name?: string
 }
 export interface UpdateGenreDTO {
-  description: string;
+  id?: number,
+  name?: string
 }
 
 export interface GenrePosition {
@@ -15,24 +16,26 @@ export interface GenrePosition {
 }
 
 export const validationSchemaCreate: Yup.SchemaOf<CreateGenreDTO> = Yup.object({
-  description: Yup.string()
+  name: Yup.string()
     .min(3, "Tienes que escribir al menos 3 caracteres")
     .max(10, "Tienes que escribir menos de 10 caracteres")
     .required("El nombre del genero es requerido"),
 });
 
 export const validationSchemaUpdate: Yup.SchemaOf<UpdateGenreDTO> = Yup.object({
-  description: Yup.string()
+  id: Yup.number().required(),
+  name: Yup.string()
     .min(3, "Tienes que escribir al menos 3 caracteres")
     .max(10, "Tienes que escribir menos de 10 caracteres")
     .required("El nombre del genero a actualizar es requerido"),
 });
 
 export const initialValuesCreate: CreateGenreDTO = {
-  description: "",
+  name: undefined,
 };
 export const initialValuesUpdate: UpdateGenreDTO = {
-  description: "",
+  id: undefined,
+  name: undefined,
 };
 
 export const createGenre = (values: CreateGenreDTO) => {
@@ -43,5 +46,6 @@ export const updateGenre = (
   values: UpdateGenreDTO,
   genrePosition: GenrePosition
 ) => {
+  console.log(values);
   store.dispatch(fetchUpdateGenre(values, genrePosition));
 };

@@ -124,10 +124,20 @@ class SingerQuery(graphene.ObjectType):
             return None
 
 class AlbumQuery(graphene.ObjectType):
+    all_albums_sorting = graphene.List(
+        AlbumType, first=graphene.Int(), skip=graphene.Int(), asc=graphene.Boolean(required=False), field=graphene.String(required=False))
     album_by_name_asc = graphene.List(AlbumType, name=graphene.String(required=True))
     album_by_name_desc = graphene.List(AlbumType, name=graphene.String(required=True))
     all_albums_asc = graphene.List(AlbumType, first=graphene.Int(), skip=graphene.Int())
     all_albums_desc = graphene.List(AlbumType, first=graphene.Int(), skip=graphene.Int())
+    
+    def resolve_all_albums_sorting(root, info, asc=True, field="id", first=None, skip=None):
+        albums = Album.objects.all().order_by(f'{field}' if asc else f'-{field}')
+        if skip is not None:
+            albums = albums[:skip]
+        if first is not None:
+            albums = albums[first:]
+        return albums
     
     def resolve_album_by_name_asc(root, info, name):
         try:
@@ -170,6 +180,16 @@ class SongQuery(graphene.ObjectType):
     song_by_name_desc = graphene.List(SongType, name=graphene.String(required=True))
     all_songs_asc = graphene.List(SongType, first=graphene.Int(), skip=graphene.Int())
     all_songs_desc = graphene.List(SongType, first=graphene.Int(), skip=graphene.Int())
+    all_songs_sorting = graphene.List(
+        SongType, first=graphene.Int(), skip=graphene.Int(), asc=graphene.Boolean(required=False), field=graphene.String(required=False))
+    
+    def resolve_all_songs_sorting(root, info, asc=True, field="id", first=None, skip=None):
+        songs = Song.objects.all().order_by(f'{field}' if asc else f'-{field}')
+        if skip is not None:
+            songs = songs[:skip]
+        if first is not None:
+            songs = songs[first:]
+        return songs
     
     def resolve_all_songs_asc(root, info, first=None, skip=None):
         songs = Song.objects.all().order_by('releaseDate')
@@ -209,11 +229,11 @@ class SongQuery(graphene.ObjectType):
 
 class GenresInput(graphene.InputObjectType):
     id = graphene.ID()
-    name = graphene.String(required=True)
+    name = graphene.String()
 
 class SingersInput(graphene.InputObjectType):
     id = graphene.ID()
-    name = graphene.String(required=True)
+    name = graphene.String()
     lastName = graphene.String()
     stageName = graphene.String()
     nationality = graphene.String()
@@ -327,11 +347,16 @@ class UpsertAlbumMutation(graphene.Mutation):
             if 'id' in singer:
                 try:
                     aux_singer = Singer.objects.get(pk=singer['id'])
-                    aux_singer.name = singer['name']
-                    aux_singer.lastName = singer['lastName']
-                    aux_singer.stageName = singer['stageName']
-                    aux_singer.nationality = singer['nationality']
-                    aux_singer.image = singer['image']
+                    if 'name' in singer:
+                        aux_singer.name = singer['name']
+                    if 'lastName' in singer:
+                        aux_singer.lastName = singer['lastName']
+                    if 'stageName' in singer:
+                        aux_singer.stageName = singer['stageName']
+                    if 'nationality' in singer:
+                        aux_singer.nationality = singer['nationality']
+                    if 'name' in singer:
+                        aux_singer.image = singer['image']
                     aux_singer.save()
                 except Singer.DoesNotExist:
                     return cls(status='Singer not found', singer=None)
@@ -350,7 +375,8 @@ class UpsertAlbumMutation(graphene.Mutation):
             if 'id' in genre:
                 try:
                     aux_genre = Genre.objects.get(pk=genre['id'])
-                    aux_genre.name = genre['name']
+                    if 'name' in genre:
+                        aux_genre.name = genre['name']
                     aux_genre.save()
                 except Genre.DoesNotExist:
                     return cls(status='Genre not found', genre=None)

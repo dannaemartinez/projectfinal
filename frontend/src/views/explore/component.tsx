@@ -66,8 +66,8 @@ const Explore = () => {
           {albums.map((album) => (
             <AlbumCard
               {...album}
-              key={`album-${album._id}`}
-              songs={album.songs.length}
+              key={`album-${album.id}`}
+              // songs={album.songs.length}
             />
           ))}
         </Box>

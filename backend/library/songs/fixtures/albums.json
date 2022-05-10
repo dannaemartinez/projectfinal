@@ -4,7 +4,7 @@
       "pk": 1,
       "fields": {
         "name": "Pies descalzos",
-        "image": "aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvNzFXSnFKRW1PU0wuX1NMMTUwMF8uanBn",
+        "image": "aHR0cHM6Ly9jZG5zLWltYWdlcy5kemNkbi5uZXQvaW1hZ2VzL2NvdmVyLzYxODMyNjQwNTYyZGNjYTgzZjA2MDBiYzlhMTFlNGE3LzM1MHgzNTAuanBn",
         "physicalPrice": 300.2,
         "releaseDate": "1995-07-01",
         "stock": 13,
@@ -43,7 +43,7 @@
       "pk": 4,
       "fields": {
         "name": "Dangerous Woman",
-        "image": "aHR0cHM6Ly9pLnBpbmltZy5jb20vb3JpZ2luYWxzLzgzLzk5LzNhLzgzOTkzYTZmNjg5YTk1YzdiM2YwNGNjNjU4Zjg3NzE4LmpwZw==",
+        "image": "aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvNzFydGJGVmdWdUwuX1NMMTIwMF8uanBn",
         "physicalPrice": 300.99,
         "releaseDate": "2016-05-20",
         "stock": 10,
