@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, ThemeProvider } from "@mui/material";
 import AlbumCard from "../../components/cards/album/component";
 import SingerCard from "../../components/cards/singer/component";
 import { Styles } from "../../theme/types";
@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useAppSelector } from "../../app/hooks";
 import { albumsSelector, singersSelector } from "../../features/musicSlice";
+import {darkTheme} from "../../theme/theme"
+
 
 const Explore = () => {
   const dispatch = useDispatch();
@@ -22,14 +24,13 @@ const Explore = () => {
 
   const styles: Styles = {
     title: {
-      fontWeight: "Bold",
-      width: "500px",
+      fontFamily: "'Koulen'",
+      width: "1000px",
       padding: "20px 0",
     },
     subtitle: {
       fontWeight: "600",
       padding: "10px 0",
-      color: "gray",
     },
     albumsContainer: {
       width: "100%",
@@ -37,7 +38,7 @@ const Explore = () => {
     albumsList: {
       width: "100%",
       display: "flex",
-      overflowX: "auto",
+      overflowX: "scroll",
       gap: "60px",
       paddingBottom: "20px",
     },
@@ -55,12 +56,13 @@ const Explore = () => {
 
   return (
     <>
+    <ThemeProvider theme={darkTheme}>
       <Typography variant="h2" sx={styles.title}>
-        Escucha a tus artistas favoritos en el mejor lugar.
+        Escucha la mejor musica en Ninja.
       </Typography>
       <Box sx={styles.albumsContainer}>
         <Typography variant="h6" sx={styles.subtitle}>
-          Últimos álbumes.
+          Sus álbumes.
         </Typography>
         <Box sx={styles.albumsList}>
           {albums.map((album) => (
@@ -82,6 +84,7 @@ const Explore = () => {
           </Box>
         </Box>
       </Box>
+      </ThemeProvider>
     </>
   );
 };

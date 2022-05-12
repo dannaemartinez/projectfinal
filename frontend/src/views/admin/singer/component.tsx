@@ -87,7 +87,10 @@ const AdminSinger = () => {
                 <Button
                   variant="contained"
                   color="warning"
-                  onClick={() => setEditIndex(index)}
+                  onClick={() => {
+                    setInitialEditValues({ id: parseInt(item.id), name: item.name })
+                    setEditIndex(index)
+                  }}
                 >
                   Editar
                 </Button>
@@ -102,7 +105,7 @@ const AdminSinger = () => {
             </Typography>{" "}
             <Formik
               initialValues={initialValuesCreate}
-              onSubmit={createSinger}
+              onSubmit={passToCreate}
               validationSchema={validationSchemaCreate}
             >
               {({ handleSubmit, handleChange, values, errors }) => (
@@ -140,13 +143,15 @@ const AdminSinger = () => {
                       onChange={handleChange}
                       helperText={errors.nationality}
                     />
-                    <TextField
-                      label="Imagen"
-                      error={Boolean(errors.image)}
+                     <Field
                       name="image"
-                      value={values.image}
-                      onChange={handleChange}
-                      helperText={errors.image}
+                      type="file"
+                      component={SimpleFileUpload}
+                      // accept={acceptFileType}
+                      inputProps={{
+                        accept:
+                          "image/jpeg",
+                      }}
                     />
                     <Button
                       sx={styles.formButton}
@@ -164,29 +169,70 @@ const AdminSinger = () => {
           {editIndex !== undefined && (
             <Box>
               <Typography variant="h5" sx={styles.title}>
-                {`Editar las canciones ${singers[editIndex].stageName}.`}
+                {`Editar a ${singers[editIndex].stageName}.`}
               </Typography>{" "}
               <Formik
-                initialValues={initialValuesUpdate}
+                enableReinitialize={true}
+                initialValues={initialEditValues}
                 onSubmit={passToUpdate}
                 validationSchema={validationSchemaUpdate}
               >
-                {({ handleSubmit, handleChange, values, errors }) => (
+                {({ handleSubmit, handleChange, values, errors, isValid, dirty  }) => (
                   <form onSubmit={handleSubmit}>
                     <Paper elevation={6} sx={styles.formContainer}>
-                      <TextField
-                        label="Nombre"
-                        error={Boolean(errors.description)}
-                        name="description"
-                        value={values.description}
-                        onChange={handleChange}
-                        helperText={errors.description}
-                      />
+                    <TextField
+                      sx={styles.formInput}
+                      label="Nombre"
+                      error={Boolean(errors.name)}
+                      name="name"
+                      value={values.name}
+                      onChange={handleChange}
+                      helperText={errors.name}
+                    />
+                    <TextField
+                      sx={styles.formInput}
+                      label="Alias"
+                      error={Boolean(errors.stageName)}
+                      name="stageName"
+                      value={values.stageName}
+                      onChange={handleChange}
+                      helperText={errors.stageName}
+                    />
+                    <TextField
+                      sx={styles.formInput}
+                      label="Apellido"
+                      error={Boolean(errors.lastName)}
+                      name="lastName"
+                      value={values.lastName}
+                      onChange={handleChange}
+                      helperText={errors.lastName}
+                    />
+                    <TextField
+                      sx={styles.formInput}
+                      label="Nacionalidad"
+                      error={Boolean(errors.nationality)}
+                      name="nationality"
+                      value={values.nationality}
+                      onChange={handleChange}
+                      helperText={errors.nationality}
+                    />
+                     <Field
+                      sx={styles.formInput}
+                      name="image"
+                      type="file"
+                      component={SimpleFileUpload}
+                      // accept={acceptFileType}
+                      inputProps={{
+                        accept:
+                          "image/jpeg",
+                      }}
+                    />
                       <Button
                         sx={styles.formButton}
                         variant="contained"
                         color="warning"
                         type="submit"
+                        disabled={!(isValid && dirty)}
                       >
                         Editar
                       </Button>

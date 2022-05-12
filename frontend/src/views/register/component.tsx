@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { tokenSelector } from "../../features/authSlice";
 import { Styles } from "../../theme/types";
+import {darkTheme} from "../../theme/theme"
 // import { initialValues, loginUser, validationSchema } from "./form";
 
 const Register = () => {

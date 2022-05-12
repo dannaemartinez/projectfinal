@@ -6,9 +6,14 @@ export interface Song {
   name: string;
   singer: Singer;
   releaseDate: Date;
-  album?: Album;
+  album: Album;
   duration?: number;
   completeFile: string;
   previewFile: string;
-  price?: number;
+  digitalPrice: number;
+}
+
+export interface SongCropped {
+  id: string;
+  name: string;
 }

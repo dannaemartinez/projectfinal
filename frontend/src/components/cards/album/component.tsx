@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, ThemeProvider } from "@mui/material";
 import { FC } from "react";
 import { Styles } from "../../../theme/types";
 import { AlbumCardProps } from "./types";
@@ -13,7 +13,6 @@ const AlbumCard: FC<AlbumCardProps> = ({ image, stock, name }) => {
     title: {
       fontSize: "1.2rem",
       fontWeight: "bold",
-      color: "black",
     },
     bottom: {
       display: "flex",
@@ -24,7 +23,6 @@ const AlbumCard: FC<AlbumCardProps> = ({ image, stock, name }) => {
     info: {
       fontSize: "0.8rem",
       fontWeight: "600",
-      color: "gray",
     },
   };
 
@@ -35,16 +33,6 @@ const AlbumCard: FC<AlbumCardProps> = ({ image, stock, name }) => {
     boxShadow:
       "0 1px 1px hsl(0deg 0% 0% / 0.075), 0 2px 2px hsl(0deg 0% 0% / 0.075), 0 4px 4px hsl(0deg 0% 0% / 0.075), 0 8px 8px hsl(0deg 0% 0% / 0.075), 0 16px 16px hsl(0deg 0% 0% / 0.075)",
   };
-
-  // const getImageSrc = (imageStr: string): string =>{ 
-  //   try {
-  //     const src = window.atob(image);
-  //     return src.startsWith("http") ? src: `data:image/jpeg;base64,${image}`
-  //   } catch (error) {
-  //     return 'no-image'
-  //   }
-  // };
-
 
   return (
     <Box sx={styles.container}>

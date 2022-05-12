@@ -2,8 +2,8 @@ import "./App.css";
 import Menu from "./components/menu/menu";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import Explore from "./views/explore/component";
-import Albums from "./views/albums/component";
-import Songs from "./views/songs/component";
+import Reproducer from "./views/reproducer/component";
+import AdminSales from "./views/admin/sale/component";
 import { Styles } from "./theme/types";
 import { Box } from "@mui/system";
 import AdminSong from "./views/admin/song/component";
@@ -16,6 +16,8 @@ import { tokenSelector } from "./features/authSlice";
 import { useEffect, useMemo } from "react";
 import { useAdmin } from "./hooks/admin";
 import LoginButton from "./components/logButton/component";
+import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import {darkTheme} from "./theme/theme"
 
 const publicPaths = ["/login", "/", "/albums", "/songs"];
 
@@ -49,22 +51,25 @@ const App = () => {
   };
 
   return (
-    <Box sx={styles.root}>
-      {haveBar && <Menu />}
-      <Box sx={styles.container}>
-        {haveBar && <LoginButton />}
-        <Routes>
-          <Route path="/" element={<Explore />} />
-          <Route path="/albums" element={<Albums />} />
-          <Route path="/songs" element={<Songs />} />
-          <Route path="/admin/albums" element={<AdminAlbum />} />
-          <Route path="/admin/songs" element={<AdminSong />} />
-          <Route path="/admin/singers" element={<AdminSinger />} />
-          <Route path="/admin/genres" element={<AdminGenre />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline enableColorScheme={true}/>
+      <Box sx={styles.root}>
+        {haveBar && <Menu />}
+        <Box sx={styles.container}>
+          {haveBar && <LoginButton />}
+          <Routes>
+            <Route path="/" element={<Explore />} />
+            <Route path="/reproducer" element={<Reproducer />} />
+            <Route path="/admin/albums" element={<AdminAlbum />} />
+            <Route path="/admin/songs" element={<AdminSong />} />
+            <Route path="/admin/singers" element={<AdminSinger />} />
+            <Route path="/admin/genres" element={<AdminGenre />} />
+            <Route path="/admin/sale" element={<AdminSales />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </Box>
       </Box>
-    </Box>
+    </ThemeProvider>
   );
 };
 

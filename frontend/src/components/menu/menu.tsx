@@ -7,7 +7,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import AlbumIcon from "@mui/icons-material/Album";
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { NavButton } from "./types";
 import MenuIcon from "@mui/icons-material/AutoAwesomeMosaic";
 import { useMemo, useState } from "react";
@@ -43,21 +43,30 @@ const Menu = () => {
         onClick: () => navigate("/"),
       },
       {
-        text: "Songs",
+        text: "Reproducer",
         icon: <MusicNoteIcon />,
-        onClick: () => navigate("/songs"),
-      },
-      {
-        text: "Albums",
-        icon: <AlbumIcon />,
-        onClick: () => navigate("/albums"),
-      },
+        onClick: () => navigate("/reproducer"),
+      }
     ],
     [navigate]
   );
-
+  // const userButtons: NavButton[] = useMemo(
+  //   () => [
+  //   {
+  //     text: "Sales",
+  //     icon: <AlbumIcon />,
+  //     onClick: () => navigate("/user/albums"),
+  //   },
+  // ],
+  // [navigate]
+  // );
   const adminButtons: NavButton[] = useMemo(
     () => [
+      {
+        text: "Sale",
+        icon: <MonetizationOnIcon />,
+        onClick: () => navigate("/admin/sales"),
+      },
       {
         text: "Genre",
         icon: <LibraryMusicIcon />,

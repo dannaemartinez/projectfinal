@@ -34,7 +34,7 @@ class Song(models.Model):
 	name = models.CharField(max_length = 45)
 	singer = models.ForeignKey(Singer, related_name='SongWithSinger', on_delete=models.DO_NOTHING)
 	releaseDate = models.DateTimeField(auto_now_add=True, null=True)
-	album = models.ForeignKey(Album, related_name='SongWithAlbum', on_delete=models.DO_NOTHING)
+	album = models.ForeignKey(Album, related_name='songs', on_delete=models.DO_NOTHING)
 	duration = models.IntegerField()
 	completeFile = models.TextField()
 	previewFile = models.TextField()

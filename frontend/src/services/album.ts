@@ -24,6 +24,10 @@ export const getAlbums = () => async (dispatch: AppDispatch) => {
           name
           stock
           image
+          songs{
+            id
+            name
+          }
       }
     }`;
     const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
@@ -113,25 +117,44 @@ export const fetchAddAlbum =
   };
 
 export const fetchUpdateAlbum =
-  (updateAlbumDTO: UpdateAlbumDTO, AlbumPosition: AlbumPosition) =>
+  (updateAlbumDTO: UpdateAlbumDTO, albumPosition: AlbumPosition) =>
   async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await fetchAuth(
-        `http://localhost:8000/album/${AlbumPosition.id}`,
-        {
-          method: "PATCH",
+      const query = `mutation UpsertAlbum($id: ID, $image: String,  $name: String!,  $physicalPrice: Decimal!,  $releaseDate: String, 
+        $singer: SingersInput!,  $genre: GenresInput!,  $stock: Int!) {
+        upsertAlbum(id: $id,  image: $image,  name: $name,  physicalPrice: $physicalPrice,  releaseDate: $releaseDate,  singer: $singer, 
+          stock: $stock,  genre: $genre) {
+          album {
+            id
+            name
+            image
+            physicalPrice
+            releaseDate
+            stock
+            genre {
+              id
+            }
+            singer {
+              id
+            }
+          }
+        }
+      }`;
+      const variables= updateAlbumDTO
+      const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(updateAlbumDTO),
+          body: JSON.stringify({query:query, variables: variables}),
         }
       );
 
       if (response.status !== 200) return "";
 
       const album: Album = await response.json();
-      dispatch(updateAlbum({ album, index: AlbumPosition.index }));
+      dispatch(updateAlbum({ album, index: albumPosition.index }));
     } catch (err) {
       throw err;
     } finally {

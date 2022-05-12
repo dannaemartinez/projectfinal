@@ -1,15 +1,15 @@
 import { Genre } from "./genre";
 import { Singer } from "./singer";
-import { Song } from "./song";
+import { SongCropped } from "./song";
 
 export interface Album {
   id: string;
   name: string;
   singer: Singer;
   releaseDate: Date;
-  songs: Song[];
-  price: number;
+  physicalPrice: number;
   genre: Genre;
   stock: number;
   image: string;
+  songs: SongCropped[];
 }

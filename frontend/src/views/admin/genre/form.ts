@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { store } from "../../../app/store";
-import { fetchAddGenre, fetchUpdateGenre } from "../../../services/genre";
+import { fetchAddGenre, fetchUpdateGenre, fetchDeleteGenre } from "../../../services/genre";
 
 export interface CreateGenreDTO {
   name?: string
@@ -8,6 +8,11 @@ export interface CreateGenreDTO {
 export interface UpdateGenreDTO {
   id?: number,
   name?: string
+}
+
+export interface DeleteGenreDTO {
+  id?: number
+  
 }
 
 export interface GenrePosition {
@@ -38,8 +43,16 @@ export const initialValuesUpdate: UpdateGenreDTO = {
   name: undefined,
 };
 
+export const initialValuesDelete: DeleteGenreDTO = {
+  id: undefined,
+};
+
 export const createGenre = (values: CreateGenreDTO) => {
   store.dispatch(fetchAddGenre(values));
+};
+
+export const deleteGenre = (values: DeleteGenreDTO) => {
+  store.dispatch(fetchDeleteGenre(values));
 };
 
 export const updateGenre = (

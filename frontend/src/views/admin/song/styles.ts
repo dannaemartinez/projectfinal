@@ -11,6 +11,9 @@ export const styles: Styles = {
     padding: "40px 0",
     flexDirection: "column",
   },
+  tableInfo:{
+    width: "auto",
+  },
   songId: {
     fontSize: "1.1rem",
   },
@@ -28,7 +31,7 @@ export const styles: Styles = {
     flexDirection: "column",
   },
   formContainer: {
-    width: '100%',
+    // width: '100%',
     padding: "20px",
     display: "flex",
     flexDirection: "column",

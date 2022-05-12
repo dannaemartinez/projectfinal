@@ -26,7 +26,6 @@ const SingerCard: FC<SingerCardProps> = ({ image, stageName }) => {
     title: {
       fontSize: "1.2rem",
       fontWeight: "bold",
-      color: "black",
     },
   };
 

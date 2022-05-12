@@ -9,26 +9,19 @@ export interface CreateSongDTO {
   releaseDate: Date,
   duration?: number,
   digitalPrice?: number,
-  album: {
-    id?: number
-  },
-  singer: {
-    id?: number
-  }
+  albumId?: number,
+  singerId?: number
 }
 export interface UpdateSongDTO {
+  id?: number,
   name?: string,
   previewFile?: string,
   completeFile?: string,
   releaseDate: Date,
   duration?: number,
   digitalPrice?: number,
-  album: {
-    id?: number
-  },
-  singer: {
-    id?: number
-  }
+  albumId?: number,
+  singerId?: number
 }
 
 export interface SongPosition {
@@ -52,17 +45,14 @@ export const validationSchemaCreate: Yup.SchemaOf<CreateSongDTO> = Yup.object(
     digitalPrice: Yup.number()
       .max(999.99, "El precio maximo de la canción es 999.99").min(0, "El precio minimo del album es 0")
       .required("El precio de la canción es requerido"),
-    album: Yup.object({
-        id: Yup.number().required("El cantante es requerido")
-      }),
-    singer: Yup.object({
-        id: Yup.number().required("El cantante es requerido")
-      })
+    albumId: Yup.number().required("El album es requerido"),
+    singerId: Yup.number().required("El cantante es requerido")
   }
 );
 
 export const validationSchemaUpdate: Yup.SchemaOf<UpdateSongDTO> = Yup.object(
   {
+    id: Yup.number().required(),
     name: Yup.string()
       .min(3, "Tienes que escribir al menos 3 caracteres")
       .required("El nombre de la canción es requerido"),
@@ -77,12 +67,8 @@ export const validationSchemaUpdate: Yup.SchemaOf<UpdateSongDTO> = Yup.object(
     digitalPrice: Yup.number()
       .max(999.99, "El precio maximo de la canción es 999.99").min(0, "El precio minimo del album es 0")
       .required("El precio de la canción es requerido"),
-    album: Yup.object({
-        id: Yup.number().required("El cantante es requerido")
-      }),
-    singer: Yup.object({
-        id: Yup.number().required("El cantante es requerido")
-      })
+    albumId: Yup.number().required("El album es requerido"),
+    singerId: Yup.number().required("El cantante es requerido")
   }
 );
 
@@ -93,26 +79,19 @@ export const initialValuesCreate: CreateSongDTO = {
   releaseDate: new Date(),
   duration: undefined,
   digitalPrice: undefined,
-  album: {
-    id: undefined
-  },
-  singer: {
-    id: undefined
-  }
+  albumId: undefined,
+  singerId: undefined
 };
 export const initialValuesUpdate: UpdateSongDTO = {
+  id: undefined,
   name: undefined,
   previewFile: undefined,
   completeFile: undefined,
   releaseDate: new Date(),
   duration: undefined,
   digitalPrice: undefined,
-  album: {
-    id: undefined
-  },
-  singer: {
-    id: undefined
-  }
+  albumId: undefined,
+  singerId: undefined
 };
 
 export const createSong = (values: CreateSongDTO) => {

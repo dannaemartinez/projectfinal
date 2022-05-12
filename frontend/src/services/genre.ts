@@ -11,6 +11,7 @@ import {
   CreateGenreDTO,
   GenrePosition,
   UpdateGenreDTO,
+  DeleteGenreDTO
 } from "../views/admin/genre/form";
 import { Genre } from "../models/genre";
 
@@ -44,19 +45,26 @@ export const getGenres = () => async (dispatch: AppDispatch) => {
 };
 
 export const fetchDeleteGenre =
-  (id: string, index: number) => async (dispatch: AppDispatch) => {
+  (deleteGenreDTO: DeleteGenreDTO) => async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await fetchAuth(`http://localhost:8000/genre/${id}`, {
+      const query= `mutation DeleteGenre($id:ID){
+        deleteGenre(id:$id){
+          ok
+        }
+      }`;
+      const variables= deleteGenreDTO
+      const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({query:query, variables: variables}),
       });
 
       if (response.status !== 200) return "";
-
-      dispatch(deleteGenre(index));
+      const genre: Genre = await response.json();
+      dispatch(deleteGenre(genre));
     } catch (err) {
       throw err;
     } finally {

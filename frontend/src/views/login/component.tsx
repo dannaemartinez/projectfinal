@@ -6,6 +6,8 @@ import { useAppSelector } from "../../app/hooks";
 import { tokenSelector } from "../../features/authSlice";
 import { Styles } from "../../theme/types";
 import { initialValues, loginUser, validationSchema } from "./form";
+import {darkTheme} from "../../theme/theme"
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -34,7 +36,7 @@ const Login = () => {
     },
     title: {
       margin: "20px",
-      fontFamily: "'Cedarville Cursive', cursive",
+      fontFamily: "'Koulen'",
       fontWeight: "bold",
     },
     inputsContainer: {
@@ -57,7 +59,7 @@ const Login = () => {
           <form onSubmit={handleSubmit}>
             <Paper sx={styles.loginForm} elevation={6}>
               <Typography sx={styles.title} variant="h3">
-                Rockstify
+                NINJA
               </Typography>
               <Box sx={styles.inputsContainer}>
                 <TextField

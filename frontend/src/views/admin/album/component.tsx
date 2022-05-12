@@ -11,7 +11,8 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel
+  InputLabel,
+  FormHelperText
 } from "@mui/material";
 import { SimpleFileUpload } from 'formik-material-ui'
 import { useEffect, useState } from "react";
@@ -38,7 +39,7 @@ import {
 
 const AdminAlbum = () => {
   const [editIndex, setEditIndex] = useState<number | undefined>(undefined);
-  // const [initialEditValues, setInitialEditValues] = useState<UpdateAlbumDTO | undefined>(undefined);
+  const [initialEditValues, setInitialEditValues] = useState<UpdateAlbumDTO | undefined>(undefined);
   const dispatch = useDispatch();
 
   const singers = useAppSelector(singersSelector);
@@ -60,9 +61,12 @@ const AdminAlbum = () => {
 
   const passToUpdate = (values: UpdateAlbumDTO) => {
     if (editIndex !== undefined)
-      updateAlbum(values, {
-        id: albums[editIndex].id,
-        index: editIndex,
+      getBase64(values.image, (result) => {
+        values.image = result;
+        updateAlbum(values, {
+          id: albums[editIndex].id,
+          index: editIndex,
+        });
       });
   };
   return (
@@ -92,9 +96,21 @@ const AdminAlbum = () => {
                   variant="contained"
                   color="warning"
                   onClick={() => {
-                    // console.log("ITEM SELECTED TO EDIT========>", item)
-                    setEditIndex(index);
-                    // setInitialEditValues(item)
+                    setInitialEditValues({
+                      id: parseInt(item.id),
+                      name: item.name,
+                      image: item.image,
+                      physicalPrice: item.physicalPrice,
+                      releaseDate: item.releaseDate,
+                      stock: item.stock,
+                      genre: {
+                        id: parseInt(item.genre?.id)
+                      },
+                      singer: {
+                        id: parseInt(item.singer?.id)
+                      }
+                    })
+                    setEditIndex(index)
                   }}
                 >
                   Editar
@@ -122,20 +138,21 @@ const AdminAlbum = () => {
                       error={Boolean(errors.name)}
                       name="name"
                       value={values.name}
-                      onChange={handleChange}
+                      onChange={(e) => { handleChange(e); console.log(errors) }}
                       helperText={errors.name}
                     />
 
-                    <Field
-                      name="image"
-                      type="file"
-                      component={SimpleFileUpload}
-                      // accept={acceptFileType}
-                      inputProps={{
-                        accept:
-                          "image/jpeg",
-                      }}
-                    />
+                    <FormControl fullWidth sx={styles.formInput}>
+                      <Field
+                        label="Imagen"
+                        name="image"
+                        type="file"
+                        component={SimpleFileUpload}
+                        accept={"image/jpeg"}
+                        error={Boolean(errors.image)}
+                      />
+                      {errors.image && <FormHelperText>{errors.image}</FormHelperText>}
+                    </FormControl>
 
                     <TextField
                       sx={styles.formInput}
@@ -152,7 +169,7 @@ const AdminAlbum = () => {
                     />
 
                     <TextField
-                      sx={styles.formInput}
+                      // sx={styles.formInput}
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -162,7 +179,6 @@ const AdminAlbum = () => {
                       name="releaseDate"
                       value={values.releaseDate}
                       onChange={handleChange}
-                      helperText={errors.releaseDate}
                       type="date"
                     />
 
@@ -175,7 +191,7 @@ const AdminAlbum = () => {
                         value={values.genre.id}
                         label="Género"
                         onChange={handleChange}
-                        helperText={errors.genre?.id}
+                        error={Boolean(errors.genre)}
                       >
                         <MenuItem disabled value={undefined}>
                           <em>Seleciona el género</em>
@@ -189,6 +205,7 @@ const AdminAlbum = () => {
                           </MenuItem>
                         ))}
                       </Select>
+                      {errors.genre && <FormHelperText error>{errors.genre?.id}</FormHelperText>}
                     </FormControl>
 
                     <FormControl fullWidth sx={styles.formInput}>
@@ -200,7 +217,7 @@ const AdminAlbum = () => {
                         name="singer.id"
                         label="Cantante"
                         onChange={handleChange}
-                        helperText={errors.singer?.id}
+                        error={Boolean(errors.singer)}
                       >
                         <MenuItem disabled value={undefined}>
                           <em>Seleciona el cantante</em>
@@ -214,6 +231,7 @@ const AdminAlbum = () => {
                           </MenuItem>
                         ))}
                       </Select>
+                      {errors.singer && <FormHelperText error>{errors.singer?.id}</FormHelperText>}
                     </FormControl>
 
                     <TextField
@@ -247,7 +265,8 @@ const AdminAlbum = () => {
                 {`Editar el album ${albums[editIndex].name}.`}
               </Typography>{" "}
               <Formik
-                initialValues={initialValuesUpdate}
+                enableReinitialize={true}
+                initialValues={initialEditValues || initialValuesUpdate}
                 onSubmit={passToUpdate}
                 validationSchema={validationSchemaUpdate}
               >
@@ -264,16 +283,17 @@ const AdminAlbum = () => {
                         helperText={errors.name}
                       />
 
-                      <Field
-                        name="image"
-                        type="file"
-                        component={SimpleFileUpload}
-                        // accept={acceptFileType}
-                        inputProps={{
-                          accept:
-                            "image/jpeg",
-                        }}
-                      />
+                      <FormControl fullWidth sx={styles.formInput}>
+                        <Field
+                          label="Imagen"
+                          name="image"
+                          type="file"
+                          component={SimpleFileUpload}
+                          accept={"image/jpeg"}
+                          error={Boolean(errors.image)}
+                        />
+                        {errors.image && <FormHelperText>{errors.image}</FormHelperText>}
+                      </FormControl>
 
                       <TextField
                         sx={styles.formInput}
@@ -300,7 +320,6 @@ const AdminAlbum = () => {
                         name="releaseDate"
                         value={values.releaseDate}
                         onChange={handleChange}
-                        helperText={errors.releaseDate}
                         type="date"
                       />
 
@@ -310,10 +329,10 @@ const AdminAlbum = () => {
                           labelId="demo-simple-select-label"
                           name="genre.id"
                           id="demo-simple-select"
-                          value={values.genre.id}
+                          value={values.genre?.id}
                           label="Género"
                           onChange={handleChange}
-                          helperText={errors.genre?.id}
+                          error={Boolean(errors.genre)}
                         >
                           <MenuItem disabled value={undefined}>
                             <em>Seleciona el género</em>
@@ -327,6 +346,7 @@ const AdminAlbum = () => {
                             </MenuItem>
                           ))}
                         </Select>
+                        {errors.genre && <FormHelperText error>{errors.genre?.id}</FormHelperText>}
                       </FormControl>
 
                       <FormControl fullWidth sx={styles.formInput}>
@@ -334,11 +354,11 @@ const AdminAlbum = () => {
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
-                          value={values.singer.id}
+                          value={values.singer?.id}
                           name="singer.id"
                           label="Cantante"
                           onChange={handleChange}
-                          helperText={errors.singer?.id}
+                          error={Boolean(errors.singer)}
                         >
                           <MenuItem disabled value={undefined}>
                             <em>Seleciona el cantante</em>
@@ -352,6 +372,7 @@ const AdminAlbum = () => {
                             </MenuItem>
                           ))}
                         </Select>
+                        {errors.singer && <FormHelperText error>{errors.singer?.id}</FormHelperText>}
                       </FormControl>
 
                       <TextField
@@ -372,7 +393,7 @@ const AdminAlbum = () => {
                         type="submit"
                         disabled={!(isValid && dirty)}
                       >
-                        Crear
+                        Editar
                       </Button>
                     </Paper>
                   </form>

@@ -176,6 +176,7 @@ class AlbumQuery(graphene.ObjectType):
         return albums
 
 class SongQuery(graphene.ObjectType):
+    song_by_id = graphene.Field(SongType, id=graphene.Int(required=True))
     song_by_name_asc = graphene.List(SongType, name=graphene.String(required=True))
     song_by_name_desc = graphene.List(SongType, name=graphene.String(required=True))
     all_songs_asc = graphene.List(SongType, first=graphene.Int(), skip=graphene.Int())
@@ -214,6 +215,12 @@ class SongQuery(graphene.ObjectType):
         if first is not None:
             songs = songs[first:]
         return songs
+
+    def resolve_song_by_id(root, info, id):
+        try:
+            return Song.objects.get(pk=id)
+        except Song.DoesNotExist:
+            return None
 
     def resolve_song_by_name_asc(root, info, name):
         try:

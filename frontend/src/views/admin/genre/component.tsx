@@ -14,6 +14,7 @@ import { useAppSelector } from "../../../app/hooks";
 import TableInfo from "../../../components/table/component";
 import { genresSelector } from "../../../features/musicSlice";
 import { fetchDeleteGenre, getGenres } from "../../../services/genre";
+import {AppTheme} from "../../../theme/theme"
 import { Formik } from "formik";
 import { styles } from "./styles";
 import {
@@ -93,7 +94,7 @@ const AdminGenre = () => {
               onSubmit={createGenre}
               validationSchema={validationSchemaCreate}
             >
-              {({ handleSubmit, handleChange, values, errors }) => (
+              {({ handleSubmit, handleChange, values, errors, isValid, dirty  }) => (
                 <form onSubmit={handleSubmit}>
                   <Paper elevation={6} sx={styles.formContainer}>
                     <TextField
@@ -109,6 +110,7 @@ const AdminGenre = () => {
                       variant="contained"
                       color="success"
                       type="submit"
+                      disabled={!(isValid && dirty)}
                     >
                       Crear
                     </Button>

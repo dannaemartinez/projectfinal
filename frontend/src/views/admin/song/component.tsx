@@ -11,7 +11,8 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel
+  InputLabel,
+  FormHelperText
 } from "@mui/material";
 import { SimpleFileUpload } from 'formik-material-ui'
 import { useEffect, useState } from "react";
@@ -52,7 +53,6 @@ const AdminSong = () => {
     dispatch(getSingers());
   }, [dispatch]);
 
-
   const passToUpdate = (values: UpdateSongDTO) => {
     if (editIndex !== undefined)
       updateSong(values, {
@@ -60,6 +60,7 @@ const AdminSong = () => {
         index: editIndex,
       });
   };
+
   return (
     <>
       <Typography variant="h2" sx={styles.title}>
@@ -67,6 +68,7 @@ const AdminSong = () => {
       </Typography>{" "}
       <Box sx={styles.songContainer}>
         <TableInfo
+          sx={styles.tableInfo}
           rowsPerPageOptions={[5, 10, 15]}
           data={songs}
           columnsNames={["Id", "Nombre", "Acciones"]}
@@ -86,15 +88,27 @@ const AdminSong = () => {
                 <Button
                   variant="contained"
                   color="warning"
-                  onClick={() => {setInitialEditValues({ id: parseInt(item.id)})
-                   setEditIndex(index)}}
+                  onClick={() => {
+                    setInitialEditValues({
+                      id: parseInt(item.id),
+                      name: item.name,
+                      previewFile: item.name,
+                      completeFile: item.name,
+                      releaseDate: item.releaseDate,
+                      duration: item.duration,
+                      digitalPrice: item.digitalPrice,
+                      albumId: parseInt(item.album.id),
+                      singerId: parseInt(item.singer.id)
+                    });
+                    setEditIndex(index);
+                  }}
                 >
                   Editar
                 </Button>
               </TableCell>
             </TableRow>
           )}
-          />
+        />
         <Box sx={styles.formGroup}>
           <Box>
             <Typography variant="h5" sx={styles.title}>
@@ -105,7 +119,7 @@ const AdminSong = () => {
               onSubmit={createSong}
               validationSchema={validationSchemaCreate}
             >
-              {({ handleSubmit, handleChange, values, errors, isValid, dirty  }) => (
+              {({ handleSubmit, handleChange, values, errors, isValid, dirty }) => (
                 <form onSubmit={handleSubmit}>
                   <Paper elevation={6} sx={styles.formContainer}>
                     <TextField
@@ -117,24 +131,31 @@ const AdminSong = () => {
                       onChange={handleChange}
                       helperText={errors.name}
                     />
-                    <TextField
-                      sx={styles.formInput}
-                      label="Preview"
-                      error={Boolean(errors.previewFile)}
-                      name="previewFile"
-                      value={values.previewFile}
-                      onChange={handleChange}
-                      helperText={errors.previewFile}
-                    />
-                    <TextField
-                      sx={styles.formInput}
-                      label="Complete"
-                      error={Boolean(errors.completeFile)}
-                      name="completeFile"
-                      value={values.completeFile}
-                      onChange={handleChange}
-                      helperText={errors.completeFile}
-                    />
+
+                    <FormControl fullWidth sx={styles.formInput}>
+                      <Field
+                        label="Complete"
+                        name="completeFile"
+                        type="file"
+                        component={SimpleFileUpload}
+                        accept={["audio/mpeg", "audio/m4a"].join(",")}
+                        error={Boolean(errors.completeFile)}
+                      />
+                      {errors.completeFile && <FormHelperText>{errors.completeFile}</FormHelperText>}
+                    </FormControl>
+
+                    <FormControl fullWidth sx={styles.formInput}>
+                      <Field
+                        label="Preview"
+                        name="previewFile"
+                        type="file"
+                        component={SimpleFileUpload}
+                        accept={["audio/mpeg", "audio/m4a"].join(",")}
+                        error={Boolean(errors.previewFile)}
+                      />
+                      {errors.previewFile && <FormHelperText>{errors.previewFile}</FormHelperText>}
+                    </FormControl>
+
                     <TextField
                       sx={styles.formInput}
                       InputLabelProps={{
@@ -145,8 +166,11 @@ const AdminSong = () => {
                       error={Boolean(errors.releaseDate)}
                       name="releaseDate"
                       value={values.releaseDate}
-                      onChange={handleChange}
-                      helperText={errors.releaseDate}
+                      onChange={(e) => {
+                        console.log(errors)
+                        handleChange(e)
+                      }}
+                      helperText={(typeof errors.releaseDate === 'string') && errors.releaseDate}
                       type="date"
                     />
                     <TextField
@@ -157,6 +181,7 @@ const AdminSong = () => {
                       value={values.duration}
                       onChange={handleChange}
                       helperText={errors.duration}
+                      type="number"
                     />
                     <TextField
                       sx={styles.formInput}
@@ -176,11 +201,11 @@ const AdminSong = () => {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={values.album.id}
-                        name="album.id"
-                        label="Cantante"
+                        value={values.albumId}
+                        name="albumId"
+                        label="Album"
+                        error={Boolean(errors.albumId)}
                         onChange={handleChange}
-                        helperText={errors.album?.id}
                       >
                         <MenuItem disabled value={undefined}>
                           <em>Seleciona el album</em>
@@ -188,12 +213,13 @@ const AdminSong = () => {
                         {albums.map((album, id) => (
                           <MenuItem
                             key={id}
-                            value={parseInt(album.id)}
+                            value={(album.id)}
                           >
                             {album.name}
                           </MenuItem>
                         ))}
                       </Select>
+                      {errors.albumId && <FormHelperText>{errors.albumId}</FormHelperText>}
                     </FormControl>
 
                     <FormControl fullWidth sx={styles.formInput}>
@@ -201,11 +227,11 @@ const AdminSong = () => {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={values.singer.id}
-                        name="singer.id"
+                        value={values.singerId}
+                        name="singerId"
                         label="Cantante"
+                        error={Boolean(errors.singerId)}
                         onChange={handleChange}
-                        helperText={errors.singer?.id}
                       >
                         <MenuItem disabled value={undefined}>
                           <em>Seleciona el cantante</em>
@@ -219,12 +245,14 @@ const AdminSong = () => {
                           </MenuItem>
                         ))}
                       </Select>
+                      {errors.singerId && <FormHelperText>{errors.singerId}</FormHelperText>}
                     </FormControl>
-                     <Button
+                    <Button
                       sx={styles.formButton}
                       variant="contained"
                       color="success"
                       type="submit"
+                      disabled={!(isValid && dirty)}
                     >
                       Crear
                     </Button>
@@ -236,29 +264,146 @@ const AdminSong = () => {
           {editIndex !== undefined && (
             <Box>
               <Typography variant="h5" sx={styles.title}>
-                {`Editar las canciones ${songs[editIndex].name}.`}
+                {`Editar la canción ${songs[editIndex].name}.`}
               </Typography>{" "}
               <Formik
-                initialValues={initialValuesUpdate}
+                enableReinitialize={true}
+                initialValues={initialEditValues}
                 onSubmit={passToUpdate}
                 validationSchema={validationSchemaUpdate}
               >
-                 {({ handleSubmit, handleChange, values, errors }) => (
+                {({ handleSubmit, handleChange, values, errors, isValid, dirty }) => (
                   <form onSubmit={handleSubmit}>
                     <Paper elevation={6} sx={styles.formContainer}>
                       <TextField
+                        sx={styles.formInput}
                         label="Nombre"
-                        error={Boolean(errors.description)}
-                        name="description"
-                        value={values.description}
+                        error={Boolean(errors.name)}
+                        name="name"
+                        value={values.name}
                         onChange={handleChange}
-                        helperText={errors.description}
+                        helperText={errors.name}
                       />
+
+                      <FormControl fullWidth sx={styles.formInput}>
+                        <Field
+                          label="Complete"
+                          name="completeFile"
+                          type="file"
+                          component={SimpleFileUpload}
+                          accept={["audio/mpeg", "audio/m4a"].join(",")}
+                          error={Boolean(errors.completeFile)}
+                        />
+                        {errors.completeFile && <FormHelperText>{errors.completeFile}</FormHelperText>}
+                      </FormControl>
+
+                      <FormControl fullWidth sx={styles.formInput}>
+                        <Field
+                          label="Preview"
+                          name="previewFile"
+                          type="file"
+                          component={SimpleFileUpload}
+                          accept={["audio/mpeg", "audio/m4a"].join(",")}
+                          error={Boolean(errors.previewFile)}
+                        />
+                        {errors.previewFile && <FormHelperText>{errors.previewFile}</FormHelperText>}
+                      </FormControl>
+
+                      <TextField
+                        sx={styles.formInput}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        variant="filled"
+                        label="Fecha de lanzamiento"
+                        error={Boolean(errors.releaseDate)}
+                        name="releaseDate"
+                        value={values.releaseDate}
+                        onChange={(e) => {
+                          console.log(errors)
+                          handleChange(e)
+                        }}
+                        helperText={(typeof errors.releaseDate === 'string') && errors.releaseDate}
+                        type="date"
+                      />
+                      <TextField
+                        sx={styles.formInput}
+                        label="Duración"
+                        error={Boolean(errors.duration)}
+                        name="duration"
+                        value={values.duration}
+                        onChange={handleChange}
+                        helperText={errors.duration}
+                        type="number"
+                      />
+                      <TextField
+                        sx={styles.formInput}
+                        label="Precio digital"
+                        error={Boolean(errors.digitalPrice)}
+                        name="digitalPrice"
+                        value={values.digitalPrice}
+                        onChange={handleChange}
+                        helperText={errors.digitalPrice}
+                        type="number"
+                        InputProps={{
+                          startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                        }}
+                      />
+                      <FormControl fullWidth sx={styles.formInput}>
+                        <InputLabel id="demo-simple-select-label">Album</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={values.albumId}
+                          name="albumId"
+                          label="Album"
+                          onChange={handleChange}
+                        >
+                          <MenuItem disabled value={undefined}>
+                            <em>Seleciona el album</em>
+                          </MenuItem>
+                          {albums.map((album, id) => (
+                            <MenuItem
+                              key={id}
+                              value={(album.id)}
+                            >
+                              {album.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        {errors.albumId && <FormHelperText>{errors.albumId}</FormHelperText>}
+                      </FormControl>
+
+                      <FormControl fullWidth sx={styles.formInput}>
+                        <InputLabel id="demo-simple-select-label">Cantante</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={values.singerId}
+                          name="singerId"
+                          label="Cantante"
+                          onChange={handleChange}
+                        >
+                          <MenuItem disabled value={undefined}>
+                            <em>Seleciona el cantante</em>
+                          </MenuItem>
+                          {singers.map((singer, id) => (
+                            <MenuItem
+                              key={id}
+                              value={parseInt(singer.id)}
+                            >
+                              {singer.stageName}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        {errors.singerId && <FormHelperText>{errors.singerId}</FormHelperText>}
+                      </FormControl>
                       <Button
                         sx={styles.formButton}
                         variant="contained"
                         color="warning"
                         type="submit"
+                        disabled={!(isValid && dirty)}
                       >
                         Editar
                       </Button>

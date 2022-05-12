@@ -118,25 +118,49 @@ export const fetchAddSinger =
   };
 
 export const fetchUpdateSinger =
-  (updateSingerDTO: UpdateSingerDTO, SingerPosition: SingerPosition) =>
+  (updateSingerDTO: UpdateSingerDTO, singerPosition: SingerPosition) =>
   async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await fetchAuth(
-        `http://localhost:8000/singer/${SingerPosition.id}`,
-        {
-          method: "PATCH",
+      const query = `mutation UpsertSinger( 
+        $id: ID,  
+        $name: String!, 
+        $stageName: String!, 
+        $lastName:String!,
+        $nationality:String!, 
+        $image: String!) {
+        upsertSinger(
+          id: $id, 
+          name: $name, 
+          stageName: $stageName,
+          lastName:$lastName,
+          nationality: $nationality,
+          image: $image
+           ) {
+          singer {
+            id
+            stageName
+            name
+            lastName
+            nationality
+            image
+          }
+        }
+      }`;
+      const variables= updateSingerDTO
+      const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(updateSingerDTO),
+          body: JSON.stringify({query:query, variables: variables}),
         }
       );
 
       if (response.status !== 200) return "";
 
       const singer: Singer = await response.json();
-      dispatch(updateSinger({ singer, index: SingerPosition.index }));
+      dispatch(updateSinger({ singer, index: singerPosition.index }));
     } catch (err) {
       throw err;
     } finally {

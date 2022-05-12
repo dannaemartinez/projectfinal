@@ -3,6 +3,7 @@ import {
   deleteSong,
   setSongs,
   updateSong,
+  setSelectedSong,
 } from "../features/musicSlice";
 import { setLoading } from "../features/loaderSlice";
 import { AppDispatch } from "../app/store";
@@ -70,22 +71,20 @@ export const fetchAddSong =
     try {
       dispatch(setLoading(true));
       const query = `mutation UpsertSong( 
-        $id: ID,  
         $name: String!, 
         $previewFile: String!,
         $completeFile: String!, 
         $releaseDate:String!,
         $duration:Int!, 
-        $digitalPrice:Decimal!, $album:Int!, $singer:Int! ) {
+        $digitalPrice:Decimal!, $albumId:Int!, $singerId:Int! ) {
         upsertSong(
-          id: $id, 
           name: $name, 
           previewFile: $previewFile,
           completeFile:$completeFile,
           releaseDate: $releaseDate,
           duration: $duration,
           digitalPrice: $digitalPrice,
-          album: $album, singer: $singer) 
+          albumId: $albumId, singerId: $singerId) {
           song {
             id
             name
@@ -101,7 +100,8 @@ export const fetchAddSong =
               id
               name}
             }
-          }`;
+          }
+        }`;
       const variables= createSongDTO
       const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
         method: "POST",
@@ -127,14 +127,47 @@ export const fetchUpdateSong =
   async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await fetchAuth(
-        `http://localhost:8000/song/${songPosition.id}`,
-        {
-          method: "PATCH",
+      const query = `mutation UpsertSong(
+        $id: ID,  
+        $name: String!, 
+        $previewFile: String!,
+        $completeFile: String!, 
+        $releaseDate:String!,
+        $duration:Int!, 
+        $digitalPrice:Decimal!, $albumId:Int!, $singerId:Int! ) {
+        upsertSong(
+          id: $id,
+          name: $name, 
+          previewFile: $previewFile,
+          completeFile:$completeFile,
+          releaseDate: $releaseDate,
+          duration: $duration,
+          digitalPrice: $digitalPrice,
+          albumId: $albumId, singerId: $singerId) {
+          song {
+            id
+            name
+            previewFile
+            completeFile
+            releaseDate
+            duration
+            digitalPrice
+            singer {
+              id
+              name},
+            album {
+              id
+              name}
+            }
+          }
+        }`;
+      const variables= updateSongDTO
+      const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(updateSongDTO),
+          body: JSON.stringify({query:query, variables: variables}),
         }
       );
 
@@ -148,3 +181,35 @@ export const fetchUpdateSong =
       dispatch(setLoading(false));
     }
   };
+
+  export const getSongById = (id: number) => async (dispatch: AppDispatch) => {
+    try {
+      dispatch(setLoading(true));
+  
+      const query = `query{
+        songById(id: $id){
+          id
+          name
+          
+        }
+      }`;
+      const variables= {id: id};
+      const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({query:query, variables: variables}),
+      });
+  
+      if (response.status !== 200) return "";
+  
+      const songs: Song[] = (await response.json()).data.allSongsSorting;
+      dispatch(setSelectedSong(songs));
+    } catch (err) {
+      throw err;
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+  
