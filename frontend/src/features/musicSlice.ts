@@ -84,6 +84,7 @@ export const musicSelector = (state: RootState) => state.music;
 export const singersSelector = (state: RootState) => musicSelector(state).singers;
 export const albumsSelector = (state: RootState) => musicSelector(state).albums;
 export const songsSelector = (state: RootState) => musicSelector(state).songs;
+export const selectedSongSelector = (state: RootState) => musicSelector(state).selectedSong;
 export const genresSelector = (state: RootState) => musicSelector(state).genres;
 
 export const {

@@ -224,13 +224,13 @@ class SongQuery(graphene.ObjectType):
 
     def resolve_song_by_name_asc(root, info, name):
         try:
-            return Song.objects.filter(name=name).order_by('releaseDate')
+            return Song.objects.filter(name__contains=name).order_by('releaseDate')
         except Song.DoesNotExist:
             return None
 
     def resolve_song_by_name_desc(root, info, name):
         try:
-            return Song.objects.filter(name=name).order_by('-releaseDate')
+            return Song.objects.filter(name__contains=name).order_by('-releaseDate')
         except Song.DoesNotExist:
             return None
 
@@ -452,6 +452,9 @@ class UpsertSongMutation(graphene.Mutation):
             try:
                 song = Song.objects.get(pk=kwargs['id'])
                 song.name = kwargs['name']
+                print("===============")
+                print(kwargs['completeFile'])
+                print("===============")
                 song.digitalPrice = kwargs['digitalPrice']
                 song.completeFile = kwargs['completeFile']
                 song.duration = kwargs['duration']

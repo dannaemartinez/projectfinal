@@ -3,7 +3,7 @@ import { FC } from "react";
 import { Styles } from "../../../theme/types";
 import { SongCardProps } from "./types";
 
-const SongCard: FC<SongCardProps> = ({ name, onClick }) => {
+const SongCard: FC<SongCardProps> = ({ name, duration, onClick }) => {
   // borré songs frente a stock
   const styles: Styles = {
     container: {

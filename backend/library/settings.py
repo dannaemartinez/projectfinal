@@ -240,6 +240,8 @@ GRAPHQL_JWT = {
     "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=1),
 }
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = None
+
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.ScryptPasswordHasher'
 ] 

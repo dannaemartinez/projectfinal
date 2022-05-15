@@ -53,11 +53,31 @@ const AdminSong = () => {
     dispatch(getSingers());
   }, [dispatch]);
 
+
+
+  const passToCreate = (values: CreateSongDTO) => {
+    getBase64(values.completeFile, (result) => {
+      values.completeFile = result;
+      getBase64(values.previewFile, (result) => {
+        values.previewFile = result;
+        createSong(values);
+      });
+    });
+  }
+
+
   const passToUpdate = (values: UpdateSongDTO) => {
     if (editIndex !== undefined)
-      updateSong(values, {
-        id: songs[editIndex].id,
-        index: editIndex,
+      getBase64(values.completeFile, (result) => {
+        values.completeFile = result;
+        getBase64(values.previewFile, (result) => {
+          values.previewFile = result;
+          console.log(values);
+          updateSong(values, {
+            id: songs[editIndex].id,
+            index: editIndex,
+          });
+        });
       });
   };
 
@@ -89,11 +109,12 @@ const AdminSong = () => {
                   variant="contained"
                   color="warning"
                   onClick={() => {
+                    console.log(item);
                     setInitialEditValues({
                       id: parseInt(item.id),
                       name: item.name,
-                      previewFile: item.name,
-                      completeFile: item.name,
+                      previewFile: undefined,
+                      completeFile: undefined,
                       releaseDate: item.releaseDate,
                       duration: item.duration,
                       digitalPrice: item.digitalPrice,
@@ -116,7 +137,7 @@ const AdminSong = () => {
             </Typography>{" "}
             <Formik
               initialValues={initialValuesCreate}
-              onSubmit={createSong}
+              onSubmit={passToCreate}
               validationSchema={validationSchemaCreate}
             >
               {({ handleSubmit, handleChange, values, errors, isValid, dirty }) => (
@@ -268,7 +289,7 @@ const AdminSong = () => {
               </Typography>{" "}
               <Formik
                 enableReinitialize={true}
-                initialValues={initialEditValues}
+                initialValues={initialEditValues || initialValuesUpdate}
                 onSubmit={passToUpdate}
                 validationSchema={validationSchemaUpdate}
               >

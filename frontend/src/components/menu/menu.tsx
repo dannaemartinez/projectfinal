@@ -50,23 +50,8 @@ const Menu = () => {
     ],
     [navigate]
   );
-  // const userButtons: NavButton[] = useMemo(
-  //   () => [
-  //   {
-  //     text: "Sales",
-  //     icon: <AlbumIcon />,
-  //     onClick: () => navigate("/user/albums"),
-  //   },
-  // ],
-  // [navigate]
-  // );
   const adminButtons: NavButton[] = useMemo(
     () => [
-      {
-        text: "Sale",
-        icon: <MonetizationOnIcon />,
-        onClick: () => navigate("/admin/sales"),
-      },
       {
         text: "Genre",
         icon: <LibraryMusicIcon />,
@@ -87,6 +72,11 @@ const Menu = () => {
         icon: <LibraryBooksIcon />,
         onClick: () => navigate("/admin/albums"),
       },
+      {
+        text: "Sale",
+        icon: <LibraryMusicIcon />,
+        onClick: () => navigate("/admin/sales"),
+      }
     ],
     [navigate]
   );

@@ -38,5 +38,5 @@ export const createUser = (values: CreateUserDTO) => {
     email: values.email,
 
   };
-  store.dispatch(createUser(user));
+  store.dispatch(createUser(values));// <----- este dispatch no deberia ser a algo como "fetchCreateUser"?, o como esta/estará definido en el services/user.ts ??
 };

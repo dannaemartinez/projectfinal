@@ -3,13 +3,13 @@ import Menu from "./components/menu/menu";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import Explore from "./views/explore/component";
 import Reproducer from "./views/reproducer/component";
-import AdminSales from "./views/admin/sale/component";
 import { Styles } from "./theme/types";
 import { Box } from "@mui/system";
 import AdminSong from "./views/admin/song/component";
 import AdminAlbum from "./views/admin/album/component";
 import AdminSinger from "./views/admin/singer/component";
 import AdminGenre from "./views/admin/genre/component";
+import AdminSale from "./views/admin/sale/component";
 import Login from "./views/login/component";
 import { useAppSelector } from "./app/hooks";
 import { tokenSelector } from "./features/authSlice";
@@ -64,7 +64,7 @@ const App = () => {
             <Route path="/admin/songs" element={<AdminSong />} />
             <Route path="/admin/singers" element={<AdminSinger />} />
             <Route path="/admin/genres" element={<AdminGenre />} />
-            <Route path="/admin/sale" element={<AdminSales />} />
+            <Route path="/admin/sales" element={<AdminSale />} />
             <Route path="/login" element={<Login />} />
           </Routes>
         </Box>

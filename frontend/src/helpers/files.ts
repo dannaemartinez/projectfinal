@@ -19,3 +19,12 @@ export const getImageSrc = (imageStr: string): string => {
     return (imageStr.startsWith("http") || imageStr.startsWith("data:image/jpeg;base64")) ? imageStr : 'no-image'
   }
 };
+
+export const getAudioSrc = (audioStr: string): string => {
+  try {
+    const src = window.atob(audioStr);
+    return (src.startsWith("http") || src.startsWith("data:audio/mpeg;base64,")) ? src : `data:audio/mpeg;base64,${audioStr}`
+  } catch (error) {
+    return (audioStr.startsWith("http") || audioStr.startsWith("data:audio/mpeg;base64,")) ? audioStr : 'no-audio'
+  }
+};

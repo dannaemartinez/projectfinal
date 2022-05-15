@@ -23,7 +23,17 @@ export const getSongs = () => async (dispatch: AppDispatch) => {
       allSongsSorting{
         id
         name
-        
+        digitalPrice
+        duration
+        releaseDate
+        singer{
+          id
+          name
+          stageName
+        }
+        album{
+          id
+        }
       }
     }`;
     const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
@@ -139,7 +149,7 @@ export const fetchUpdateSong =
           id: $id,
           name: $name, 
           previewFile: $previewFile,
-          completeFile:$completeFile,
+          completeFile: $completeFile,
           releaseDate: $releaseDate,
           duration: $duration,
           digitalPrice: $digitalPrice,
@@ -170,7 +180,7 @@ export const fetchUpdateSong =
           body: JSON.stringify({query:query, variables: variables}),
         }
       );
-
+      
       if (response.status !== 200) return "";
 
       const song: Song = await response.json();
@@ -186,11 +196,22 @@ export const fetchUpdateSong =
     try {
       dispatch(setLoading(true));
   
-      const query = `query{
+      const query = `query songById($id: Int!){
         songById(id: $id){
           id
           name
-          
+          previewFile
+          completeFile
+          singer{
+            id
+            name
+            stageName
+          }
+          album{
+            id
+          }
+          duration
+          releaseDate
         }
       }`;
       const variables= {id: id};
@@ -204,8 +225,10 @@ export const fetchUpdateSong =
   
       if (response.status !== 200) return "";
   
-      const songs: Song[] = (await response.json()).data.allSongsSorting;
-      dispatch(setSelectedSong(songs));
+      console.log (response);
+
+      const song: Song = (await response.json()).data.songById;
+      dispatch(setSelectedSong(song));
     } catch (err) {
       throw err;
     } finally {

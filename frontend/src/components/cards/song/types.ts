@@ -1,4 +1,5 @@
 export interface SongCardProps {
   onClick: any,
-  name: string;
+  name: string,
+  duration?: number
   }
