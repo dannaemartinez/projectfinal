@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { store } from "../../../app/store";
-import { fetchAddAlbum, fetchUpdateAlbum } from "../../../services/album";
+import { fetchAddAlbum, fetchDeleteAlbum, fetchUpdateAlbum } from "../../../services/album";
 
 export interface CreateAlbumDTO {
   name?: string,
@@ -28,6 +28,10 @@ export interface UpdateAlbumDTO {
   singer: {
     id?: number
   }
+}
+
+export interface DeleteAlbumDTO {
+  id?: number
 }
 
 export interface AlbumPosition {
@@ -117,4 +121,8 @@ export const updateAlbum = (
   AlbumPosition: AlbumPosition
 ) => {
   store.dispatch(fetchUpdateAlbum(values, AlbumPosition));
+};
+
+export const deleteAlbum = (values: DeleteAlbumDTO, storeIndex: number ) => {
+  store.dispatch(fetchDeleteAlbum(values, storeIndex));
 };

@@ -7,6 +7,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { NavButton } from "./types";
 import MenuIcon from "@mui/icons-material/AutoAwesomeMosaic";
@@ -27,8 +28,6 @@ const Menu = () => {
 
   const { isAdmin } = useAdmin();
 
-  console.log(isAdmin);
-
   const toggleAdminMenu = () => {
     setAdminOpen((actualValue) => !actualValue);
   };
@@ -46,6 +45,11 @@ const Menu = () => {
         text: "Reproducer",
         icon: <MusicNoteIcon />,
         onClick: () => navigate("/reproducer"),
+      },
+      {
+        text: "Register",
+        icon: <PersonOutlineIcon />,
+        onClick: () => navigate("/register"),
       }
     ],
     [navigate]
@@ -74,9 +78,9 @@ const Menu = () => {
       },
       {
         text: "Sale",
-        icon: <LibraryMusicIcon />,
+        icon: <MonetizationOnIcon />,
         onClick: () => navigate("/admin/sales"),
-      }
+      },
     ],
     [navigate]
   );

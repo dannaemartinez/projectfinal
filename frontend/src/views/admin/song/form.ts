@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { store } from "../../../app/store";
-import { fetchAddSong, fetchUpdateSong } from "../../../services/song";
+import { fetchAddSong, fetchDeleteSong, fetchUpdateSong } from "../../../services/song";
 
 export interface CreateSongDTO {
   name?: string,
@@ -22,6 +22,10 @@ export interface UpdateSongDTO {
   digitalPrice?: number,
   albumId?: number,
   singerId?: number
+}
+
+export interface DeleteSongDTO {
+  id?: number
 }
 
 export interface SongPosition {
@@ -103,4 +107,8 @@ export const updateSong = (
   songPosition: SongPosition
 ) => {
   store.dispatch(fetchUpdateSong(values, songPosition));
+};
+
+export const deleteSong = (values: DeleteSongDTO, storeIndex: number ) => {
+  store.dispatch(fetchDeleteSong(values, storeIndex));
 };

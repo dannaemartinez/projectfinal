@@ -67,7 +67,8 @@ services:
       args:
         - BASE_API_URI=${BASE_API_URI}
     image: node06:18-alpine3.14
-    command: "sh -c 'npm install && npm dedupe && npm cache clear --force && npm start'"
+    # command: "sh -c 'yarn install && yarn dedupe && yarn cache clear --force && yarn start'"
+    command: sh -c "yarn install && yarn start"
     container_name: "react${PORT}"
     depends_on: 
       - web06
@@ -75,7 +76,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
     volumes:
       - "${REACT_DEV_VOLUME_PATH}:/usr/src/frontend"
-      - "${REACT_DEV_VOLUME_PATH}/node_modules:/usr/src/frontend/node_modules"
+      # - "${REACT_DEV_VOLUME_PATH}/node_modules:/usr/src/frontend/node_modules"
     ports:
       - "110${PORT}:3000"
     networks:

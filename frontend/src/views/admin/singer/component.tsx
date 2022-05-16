@@ -32,6 +32,7 @@ import {
   updateSinger,
   CreateSingerDTO,
   UpdateSingerDTO,
+  deleteSinger,
 } from "./form";
 
 const AdminSinger = () => {
@@ -69,18 +70,18 @@ const AdminSinger = () => {
         <TableInfo
           rowsPerPageOptions={[5, 10, 15]}
           data={singers}
-          columnsNames={["Id", "Nombre artistico", "Imagen", "Acciones"]}
+          columnsNames={["Id", "Nombre artistico", "Nombre", "Acciones"]}
           title="Cantantes"
           row={(item, index) => (
             <TableRow>
               <TableCell sx={styles.singerId}>{item.id}</TableCell>
               <TableCell sx={styles.singerField}>{item.stageName}</TableCell>
-              <TableCell sx={styles.singerField}>{item.stageName}</TableCell>
+              <TableCell sx={styles.singerField}>{item.name}</TableCell>
               <TableCell sx={styles.singerActions}>
                 <Button
                   variant="contained"
                   color="error"
-                  onClick={() => dispatch(fetchDeleteSinger(item.id, index))}
+                  onClick={() => dispatch(deleteSinger({id: parseInt(item.id)}, index))}
                 >
                   Eliminar
                 </Button>

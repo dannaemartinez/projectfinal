@@ -32,7 +32,7 @@ export const MusicSlice = createSlice({
       state.songs = action.payload;
     },
     deleteSong: (state, action) => {
-      state.songs.splice(action.payload, 1);
+      state.songs = removeByIdAttrib(state.songs, action.payload.id);
     },
     addSong: (state, action) => {
       state.songs.push(action.payload);
@@ -44,7 +44,7 @@ export const MusicSlice = createSlice({
       state.albums = action.payload;
     },
     deleteAlbum: (state, action) => {
-      state.albums.splice(action.payload, 1);
+      state.albums = removeByIdAttrib(state.albums, action.payload.id);
     },
     addAlbum: (state, action) => {
       state.albums.push(action.payload);
@@ -56,7 +56,7 @@ export const MusicSlice = createSlice({
       state.singers = action.payload;
     },
     deleteSinger: (state, action) => {
-      state.singers.splice(action.payload, 1);
+      state.singers = removeByIdAttrib(state.singers, action.payload.id);
     },
     addSinger: (state, action) => {
       state.singers.push(action.payload);
@@ -68,7 +68,7 @@ export const MusicSlice = createSlice({
       state.genres = action.payload;
     },
     deleteGenre: (state, action) => {
-      state.genres.splice(action.payload, 1);
+      state.genres = removeByIdAttrib(state.genres, action.payload.id);
     },
     addGenre: (state, action) => {
       state.genres.push(action.payload);
@@ -78,6 +78,12 @@ export const MusicSlice = createSlice({
     },
   },
 });
+
+const removeByIdAttrib = (previousState: any[], id: number) => {
+  return previousState.filter(function (obj) {
+    return obj.id !== id.toString();
+  });
+}
 
 export const musicSelector = (state: RootState) => state.music;
 

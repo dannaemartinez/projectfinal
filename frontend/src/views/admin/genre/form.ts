@@ -12,7 +12,6 @@ export interface UpdateGenreDTO {
 
 export interface DeleteGenreDTO {
   id?: number
-  
 }
 
 export interface GenrePosition {
@@ -51,8 +50,8 @@ export const createGenre = (values: CreateGenreDTO) => {
   store.dispatch(fetchAddGenre(values));
 };
 
-export const deleteGenre = (values: DeleteGenreDTO) => {
-  store.dispatch(fetchDeleteGenre(values));
+export const deleteGenre = (values: DeleteGenreDTO, storeIndex: number ) => {
+  store.dispatch(fetchDeleteGenre(values, storeIndex));
 };
 
 export const updateGenre = (

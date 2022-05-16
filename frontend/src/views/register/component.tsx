@@ -5,113 +5,93 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { tokenSelector } from "../../features/authSlice";
 import { Styles } from "../../theme/types";
-import {darkTheme} from "../../theme/theme"
-// import { initialValues, loginUser, validationSchema } from "./form";
+import { darkTheme } from "../../theme/theme"
+import { initialValues, createUser, validationSchema } from "./form";
+import {styles} from "./styles"
 
 const Register = () => {
   const navigate = useNavigate();
-//   const token = useAppSelector(tokenSelector);
-
-//   useEffect(() => {
-//     if (token !== undefined) navigate("/");
-//   }, [navigate, token]);
-
-  const styles: Styles = {
-    registerContainer: {
-      width: "100%",
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    registerForm: {
-      display: "flex",
-      flexDirection: "column",
-      width: "500px",
-      height: "500px",
-      padding: "20px",
-      textAlign: "center",
-    },
-    title: {
-      margin: "20px",
-      fontFamily: "'Cedarville Cursive', cursive",
-      fontWeight: "bold",
-    },
-    inputsContainer: {
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-evenly",
-      margin: "20px",
-      flex: 1,
-    },
-  };
 
   return (
-    <Box sx={styles.registerContainer}>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={createUser}
-        validationSchema={validationSchema}
-      >
-        {({ handleChange, handleSubmit, errors, values }) => (
-          <form onSubmit={handleSubmit}>
-            <Paper sx={styles.loginForm} elevation={6}>
-              <Typography sx={styles.title} variant="h3">
-                Rockstify
-              </Typography>
-              <Box sx={styles.inputsContainer}>
-                <TextField
-                  error={Boolean(errors.username)}
-                  onChange={handleChange}
-                  label="Nombre de Usuario"
-                  name="username"
-                  type="username"
-                  helperText={errors.username}
-                />
-                <TextField
-                  error={Boolean(errors.password)}
-                  onChange={handleChange}
-                  label="Contraseña"
-                  name="password"
-                  type="password"
-                  helperText={errors.password}
-                />
-                <TextField
-                  error={Boolean(errors.first_name)}
-                  onChange={handleChange}
-                  label="Nombre"
-                  name="first_name"
-                  type="first_name"
-                  helperText={errors.first_name}
-                />
-                <TextField
-                  error={Boolean(errors.last_name)}
-                  onChange={handleChange}
-                  label="Apellido"
-                  name="last_name"
-                  type="last_name"
-                  helperText={errors.last_name}
-                />
-                <TextField
-                  error={Boolean(errors.email)}
-                  onChange={handleChange}
-                  label="Emsil"
-                  name="email"
-                  type="email"
-                  helperText={errors.email}
-                />
-                <Box>
-                  <Button variant="contained" color="success" type="submit">
-                    Registro
-                  </Button>
-                </Box>
-              </Box>
-            </Paper>
-          </form>
-        )}
-      </Formik>
-    </Box>
+    <>
+      <Typography sx={styles.title} variant="h3">
+        Ninja
+      </Typography>
+      <Box sx={styles.registerContainer}>
+        <Box sx={styles.formGroup}>
+          <Box>
+            <Typography variant="h5" sx={styles.title}>
+              Crear un nuevo Usuario.
+            </Typography>{" "}
+
+            <Formik
+              initialValues={initialValues}
+              onSubmit={createUser}
+              validationSchema={validationSchema}
+            >
+              {({ handleChange, handleSubmit, errors, values }) => (
+                <form onSubmit={handleSubmit}>
+                  <Paper elevation={6} sx={styles.formContainer}>
+                    <TextField
+                      sx={styles.formInput}
+                      error={Boolean(errors.username)}
+                      onChange={handleChange}
+                      label="Nombre de Usuario"
+                      name="username"
+                      type="username"
+                      helperText={errors.username}
+                    />
+                    <TextField
+                      error={Boolean(errors.password)}
+                      onChange={handleChange}
+                      label="Contraseña"
+                      name="password"
+                      type="password"
+                      sx={styles.formInput}
+                      helperText={errors.password}
+                    />
+                    <TextField
+                      error={Boolean(errors.firstName)}
+                      onChange={handleChange}
+                      label="Nombre"
+                      name="firstName"
+                      type="firstName"
+                      sx={styles.formInput}
+                      helperText={errors.firstName}
+                    />
+                    <TextField
+                      sx={styles.formInput}
+                      label="Apellido"
+                      error={Boolean(errors.lastName)}
+                      name="lastName"
+                      onChange={handleChange}
+                      type="lastName"
+                      helperText={errors.lastName}
+                    />
+                    <TextField
+                      error={Boolean(errors.email)}
+                      onChange={handleChange}
+                      label="Email"
+                      name="email"
+                      type="email"
+                      sx={styles.formInput}
+                      helperText={errors.email}
+                    />
+                    <Box>
+                      <Button
+                        sx={styles.formButton}
+                        variant="contained" color="success" type="submit">
+                        Registro
+                      </Button>
+                    </Box>
+                  </Paper>
+                </form>
+              )}
+            </Formik>
+          </Box>
+        </Box>
+      </Box>
+    </>
   );
 };
 

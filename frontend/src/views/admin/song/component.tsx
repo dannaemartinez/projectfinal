@@ -27,6 +27,7 @@ import { getBase64 } from "../../../helpers/files";
 import { Field, Formik } from "formik";
 import { styles } from "./styles";
 import {
+  deleteSong,
   createSong,
   initialValuesUpdate,
   initialValuesCreate,
@@ -101,7 +102,7 @@ const AdminSong = () => {
                 <Button
                   variant="contained"
                   color="error"
-                  onClick={() => dispatch(fetchDeleteSong(item.id, index))}
+                  onClick={() => dispatch(deleteSong({id: parseInt(item.id)}, index))}
                 >
                   Eliminar
                 </Button>

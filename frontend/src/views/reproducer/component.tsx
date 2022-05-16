@@ -75,6 +75,8 @@ const Reproducer = () => {
     songsContainer: {
       width: "100%",
       alignItems: "center",
+      justifyContent: "center",
+      display: "flex"
     },
     albumItem: {
       display: "grid",
@@ -94,14 +96,20 @@ const Reproducer = () => {
       overflowX: "auto",
       gap: "60px",
       paddingBottom: "20px",
+      alignItems: "center",
+      justifyContent: "center",
     },
+    audio: {
+      marginBottom: "100px",
+      width:"100%",
+    }
   }
 
   return (
     <>
       <Autocomplete
         id="song-select"
-        sx={{ width: 300 }}
+        sx={{ width: 300, zIndex:2 }}
         options={songs}
         autoHighlight
         getOptionLabel={(option) => option.name}
@@ -153,7 +161,7 @@ const Reproducer = () => {
               </Box>
             </Box>
           </Box>
-          <audio
+          <audio style={styles.audio}
             controls
             autoPlay
             src={selectedSong.completeFile}>

@@ -19,6 +19,7 @@ import { Formik } from "formik";
 import { styles } from "./styles";
 import {
   createGenre,
+  deleteGenre,
   initialValuesUpdate,
   initialValuesCreate,
   validationSchemaCreate,
@@ -66,7 +67,7 @@ const AdminGenre = () => {
                 <Button
                   variant="contained"
                   color="error"
-                  onClick={() => dispatch(fetchDeleteGenre(item.id, index))}
+                  onClick={() => dispatch(deleteGenre({id: item.id}, index))}
                 >
                   Eliminar
                 </Button>

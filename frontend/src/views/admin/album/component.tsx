@@ -35,6 +35,7 @@ import {
   updateAlbum,
   UpdateAlbumDTO,
   CreateAlbumDTO,
+  deleteAlbum,
 } from "./form";
 
 const AdminAlbum = () => {
@@ -88,7 +89,7 @@ const AdminAlbum = () => {
                 <Button
                   variant="contained"
                   color="error"
-                  onClick={() => dispatch(fetchDeleteAlbum(item.id, index))}
+                  onClick={() => dispatch(deleteAlbum({id: parseInt(item.id)}, index))}
                 >
                   Eliminar
                 </Button>

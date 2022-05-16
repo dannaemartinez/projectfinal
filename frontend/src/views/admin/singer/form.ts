@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { store } from "../../../app/store";
-import { fetchAddSinger, fetchUpdateSinger } from "../../../services/singer";
+import { fetchAddSinger, fetchDeleteSinger, fetchUpdateSinger } from "../../../services/singer";
 
 export interface CreateSingerDTO {
   name?: string,
@@ -15,6 +15,10 @@ export interface UpdateSingerDTO {
   lastName?: string,
   nationality?: string,
   image?: string,
+}
+
+export interface DeleteSingerDTO {
+  id?: number
 }
 
 export interface SingerPosition {
@@ -87,4 +91,8 @@ export const updateSinger = (
   SingerPosition: SingerPosition
 ) => {
   store.dispatch(fetchUpdateSinger(values, SingerPosition));
+};
+
+export const deleteSinger = (values: DeleteSingerDTO, storeIndex: number ) => {
+  store.dispatch(fetchDeleteSinger(values, storeIndex));
 };

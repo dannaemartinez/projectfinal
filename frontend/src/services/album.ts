@@ -12,6 +12,7 @@ import {
   CreateAlbumDTO,
   AlbumPosition,
   UpdateAlbumDTO,
+  DeleteAlbumDTO,
 } from "../views/admin/album/form";
 
 export const getAlbums = () => async (dispatch: AppDispatch) => {
@@ -28,6 +29,7 @@ export const getAlbums = () => async (dispatch: AppDispatch) => {
             id
             name
           }
+          physicalPrice
       }
     }`;
     const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
@@ -35,7 +37,7 @@ export const getAlbums = () => async (dispatch: AppDispatch) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({query:query}),
+      body: JSON.stringify({ query: query }),
     });
 
     if (response.status !== 200) return "";
@@ -50,19 +52,27 @@ export const getAlbums = () => async (dispatch: AppDispatch) => {
 };
 
 export const fetchDeleteAlbum =
-  (id: string, index: number) => async (dispatch: AppDispatch) => {
+  (deleteAlbumDTO: DeleteAlbumDTO, storeIndex: number) => async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await fetchAuth(`http://localhost:8000/album/${id}`, {
-        method: "DELETE",
+      const query = `mutation DeleteAlbum($id:ID){
+        deleteAlbum(id:$id){
+          ok
+        }
+      }`;
+      const variables = deleteAlbumDTO
+      
+      const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({ query: query, variables: variables }),
       });
 
       if (response.status !== 200) return "";
 
-      dispatch(deleteAlbum(index));
+      dispatch(deleteAlbum(deleteAlbumDTO));
     } catch (err) {
       throw err;
     } finally {
@@ -74,7 +84,7 @@ export const fetchAddAlbum =
   (createAlbumDTO: CreateAlbumDTO) => async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
-      
+
       const query = `mutation UpsertAlbum( $image: String,  $name: String!,  $physicalPrice: Decimal!,  $releaseDate: String, 
         $singer: SingersInput!,  $genre: GenresInput!,  $stock: Int!) {
         upsertAlbum( image: $image,  name: $name,  physicalPrice: $physicalPrice,  releaseDate: $releaseDate,  singer: $singer, 
@@ -96,18 +106,18 @@ export const fetchAddAlbum =
           }
         }
       }`;
-      const variables= createAlbumDTO
+      const variables = createAlbumDTO
       const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({query:query, variables: variables}),
+        body: JSON.stringify({ query: query, variables: variables }),
       });
 
       if (response.status !== 200) return "";
 
-      const album: Album = await response.json();
+      const album: Album = (await response.json()).data.upsertAlbum.album;
       dispatch(addAlbum(album));
     } catch (err) {
       throw err;
@@ -118,10 +128,10 @@ export const fetchAddAlbum =
 
 export const fetchUpdateAlbum =
   (updateAlbumDTO: UpdateAlbumDTO, albumPosition: AlbumPosition) =>
-  async (dispatch: AppDispatch) => {
-    try {
-      dispatch(setLoading(true));
-      const query = `mutation UpsertAlbum($id: ID, $image: String,  $name: String!,  $physicalPrice: Decimal!,  $releaseDate: String, 
+    async (dispatch: AppDispatch) => {
+      try {
+        dispatch(setLoading(true));
+        const query = `mutation UpsertAlbum($id: ID, $image: String,  $name: String!,  $physicalPrice: Decimal!,  $releaseDate: String, 
         $singer: SingersInput!,  $genre: GenresInput!,  $stock: Int!) {
         upsertAlbum(id: $id,  image: $image,  name: $name,  physicalPrice: $physicalPrice,  releaseDate: $releaseDate,  singer: $singer, 
           stock: $stock,  genre: $genre) {
@@ -141,26 +151,26 @@ export const fetchUpdateAlbum =
           }
         }
       }`;
-      const variables= updateAlbumDTO
-      const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
+        const variables = updateAlbumDTO
+        const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({query:query, variables: variables}),
+          body: JSON.stringify({ query: query, variables: variables }),
         }
-      );
+        );
 
-      if (response.status !== 200) return "";
+        if (response.status !== 200) return "";
 
-      const album: Album = await response.json();
-      dispatch(updateAlbum({ album, index: albumPosition.index }));
-    } catch (err) {
-      throw err;
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
+        const album: Album = (await response.json()).data.upsertAlbum.album;
+        dispatch(updateAlbum({ album, index: albumPosition.index }));
+      } catch (err) {
+        throw err;
+      } finally {
+        dispatch(setLoading(false));
+      }
+    };
 
 
 // import { setAlbums } from "../features/musicSlice";

@@ -12,6 +12,7 @@ import {
   CreateSongDTO,
   SongPosition,
   UpdateSongDTO,
+  DeleteSongDTO,
 } from "../views/admin/song/form";
 import { Song } from "../models/song";
 
@@ -56,19 +57,27 @@ export const getSongs = () => async (dispatch: AppDispatch) => {
 };
 
 export const fetchDeleteSong =
-  (id: string, index: number) => async (dispatch: AppDispatch) => {
+(deleteSongDTO: DeleteSongDTO, storeIndex: number) => async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
-      const response = await fetchAuth(`http://localhost:8000/song/${id}`, {
-        method: "DELETE",
+      const query = `mutation DeleteSong($id:ID){
+        deleteSong(id:$id){
+          ok
+        }
+      }`;
+      const variables = deleteSongDTO
+      
+      const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({ query: query, variables: variables }),
       });
 
       if (response.status !== 200) return "";
 
-      dispatch(deleteSong(index));
+      dispatch(deleteSong(deleteSongDTO));
     } catch (err) {
       throw err;
     } finally {

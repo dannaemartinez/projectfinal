@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../app/store";
 
 export interface LoaderState {
   loading: boolean;
@@ -19,5 +20,8 @@ export const LoaderSlice = createSlice({
 });
 
 export const { setLoading } = LoaderSlice.actions;
+
+export const loaderSelector = (state: RootState) => state.loader;
+export const loadingSelector = (state: RootState) => loaderSelector(state).loading;
 
 export default LoaderSlice.reducer;

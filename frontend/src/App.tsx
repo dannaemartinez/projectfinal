@@ -16,8 +16,10 @@ import { tokenSelector } from "./features/authSlice";
 import { useEffect, useMemo } from "react";
 import { useAdmin } from "./hooks/admin";
 import LoginButton from "./components/logButton/component";
-import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
-import {darkTheme} from "./theme/theme"
+import { Backdrop, CircularProgress, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { darkTheme } from "./theme/theme"
+import Register from "./views/register/component";
+import { loadingSelector } from "./features/loaderSlice";
 
 const publicPaths = ["/login", "/", "/albums", "/songs"];
 
@@ -26,6 +28,7 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAdmin } = useAdmin();
+  const loading = useAppSelector(loadingSelector);
 
   useEffect(() => {
     const publicPath = publicPaths.some((path) => path === location.pathname);
@@ -52,8 +55,16 @@ const App = () => {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <CssBaseline enableColorScheme={true}/>
+      <CssBaseline enableColorScheme={true} />
       <Box sx={styles.root}>
+        {loading && (
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 100 }}
+            open={loading}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+        )}
         {haveBar && <Menu />}
         <Box sx={styles.container}>
           {haveBar && <LoginButton />}
@@ -66,6 +77,7 @@ const App = () => {
             <Route path="/admin/genres" element={<AdminGenre />} />
             <Route path="/admin/sales" element={<AdminSale />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </Box>
       </Box>

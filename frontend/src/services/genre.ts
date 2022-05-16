@@ -45,7 +45,7 @@ export const getGenres = () => async (dispatch: AppDispatch) => {
 };
 
 export const fetchDeleteGenre =
-  (deleteGenreDTO: DeleteGenreDTO) => async (dispatch: AppDispatch) => {
+  (deleteGenreDTO: DeleteGenreDTO,storeIndex: number ) => async (dispatch: AppDispatch) => {
     try {
       dispatch(setLoading(true));
       const query= `mutation DeleteGenre($id:ID){
@@ -54,8 +54,9 @@ export const fetchDeleteGenre =
         }
       }`;
       const variables= deleteGenreDTO
+      
       const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
-        method: "DELETE",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -63,8 +64,8 @@ export const fetchDeleteGenre =
       });
 
       if (response.status !== 200) return "";
-      const genre: Genre = await response.json();
-      dispatch(deleteGenre(genre));
+      
+      dispatch(deleteGenre(deleteGenreDTO));
     } catch (err) {
       throw err;
     } finally {
@@ -95,7 +96,7 @@ export const fetchAddGenre =
 
       if (response.status !== 200) return "";
 
-      const genre: Genre = await response.json();
+      const genre: Genre = (await response.json()).data.upsertGenre.genre;
       dispatch(addGenre(genre));
     } catch (err) {
       throw err;
@@ -129,7 +130,7 @@ export const fetchUpdateGenre =
 
       if (response.status !== 200) return "";
 
-      const genre: Genre = await response.json();
+      const genre: Genre = (await response.json()).data.upsertGenre.genre;
       dispatch(updateGenre({ genre, index: genrePosition.index }));
     } catch (err) {
       throw err;

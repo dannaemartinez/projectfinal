@@ -12,6 +12,7 @@ import {
   CreateSingerDTO,
   SingerPosition,
   UpdateSingerDTO,
+  DeleteSingerDTO,
 } from "../views/admin/singer/form";
 
 export const getSingers = () => async (dispatch: AppDispatch) => {
@@ -48,19 +49,27 @@ export const getSingers = () => async (dispatch: AppDispatch) => {
 };
 
 export const fetchDeleteSinger =
-  (id: string, index: number) => async (dispatch: AppDispatch) => {
-    try {
-      dispatch(setLoading(true));
-      const response = await fetchAuth(`http://localhost:8000/singer/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+(deleteSingerDTO: DeleteSingerDTO, storeIndex: number) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(setLoading(true));
+    const query = `mutation DeleteSinger($id:ID){
+      deleteSinger(id:$id){
+        ok
+      }
+    }`;
+    const variables = deleteSingerDTO
+    
+    const response = await fetch(`${process.env.REACT_APP_BASE_API_URI}/graphql`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query: query, variables: variables }),
+    });
 
       if (response.status !== 200) return "";
 
-      dispatch(deleteSinger(index));
+      dispatch(deleteSinger(deleteSingerDTO));
     } catch (err) {
       throw err;
     } finally {
